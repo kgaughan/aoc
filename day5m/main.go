@@ -29,7 +29,7 @@ func main() {
 	nTotal := 0
 	for scanner.Scan() {
 		nTotal++
-		if day5.IsNice(scanner.Text()) {
+		if day5.IsNice1(scanner.Text()) {
 			nNice++
 		}
 	}

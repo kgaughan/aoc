@@ -16,11 +16,15 @@ func TestIsNice(t *testing.T) {
 		{"dvszwmarrgswjxmb", false},
 	}
 
+	driver(t, tests, "IsNice1", IsNice1)
+}
+
+func driver(t *testing.T, tests []fixture, fnName string, fn NiceFunc) {
 	for _, test := range tests {
-		if answer := IsNice(test.s); answer != test.expected {
+		if answer := fn(test.s); answer != test.expected {
 			t.Errorf(
-				"IsNice(%q): got %v, expected %v",
-				test.s, answer, test.expected)
+				"%v(%q): got %v, expected %v",
+				fnName, test.s, answer, test.expected)
 		}
 	}
 }

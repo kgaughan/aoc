@@ -9,7 +9,9 @@ func isVowel(ch rune) bool {
 	return strings.ContainsRune("aeoiu", ch)
 }
 
-func IsNice(s string) bool {
+type NiceFunc func(string) bool
+
+func IsNice1(s string) bool {
 	naughties := []string{
 		"ab",
 		"cd",

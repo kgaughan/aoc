@@ -1,0 +1,36 @@
+Advent of Code
+==============
+
+This repo contains my answers for Advent of Code.
+
+The answers for each day are split into two modules. Those named 'dayX'
+contain library code for implementing the problem solution, while those
+named 'dayXm' contain command-line drivers for running the code in matching
+'dayX' package.
+
+Why?
+====
+
+Primarily to learn Go. It's one thing to be familiar with a language, but
+quite another to know it, and to know it requires you to write code in that
+language. Advent of Code seemed like a reasonable way to at least learn the
+parts of Go that don't require concurrency.
+
+Do you happen to be doing anything silly?
+=========================================
+
+Why yes, I am! I'm coding all of this in an Android terminal emulator by the
+name of Termux, which comes with its own APT-based package manager and repo.
+So far, this all been unreasonably effective, and I have OpenSSH, nano, git,
+and Go installed on my tablet through Termux.
+
+The one difficulty I've run into is that neither Chrome nor Firefox provide a
+way to download the test data. I could copy and paste it, but the paste buffer
+seems to be a maximum of 4096 bytes, which is *tiny*.
+
+And yes, I'm using nano, not my usual vim. Not because I particularly *like*
+nano (I don't), but because vim isn't practical to use with my particular
+Bluetooth keyboard. After some tweaking, I got nano to the point where it
+isn't entirely useless, and at least it does syntax highlighting, and ^T can
+be used to run gofmt, which is nice. I can't imagine why somebody would use
+it for doing anything other than light editing if they had an alternative.

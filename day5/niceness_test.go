@@ -7,7 +7,7 @@ type fixture struct {
 	expected bool
 }
 
-func TestIsNice(t *testing.T) {
+func TestIsNice1(t *testing.T) {
 	tests := []fixture{
 		{"ugknbfddgicrmopn", true},
 		{"aaa", true},
@@ -17,6 +17,19 @@ func TestIsNice(t *testing.T) {
 	}
 
 	driver(t, tests, "IsNice1", IsNice1)
+}
+
+func TestIsNice2(t *testing.T) {
+	tests := []fixture{
+		{"xyxy", true},
+		{"aaa", false},
+		{"qjhvhtzxzqqjkmpb", true},
+		{"xxyxx", true},
+		{"uurcxstgmygtbstg", false},
+		{"ieodomkazucvgmuy", false},
+	}
+
+	driver(t, tests, "IsNice2", IsNice2)
 }
 
 func driver(t *testing.T, tests []fixture, fnName string, fn NiceFunc) {

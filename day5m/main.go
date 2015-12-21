@@ -11,7 +11,15 @@ import (
 )
 
 func main() {
+	method2 := flag.Bool("2", false, "Use the second niceness method.")
 	flag.Parse()
+
+	var isNice day5.NiceFunc
+	if *method2 {
+		isNice = day5.IsNice2
+	} else {
+		isNice = day5.IsNice1
+	}
 
 	path := flag.Arg(0)
 	if path == "" {
@@ -29,7 +37,7 @@ func main() {
 	nTotal := 0
 	for scanner.Scan() {
 		nTotal++
-		if day5.IsNice1(scanner.Text()) {
+		if isNice(scanner.Text()) {
 			nNice++
 		}
 	}

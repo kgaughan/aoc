@@ -2,13 +2,13 @@ package day6
 
 import "testing"
 
-func assertLightCount(t *testing.T, lights *Lights, expected uint) {
+func assertLightCount(t *testing.T, lights *Lights, expected int) {
 	if n := lights.Count(); n != expected {
 		t.Errorf("Expected %v lights, but counted %v", expected, n)
 	}
 }
 
-func assertAddPoint(t *testing.T, lights *Lights, point Coord, expected uint) {
+func assertAddPoint(t *testing.T, lights *Lights, point Coord, expected int) {
 	lights.TurnOn(point, point)
 	assertLightCount(t, lights, expected)
 }

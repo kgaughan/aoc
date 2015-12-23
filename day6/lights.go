@@ -7,7 +7,7 @@ type Coord struct {
 const max = 1000
 
 type Lights struct {
-	lights [max][max]uint8
+	lights [max][max]int16
 }
 
 func apply(from, to Coord, fn func(int, int)) {
@@ -36,13 +36,20 @@ func (l *Lights) Toggle(from, to Coord) {
 	})
 }
 
-func (l *Lights) Count() uint {
-	var n uint
+func (l *Lights) Increment(from, to Coord, by int16) {
+	apply(from, to, func(x, y int) {
+		l.lights[x][y] += by
+		if l.lights[x][y] < 0 {
+			l.lights[x][y] = 0
+		}
+	})
+}
 
-	n = 0
+func (l *Lights) Count() int {
+	n := 0
 	for x := 0; x < max; x++ {
 		for y := 0; y < max; y++ {
-			n += uint(l.lights[x][y])
+			n += int(l.lights[x][y])
 		}
 	}
 	return n

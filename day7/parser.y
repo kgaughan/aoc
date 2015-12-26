@@ -2,7 +2,7 @@
 package day7
 
 import (
-	"log"
+	"fmt"
 )
 %}
 
@@ -15,26 +15,19 @@ import (
 %token <node> LSHIFT RSHIFT
 %token <node> IDENTIFIER LITERAL
 
-%type <node> expr val
+%type <node> stmts expr val
 
 %%
 
 top:	stmts {
-			log.Println("top")
+			fmt.Println($1.(Context).EvaluateID("a"))
 		}
 
 stmts:	/* empty */ {
-			// Initialise statement list?
-			log.Println("empty statment")
+			$$ = NewContext()
 		}
-|		stmts stmt {
-			// Append statement to statement list.
-			log.Println("appending statement")
-		}
-;
-
-stmt:	expr ASSIGN IDENTIFIER {
-			log.Println("Assign")
+|		stmts expr ASSIGN IDENTIFIER {
+			$$.(Context).Add($4.String(), $2)
 		}
 ;
 

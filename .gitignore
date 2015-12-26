@@ -1,2 +1,5 @@
 .*.sw?
 *.cm[oi]
+parser.go
+lexer.go
+y.output

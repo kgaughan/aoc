@@ -4,3 +4,4 @@ parser.go
 lexer.go
 y.output
 *~
+.*.sw?

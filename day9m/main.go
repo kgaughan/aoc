@@ -16,6 +16,7 @@ type pair struct {
 }
 
 func main() {
+	doLongest := flag.Bool("longest", false, "Calculate longest rather than shortest.")
 	flag.Parse()
 
 	var source io.Reader
@@ -41,19 +42,32 @@ func main() {
 		pairs[pair{to, from}] = distance
 	})
 
+	if *doLongest {
+		distance := Travel(0, towns, pairs, func(current, next int) bool {
+			return next > current
+		})
+		fmt.Printf("Longest distance is %v\n", distance)
+	} else {
+		distance := Travel(math.MaxInt32, towns, pairs, func(current, next int) bool {
+			return current > next
+		})
+		fmt.Printf("Shortest distance is %v\n", distance)
+	}
+}
+
+func Travel(start int, towns []string, pairs map[pair]int, cond func(int, int) bool) int {
 	permute := day9.NewPermute(towns[1:])
-	shortest := math.MaxInt32
+	result := start
 	for {
 		permutation, done := permute.Get()
 		if done {
-			break
+			return result
 		}
 		distance := GetDistance(towns[0], permutation, pairs)
-		if distance < shortest {
-			shortest = distance
+		if cond(result, distance) {
+			result = distance
 		}
 	}
-	fmt.Printf("Shortest distance is %v\n", shortest)
 }
 
 func GetDistance(start string, rest []string, pairs map[pair]int) int {

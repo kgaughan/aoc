@@ -1,5 +1,5 @@
 build: parser
-	go build aoc/day7m
+	go build -o ${GOPATH}/bin/day7m aoc/day7m
 
 test:
 	go test aoc/day7

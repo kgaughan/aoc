@@ -6,10 +6,13 @@ import (
 	"io"
 	"log"
 	"os"
+	"strconv"
+
 	"aoc/day8"
 )
 
 func main() {
+	doQuote := flag.Bool("quote", false, "Quote the strings rather than unquoting them.")
 	flag.Parse()
 
 	var source io.Reader
@@ -22,11 +25,26 @@ func main() {
 		source = file
 	}
 
+	var conv func(string) string
+	if *doQuote {
+		conv = strconv.Quote
+	} else {
+		conv = func(s string) string {
+			unquoted, _ := strconv.Unquote(s)
+			return unquoted
+		}
+	}
+
 	originalLength := 0
-	unquotedLength := 0
-	day8.ParseStrings(source, func(original, unquoted string) {
+	convertedLength := 0
+	day8.ScanLines(source, func(original string) {
 		originalLength += len(original)
-		unquotedLength += len(unquoted)
+		convertedLength += len(conv(original))
 	})
-	fmt.Printf("Difference is %v\n", originalLength - unquotedLength)
+
+	difference := originalLength - convertedLength
+	if originalLength < convertedLength {
+		difference = -difference
+	}
+	fmt.Printf("Difference is %v\n", difference)
 }

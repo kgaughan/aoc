@@ -14,10 +14,16 @@ func AddNumbers(json interface{}) float64 {
 
 	case map[string]interface{}:
 		for _, val := range json.(map[string]interface{}) {
-			total += AddNumbers(val)
+			switch val.(type) {
+			case string:
+				if val.(string) == "red" {
+					return 0.0
+				}
+			default:
+				total += AddNumbers(val)
+			}
 		}
 	}
 
 	return total
 }
-

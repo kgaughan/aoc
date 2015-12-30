@@ -1,4 +1,4 @@
-package day9
+package permute
 
 type Permute struct {
 	source []string

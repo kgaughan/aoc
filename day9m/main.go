@@ -5,15 +5,11 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math"
 	"os"
 
+	"aoc/common/graph"
 	"aoc/day9"
 )
-
-type pair struct {
-	from, to string
-}
 
 func main() {
 	doLongest := flag.Bool("longest", false, "Calculate longest rather than shortest.")
@@ -29,7 +25,7 @@ func main() {
 		source = file
 	}
 
-	pairs := make(map[pair]int)
+	edges := graph.Edges{}
 	towns := make([]string, 0, 50)
 	day9.ScanLines(source, func(from, to string, distance int) {
 		if !day9.Contains(towns, from) {
@@ -38,42 +34,14 @@ func main() {
 		if !day9.Contains(towns, to) {
 			towns = append(towns, to)
 		}
-		pairs[pair{from, to}] = distance
-		pairs[pair{to, from}] = distance
+		edges.Add(from, to, distance)
 	})
 
 	if *doLongest {
-		distance := Travel(0, towns, pairs, func(current, next int) bool {
-			return next > current
-		})
+		distance := graph.TravelMax(towns, edges, false)
 		fmt.Printf("Longest distance is %v\n", distance)
 	} else {
-		distance := Travel(math.MaxInt32, towns, pairs, func(current, next int) bool {
-			return current > next
-		})
+		distance := graph.TravelMin(towns, edges, false)
 		fmt.Printf("Shortest distance is %v\n", distance)
 	}
-}
-
-func Travel(start int, towns []string, pairs map[pair]int, cond func(int, int) bool) int {
-	permute := day9.NewPermute(towns[1:])
-	result := start
-	for {
-		permutation, done := permute.Get()
-		if done {
-			return result
-		}
-		distance := GetDistance(towns[0], permutation, pairs)
-		if cond(result, distance) {
-			result = distance
-		}
-	}
-}
-
-func GetDistance(start string, rest []string, pairs map[pair]int) int {
-	total := pairs[pair{start, rest[0]}]
-	for i := 0; i < len(rest)-1; i++ {
-		total += pairs[pair{rest[i], rest[i+1]}]
-	}
-	return total
 }

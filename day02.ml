@@ -9,31 +9,42 @@ let direction = function
   | 'L' -> (-1, 0)
   | _   -> raise Bad_direction
 
-let bound lower upper n = max lower (min n upper)
-
-let rec follow_line (x, y) = function
+let rec follow_line to_digit (x, y) = function
   | [] -> (x, y)
   | d :: ds ->
       let (dx, dy) = direction d in
-      let x' = bound 0 2 (x + dx) in
-      let y' = bound 0 2 (y + dy) in
-      follow_line (x', y') ds
+      let x' = x + dx in
+      let y' = y + dy in
+      let loc = if to_digit (x', y') = None then (x, y) else (x', y') in
+      follow_line to_digit loc ds
 
-let to_digit (x, y) = y * 3 + x + 1
+(* A three by three grid *)
+let to_digit_grid = function
+  | (0, 0) -> Some '1'
+  | (1, 0) -> Some '2'
+  | (2, 0) -> Some '3'
+  | (0, 1) -> Some '4'
+  | (1, 1) -> Some '5'
+  | (2, 1) -> Some '6'
+  | (0, 2) -> Some '7'
+  | (1, 2) -> Some '8'
+  | (2, 2) -> Some '9'
+  | _      -> None
 
 let charlist_of_string str =
   Array.to_list (Array.init (String.length str)
                             (String.get str))
 
-let follow_set lines =
+let follow_set initial to_digit lines =
   let rec follow_set' (x, y) lines acc =
     match lines with
     | []      -> List.rev acc
     | l :: ls ->
-        let (x', y') = follow_line (x, y) (charlist_of_string l) in
+        let (x', y') = follow_line to_digit (x, y)
+                                   (charlist_of_string l) in
         follow_set' (x', y') ls ((x', y') :: acc) in
   (* (1, 1) is the '5' position *)
-  follow_set' (1, 1) lines []
+  follow_set' initial lines []
 
 let test_data = [
   "ULL";
@@ -48,13 +59,17 @@ let test1_data = [
   "URUUDUDRDDRDRRRDLLUDRUDRUUUURDRRDUDUULDUDLLUDRRUDLLRDLLULULDRRDDULDRLDLDDULLDDRDDDLRLLDLLRDUUDUURLUDURDRRRRLRRLDRRUULLDLDLRDURULRURULRRDRRDDUUURDURLLDDUUDLRLDURULURRRDRRUUUDRDDLRLRRLLULUDDRRLRRRRLRDRUDDUULULRRURUURURRLRUDLRRUUURUULLULULRRDDULDRRLLLDLUDRRRLLRDLLRLDUDDRRULULUDLURLDRDRRLULLRRDRDLUURLDDURRLDRLURULDLDRDLURRDRLUUDRUULLDRDURLLDLRUDDULLLLDLDDDLURDDUDUDDRLRDDUDDURURLULLRLUDRDDUDDLDRUURLDLUUURDUULRULLDDDURULDDLLD";
   "LRRLLRURUURRDLURRULDDDLURDUURLLDLRRRRULUUDDLULLDLLRDLUDUULLUDRLLDRULDDURURDUUULRUDRLLRDDDURLRDRRURDDRUDDRRULULLLDLRLULLDLLDRLLLUDLRURLDULRDDRDLDRRDLUUDDLURDLURLUDLRDLDUURLRRUULDLURULUURULLURLDDURRURDRLUULLRRLLLDDDURLURUURLLLLDLLLUDLDLRDULUULRRLUUUUDLURRURRULULULRURDDRRRRDRUDRURDUDDDDUDLURURRDRRDRUDRLDLDDDLURRRURRUDLDURDRLDLDLDDUDURLUDUUDRULLRLLUUDDUURRRUDURDRRUURLUDRRUDLUDDRUUDLULDLLDLRUUDUULLDULRRLDRUDRRDRLUUDDRUDDLLULRLULLDLDUULLDRUUDDUDLLLLDLDDLDLURLDLRUUDDUULLUDUUDRUDLRDDRDLDRUUDUDLLDUURRRLLLLRLLRLLRLUUDULLRLURDLLRUUDRULLULRDRDRRULRDLUDDURRRRURLLRDRLLDRUUULDUDDLRDRD";
   "DDLRRULRDURDURULLLLRLDDRDDRLLURLRDLULUDURRLUDLDUDRDULDDULURDRURLLDRRLDURRLUULLRUUDUUDLDDLRUUDRRDDRLURDRUDRRRDRUUDDRLLUURLURUDLLRRDRDLUUDLUDURUUDDUULUURLUDLLDDULLUURDDRDLLDRLLDDDRRDLDULLURRLDLRRRLRRURUUDRLURURUULDURUDRRLUDUDLRUDDUDDRLLLULUDULRURDRLUURRRRDLLRDRURRRUURULRUDULDULULUULULLURDUDUDRLDULDRDDULRULDLURLRLDDDDDDULDRURRRRDLLRUDDRDDLUUDUDDRLLRLDLUDRUDULDDDRLLLLURURLDLUUULRRRUDLLULUUULLDLRLDLLRLRDLDULLRLUDDDRDRDDLULUUR";
-  ]
+]
 
-let test lines =
-  let print_digit pos = print_int (to_digit pos) in
-  List.iter print_digit (follow_set lines);
+let harness initial to_digit lines =
+  let print_digit pos =
+    match to_digit pos with
+    | Some ch -> print_char ch
+    | None    -> ()
+  in
+  List.iter print_digit (follow_set initial to_digit lines);
   print_newline ()
 
 let () =
-  test test_data;
-  test test1_data
+  harness (1, 1) to_digit_grid test_data;
+  harness (1, 1) to_digit_grid test1_data

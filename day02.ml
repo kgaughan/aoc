@@ -31,6 +31,23 @@ let to_digit_grid = function
   | (2, 2) -> Some '9'
   | _      -> None
 
+(* A diamond-shaped grid *)
+let to_digit_diamond = function
+  | (2, 0) -> Some '1'
+  | (1, 1) -> Some '2'
+  | (2, 1) -> Some '3'
+  | (3, 1) -> Some '4'
+  | (0, 2) -> Some '5'
+  | (1, 2) -> Some '6'
+  | (2, 2) -> Some '7'
+  | (3, 2) -> Some '8'
+  | (4, 2) -> Some '9'
+  | (1, 3) -> Some 'A'
+  | (2, 3) -> Some 'B'
+  | (3, 3) -> Some 'C'
+  | (2, 4) -> Some 'D'
+  | _      -> None
+
 let charlist_of_string str =
   Array.to_list (Array.init (String.length str)
                             (String.get str))
@@ -71,5 +88,9 @@ let harness initial to_digit lines =
   print_newline ()
 
 let () =
+  print_endline "3x3 grid:";
   harness (1, 1) to_digit_grid test_data;
-  harness (1, 1) to_digit_grid test1_data
+  harness (1, 1) to_digit_grid test1_data;
+  print_endline "Diamond grid:";
+  harness (0, 2) to_digit_diamond test_data;
+  harness (0, 2) to_digit_diamond test1_data

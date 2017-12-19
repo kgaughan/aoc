@@ -5,3 +5,4 @@ lexer.go
 y.output
 *~
 .*.sw?
+*.cm[oi]

@@ -6,3 +6,4 @@ y.output
 *~
 .*.sw?
 *.cm[oi]
+__pycache__

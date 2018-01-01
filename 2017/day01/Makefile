@@ -1,4 +1,4 @@
 tests:
-	python3 -m unittest *_tests.py
+	python3 -m unittest discover
 
 .PHONY: tests

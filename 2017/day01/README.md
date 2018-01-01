@@ -1,4 +1,4 @@
---- Day 1: Inverse Captcha ---
+# Day 1: Inverse Captcha
 
 The night before Christmas, one of Santa's Elves calls you in a panic. "The
 printer's broken! We can't print the Naughty or Nice List!" By the time you
@@ -42,7 +42,7 @@ What is the solution to your captcha?
 
 Your puzzle answer was 1031.
 
---- Part Two ---
+## Part Two
 
 You notice a progress bar that jumps to 50% completion. Apparently, the door
 isn't yet satisfied, but it did emit a star as encouragement. The instructions

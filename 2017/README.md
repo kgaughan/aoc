@@ -7,3 +7,4 @@ Done:
 - [x] 2: Corruption Checksum
 - [ ] 3: Spiral Memory
 - [x] 4: High-Entropy Passphrases
+- [x] 5: A Maze of Twisty Trampolines, All Alike

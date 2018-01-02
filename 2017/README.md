@@ -9,3 +9,4 @@ Done:
 - [x] 4: High-Entropy Passphrases
 - [x] 5: A Maze of Twisty Trampolines, All Alike
 - [x] 6: Memory Reallocation
+- [ ] 7: Recursive Circus

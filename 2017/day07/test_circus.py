@@ -52,3 +52,13 @@ class CircusTest(unittest.TestCase):
         parentage = circus.build_parentage(programs)
         base = circus.find_base(circus.take_first(programs), parentage)
         self.assertEqual(base, 'tknk')
+
+    def test_find_unbalanced(self):
+        with io.StringIO(FIXTURE) as fh:
+            programs = circus.parse_file(fh)
+        parentage = circus.build_parentage(programs)
+        base = circus.find_base(circus.take_first(programs), parentage)
+        status, name, good_weight = circus.find_unbalanced(base, programs)
+        self.assertFalse(status)
+        self.assertEqual(name, 'ugml')
+        self.assertEqual(good_weight, 60)

@@ -10,4 +10,4 @@ Done:
 - [x] 5: A Maze of Twisty Trampolines, All Alike
 - [x] 6: Memory Reallocation
 - [x] 7: Recursive Circus
-- [ ] 8: I Heard You Like Registers
+- [x] 8: I Heard You Like Registers

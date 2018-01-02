@@ -25,10 +25,11 @@ class RegistersTest(unittest.TestCase):
         self.assertEqual(inst.cond_op, '>')
         self.assertEqual(inst.target, 1)
 
-    def test_part1(self):
+    def test(self):
         with io.StringIO(FIXTURE) as fh:
             instructions = registers.parse_file(fh)
-        memory = registers.process_instructions(instructions)
+        memory, largest = registers.process_instructions(instructions)
+        self.assertEqual(largest, 10)
         self.assertEqual(registers.largest_register_value(memory), 1)
         self.assertListEqual(sorted(memory.keys()), ['a', 'b', 'c'])
         self.assertEqual(memory['a'], 1)

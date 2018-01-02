@@ -39,6 +39,7 @@ OPS = {
 
 
 def process_instructions(instructions):
+    largest = 0
     memory = collections.defaultdict(int)
     for inst in instructions:
         if OPS[inst.cond_op](memory[inst.cond_reg], inst.target):
@@ -46,21 +47,20 @@ def process_instructions(instructions):
                 memory[inst.reg] += inst.amt
             elif inst.op == 'dec':
                 memory[inst.reg] -= inst.amt
-    return memory
+            largest = max(largest, memory[inst.reg])
+    return memory, largest
 
 
 def largest_register_value(memory):
     return functools.reduce(max, memory.values())
 
 
-def part1(instructions):
-    return largest_register_value(process_instructions(instructions))
-
-
 def main():
     with open('input.txt') as fh:
         instructions = parse_file(fh)
-    print("Largest:", part1(instructions))
+    memory, largest_ever = process_instructions(instructions)
+    print("Largest at end:", largest_register_value(memory))
+    print("Largest ever:", largest_ever)
 
 
 if __name__ == '__main__':

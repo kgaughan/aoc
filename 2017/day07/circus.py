@@ -27,28 +27,32 @@ def parse_file(fh):
     return programs
 
 
-def find_base(programs):
-    base = None
-    parents = {}
+def build_parentage(programs):
+    parentage = {}
     for program in programs.values():
         for child in program.children:
-            parents[child] = program.name
-        # While we're building up the mapping, get as far down the tree as we
-        # can.
-        if base is None or base in program.children:
-            base = program.name
+            parentage[child] = program
+    return parentage
 
-    # Travel down the remainder of the tree.
-    while base in parents:
-        base = parents[base]
 
+def find_base(name, parentage):
+    base = name
+    while base in parentage:
+        base = parentage[base].name
     return base
+
+
+def take_first(iterable):
+    return next(iter(iterable))
 
 
 def main():
     with open('input.txt') as fh:
         programs = parse_file(fh)
-    print(find_base(programs))
+    parentage = build_parentage(programs)
+    # Any arbitrary starting point will do.
+    base = find_base(take_first(programs), parentage)
+    print('Base:', base)
 
 
 if __name__ == '__main__':

@@ -49,4 +49,6 @@ class CircusTest(unittest.TestCase):
     def test_find_base(self):
         with io.StringIO(FIXTURE) as fh:
             programs = circus.parse_file(fh)
-        self.assertEqual(circus.find_base(programs), 'tknk')
+        parentage = circus.build_parentage(programs)
+        base = circus.find_base(circus.take_first(programs), parentage)
+        self.assertEqual(base, 'tknk')

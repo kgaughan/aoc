@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+
+import collections
+import functools
+import operator
+import re
+
+
+Instruction = collections.namedtuple('Instruction',
+                                     ['reg', 'op', 'amt',
+                                      'cond_reg', 'cond_op', 'target'])
+
+
+def parse_instruction(line):
+    match = re.match('([a-z]+) (inc|dec) (-?[0-9]+) '
+                     'if ([a-z]+) ([<>]=?|[!=]=) (-?[0-9]+)',
+                     line)
+    # Not bothering to look for parse errors.
+    return Instruction(reg=match.group(1),
+                       op=match.group(2),
+                       amt=int(match.group(3)),
+                       cond_reg=match.group(4),
+                       cond_op=match.group(5),
+                       target=int(match.group(6)))
+
+
+def parse_file(fh):
+    return [parse_instruction(line) for line in fh]
+
+
+OPS = {
+    '==': operator.eq,
+    '!=': operator.ne,
+    '>=': operator.ge,
+    '<=': operator.le,
+    '>': operator.gt,
+    '<': operator.lt,
+}
+
+
+def process_instructions(instructions):
+    memory = collections.defaultdict(int)
+    for inst in instructions:
+        if OPS[inst.cond_op](memory[inst.cond_reg], inst.target):
+            if inst.op == 'inc':
+                memory[inst.reg] += inst.amt
+            elif inst.op == 'dec':
+                memory[inst.reg] -= inst.amt
+    return memory
+
+
+def largest_register_value(memory):
+    return functools.reduce(max, memory.values())
+
+
+def part1(instructions):
+    return largest_register_value(process_instructions(instructions))
+
+
+def main():
+    with open('input.txt') as fh:
+        instructions = parse_file(fh)
+    print("Largest:", part1(instructions))
+
+
+if __name__ == '__main__':
+    main()

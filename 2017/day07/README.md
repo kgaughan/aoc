@@ -99,3 +99,5 @@ towers balanced. If this change were made, its weight would be 60.
 
 Given that exactly one program is the wrong weight, what would its weight need
 to be to balance the entire tower?
+
+Your puzzle answer was 1152.

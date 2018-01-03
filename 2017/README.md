@@ -13,3 +13,18 @@ Done:
 - [x] 8: I Heard You Like Registers
 - [x] 9: Stream Processing
 - [x] 10: Knot Hash
+- [ ] 11: Hex Ed
+- [ ] 12: Digital Plumber
+- [ ] 13: Packet Scanners
+- [ ] 14: Disk Defragmentation
+- [ ] 15: Dueling Generators
+- [ ] 16: Permutation Promenade
+- [ ] 17: Spinlock
+- [ ] 18: Duet
+- [ ] 19: A Series of Tubes
+- [ ] 20: Particle Swarm
+- [ ] 21: Fractal Art
+- [ ] 22: Sporifica Virus
+- [ ] 23: Coprocessor Conflagration
+- [ ] 24: Electromagnetic Moat
+- [ ] 25: The Halting Problem

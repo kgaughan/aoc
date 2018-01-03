@@ -1,4 +1,4 @@
-## Day 10: Knot Hash
+# Day 10: Knot Hash
 
 You come across some programs that are trying to implement a software emulation
 of a hash based on knot-tying. The hash these programs are implementing isn't

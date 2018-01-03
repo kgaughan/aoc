@@ -12,3 +12,4 @@ Done:
 - [x] 7: Recursive Circus
 - [x] 8: I Heard You Like Registers
 - [x] 9: Stream Processing
+- [x] 10: Knot Hash

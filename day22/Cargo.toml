@@ -1,0 +1,7 @@
+[package]
+name = "day22"
+version = "0.1.0"
+authors = ["Keith Gaughan <k@stereochro.me>"]
+edition = "2018"
+
+[dependencies]

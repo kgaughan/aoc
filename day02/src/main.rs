@@ -12,7 +12,13 @@ fn main() -> io::Result<()> {
         line.unwrap_or_default().trim_end().to_owned()
     }).collect();
 
-    println!("Checksum: {}", checksum_box_ids(values));
+    println!("Checksum: {}", checksum_box_ids(&values));
+
+    if let Some(common) = scan_for_consecutive(&values) {
+        println!("Common: {}", common)
+    } else {
+        println!("No consecutive IDs found.")
+    }
     Ok(())
 }
 
@@ -42,7 +48,7 @@ fn analyse_box_id(s: &str) -> Characteristics {
     result
 }
 
-fn checksum_box_ids(ids: Vec<String>) -> i32 {
+fn checksum_box_ids(ids: &Vec<String>) -> i32 {
     let mut twos = 0;
     let mut threes = 0;
 
@@ -78,7 +84,7 @@ fn check_if_consecutive(s1: &str, s2: &str) -> Option<String> {
     }
 }
 
-fn scan_for_consecutive(ids: Vec<String>) -> Option<String> {
+fn scan_for_consecutive(ids: &Vec<String>) -> Option<String> {
     for (i, id1) in ids.iter().enumerate() {
         if i < ids.len() - 1 {
             for j in (i + 1)..ids.len() {
@@ -113,7 +119,7 @@ fn test_checksum() {
                                      "abcccd".to_string(),
                                      "aabcdd".to_string(),
                                      "abcdee".to_string(),
-                                     "ababab".to_string()]), 12)
+                                     "ababab".to_string()].as_ref()), 12)
 }
 
 #[test]
@@ -130,6 +136,6 @@ fn test_scan_consecutive() {
                                          "pqrst".to_string(),
                                          "fguij".to_string(),
                                          "axcye".to_string(),
-                                         "wvxyz".to_string()]),
+                                         "wvxyz".to_string()].as_ref()),
                Some("fgij".to_string()))
 }

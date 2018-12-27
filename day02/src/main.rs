@@ -59,6 +59,25 @@ fn checksum_box_ids(ids: Vec<String>) -> i32 {
     twos * threes
 }
 
+fn check_if_consecutive(s1: &str, s2: &str) -> Option<String> {
+    let mut common = "".to_string();
+    let mut different = 0;
+
+    for (ch1, ch2) in s1.chars().zip(s2.chars()) {
+        if ch1 == ch2 {
+            common.push(ch1);
+        } else {
+            different += 1;
+        }
+    }
+
+    if different != 1 {
+        None
+    } else {
+        Some(common)
+    }
+}
+
 #[test]
 fn test_box_id() {
     assert_eq!(analyse_box_id("ab"),
@@ -82,4 +101,10 @@ fn test_checksum() {
                                      "aabcdd".to_string(),
                                      "abcdee".to_string(),
                                      "ababab".to_string()]), 12)
+}
+
+#[test]
+fn test_consecutive() {
+    assert_eq!(check_if_consecutive("abcde", "axcye"), None);
+    assert_eq!(check_if_consecutive("fghij", "fguij"), Some("fgij".to_string()));
 }

@@ -1,7 +1,19 @@
 use std::collections::HashMap;
+use std::fs::File;
+use std::io;
+use std::io::prelude::*;
+use std::io::BufReader;
 
-fn main() {
-    println!("Hello, world!");
+fn main() -> io::Result<()> {
+    let f = File::open("input.txt")?;
+    let reader = BufReader::new(f);
+
+    let values = reader.lines().map(|line| {
+        line.unwrap_or_default().trim_end().to_owned()
+    }).collect();
+
+    println!("Checksum: {}", checksum_box_ids(values));
+    Ok(())
 }
 
 #[derive(PartialEq, Debug)]
@@ -30,12 +42,12 @@ fn analyse_box_id(s: &str) -> Characteristics {
     result
 }
 
-fn checksum_box_ids(ids: Vec<&str>) -> i32 {
+fn checksum_box_ids(ids: Vec<String>) -> i32 {
     let mut twos = 0;
     let mut threes = 0;
 
     for id in ids {
-        let characteristics = analyse_box_id(id);
+        let characteristics = analyse_box_id(&id);
         if characteristics.has_two {
             twos += 1
         }
@@ -63,11 +75,11 @@ fn test_box_id() {
 
 #[test]
 fn test_checksum() {
-    assert_eq!(checksum_box_ids(vec!["abcdef",
-                                     "bababc",
-                                     "abbcde",
-                                     "abcccd",
-                                     "aabcdd",
-                                     "abcdee",
-                                     "ababab"]), 12)
+    assert_eq!(checksum_box_ids(vec!["abcdef".to_string(),
+                                     "bababc".to_string(),
+                                     "abbcde".to_string(),
+                                     "abcccd".to_string(),
+                                     "aabcdd".to_string(),
+                                     "abcdee".to_string(),
+                                     "ababab".to_string()]), 12)
 }

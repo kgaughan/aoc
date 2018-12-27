@@ -30,8 +30,25 @@ fn analyse_box_id(s: &str) -> Characteristics {
     result
 }
 
+fn checksum_box_ids(ids: Vec<&str>) -> i32 {
+    let mut twos = 0;
+    let mut threes = 0;
+
+    for id in ids {
+        let characteristics = analyse_box_id(id);
+        if characteristics.has_two {
+            twos += 1
+        }
+        if characteristics.has_three {
+            threes += 1
+        }
+    }
+
+    twos * threes
+}
+
 #[test]
-fn tests_box_id() {
+fn test_box_id() {
     assert_eq!(analyse_box_id("ab"),
                Characteristics { has_two: false, has_three: false });
     assert_eq!(analyse_box_id("aabb"),
@@ -42,4 +59,15 @@ fn tests_box_id() {
                Characteristics { has_two: false, has_three: true });
     assert_eq!(analyse_box_id("aaaabbbb"),
                Characteristics { has_two: false, has_three: false });
+}
+
+#[test]
+fn test_checksum() {
+    assert_eq!(checksum_box_ids(vec!["abcdef",
+                                     "bababc",
+                                     "abbcde",
+                                     "abcccd",
+                                     "aabcdd",
+                                     "abcdee",
+                                     "ababab"]), 12)
 }

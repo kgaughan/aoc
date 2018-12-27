@@ -1,9 +1,23 @@
 #[macro_use] extern crate text_io;
 
 use std::cmp;
+use std::fs::File;
+use std::io;
+use std::io::prelude::*;
+use std::io::BufReader;
+use std::vec;
 
-fn main() {
-    println!("Hello, world!");
+fn main() -> io::Result<()> {
+    let f = File::open("input.txt")?;
+    let reader = BufReader::new(f);
+
+    let rects: vec::Vec<Rect> = reader.lines().map(|line| {
+        parse_rect(line.unwrap_or_default().as_str())
+    }).collect();
+
+    println!("Total overlap: {}", sum_overlaps(&rects));
+
+    Ok(())
 }
 
 #[derive(PartialEq, Debug)]
@@ -55,6 +69,20 @@ fn parse_rect(s: &str) -> Rect {
     Rect::new(&id, x, y, w, h)
 }
 
+fn sum_overlaps(rects: &Vec<Rect>) -> i32 {
+    let mut total = 0;
+    for (i, r1) in rects.iter().enumerate() {
+        if i < rects.len() - 1 {
+            for j in (i + 1)..rects.len() {
+                if let Some(overlap) = r1.overlap(&rects[j]) {
+                    total += overlap
+                }
+            }
+        }
+    }
+    total
+}
+
 #[test]
 fn test_bottom_right() {
     assert_eq!(Rect::new("", 0, 0, 1, 1).bottom_right(),
@@ -99,4 +127,12 @@ fn test_parse() {
                Rect::new("2", 3, 1, 4, 4));
     assert_eq!(parse_rect("#3 @ 5,5: 2x2"),
                Rect::new("3", 5, 5, 2, 2));
+}
+
+#[test]
+fn test_sum() {
+    let rects = vec![Rect::new("1", 1, 3, 4, 4),
+                     Rect::new("2", 3, 1, 4, 4),
+                     Rect::new("3", 5, 5, 2, 2)];
+    assert_eq!(sum_overlaps(&rects), 4)
 }

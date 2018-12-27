@@ -42,6 +42,19 @@ impl Rect {
     }
 }
 
+fn parse_rect(s: &str) -> Rect {
+    let id: String;
+    let x: i32;
+    let y: i32;
+    let w: i32;
+    let h: i32;
+
+    scan!(s.bytes() => "#{} @ {},{}: {}x{}",
+          id, x, y, w, h);
+
+    Rect::new(&id, x, y, w, h)
+}
+
 #[test]
 fn test_bottom_right() {
     assert_eq!(Rect::new("", 0, 0, 1, 1).bottom_right(),
@@ -76,4 +89,14 @@ fn test_overlaps() {
     // Fully contained
     let r4 = Rect::new("", 8, 8, 2, 2);
     assert_eq!(r2.overlap(&r4), Some(4));
+}
+
+#[test]
+fn test_parse() {
+    assert_eq!(parse_rect("#1 @ 1,3: 4x4"),
+               Rect::new("1", 1, 3, 4, 4));
+    assert_eq!(parse_rect("#2 @ 3,1: 4x4"),
+               Rect::new("2", 3, 1, 4, 4));
+    assert_eq!(parse_rect("#3 @ 5,5: 2x2"),
+               Rect::new("3", 5, 5, 2, 2));
 }

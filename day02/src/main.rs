@@ -78,6 +78,19 @@ fn check_if_consecutive(s1: &str, s2: &str) -> Option<String> {
     }
 }
 
+fn scan_for_consecutive(ids: Vec<String>) -> Option<String> {
+    for (i, id1) in ids.iter().enumerate() {
+        if i < ids.len() - 1 {
+            for j in (i + 1)..ids.len() {
+                if let Some(common) = check_if_consecutive(&id1, &ids[j]) {
+                    return Some(common)
+                }
+            }
+        }
+    }
+    None
+}
+
 #[test]
 fn test_box_id() {
     assert_eq!(analyse_box_id("ab"),
@@ -107,4 +120,16 @@ fn test_checksum() {
 fn test_consecutive() {
     assert_eq!(check_if_consecutive("abcde", "axcye"), None);
     assert_eq!(check_if_consecutive("fghij", "fguij"), Some("fgij".to_string()));
+}
+
+#[test]
+fn test_scan_consecutive() {
+    assert_eq!(scan_for_consecutive(vec!["abcde".to_string(),
+                                         "fghij".to_string(),
+                                         "klmno".to_string(),
+                                         "pqrst".to_string(),
+                                         "fguij".to_string(),
+                                         "axcye".to_string(),
+                                         "wvxyz".to_string()]),
+               Some("fgij".to_string()))
 }

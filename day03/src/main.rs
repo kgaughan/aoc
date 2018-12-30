@@ -11,16 +11,19 @@ fn main() -> io::Result<()> {
     let f = File::open("input.txt")?;
     let reader = BufReader::new(f);
 
-    let rects: vec::Vec<Rect> = reader.lines().map(|line| {
+    // .sort() further down requres this be mutable.
+    let mut rects: vec::Vec<Rect> = reader.lines().map(|line| {
         parse_rect(line.unwrap_or_default().as_str())
     }).collect();
+    // Has to be separate to keep the type inference engine happy.
+    rects.sort();
 
     println!("Total overlap: {}", sum_overlaps(&rects));
 
     Ok(())
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Eq, Ord, Debug)]
 struct Rect {
     id: String,
     x: i32,
@@ -47,12 +50,20 @@ impl Rect {
         let x6 = cmp::min(x2, x4);
         let y6 = cmp::min(y2, y4);
 
-        // Degenerate triangle: no overlap
+        // Degenerate rectangle: no overlap
         if x5 >= x6 || y5 >= y6 {
             None
         } else {
             Some((x6 - x5) * (y6 - y5))
         }
+    }
+}
+
+impl PartialOrd for Rect {
+    fn partial_cmp(&self, other: &Rect) -> Option<cmp::Ordering> {
+        // Enough ordering for sorting the rectangles for a plane sweep
+        // (https://en.wikipedia.org/wiki/Sweep_line_algorithm)
+        Some(self.x.cmp(&other.x))
     }
 }
 

@@ -14,7 +14,11 @@ fn main() -> io::Result<()> {
         parse_rect(line.unwrap_or_default().as_str())
     }).collect();
 
-    println!("Total overlap: {}", sum_overlaps(&rects));
+    let mut sheet: [[u8; 1000]; 1000] = [[0; 1000]; 1000];
+    plot_rectangles(&rects, &mut sheet);
+
+    println!("Total overlap: {}", count_overlaps(&sheet));
+    println!("First without overlap: {}", find_first_without_overlap(&rects, &sheet).unwrap());
 
     Ok(())
 }
@@ -55,18 +59,8 @@ fn parse_rect(s: &str) -> Rect {
     Rect::new(&id, x, y, w, h)
 }
 
-fn sum_overlaps(rects: &Vec<Rect>) -> i32 {
-    // I'm not happy with doing this using a brute-force mechanism such as
-    // this, but I've faffed around long enough. Here's the proper way to
-    // solve it:
-    //
-    //     http://codercareer.blogspot.com/2011/12/no-27-area-of-rectangles.html
-    //
-    // There's code in the previous commit that would be needed to implement
-    // that algorithm.
-
+fn plot_rectangles(rects: &Vec<Rect>, sheet: &mut [[u8; 1000]; 1000]) -> () {
     // Plot the rectangles. 0 = empty; 1 = no overlap; 2 = overlap
-    let mut sheet: [[u8; 1000]; 1000] = [[0; 1000]; 1000];
     for rect in rects.iter() {
         let (x1, y1) = rect.top_left();
         let (x2, y2) = rect.bottom_right();
@@ -80,7 +74,9 @@ fn sum_overlaps(rects: &Vec<Rect>) -> i32 {
             }
         }
     }
+}
 
+fn count_overlaps(sheet: &[[u8; 1000]; 1000]) -> i32 {
     // Count the overlaps. Probably not idiomatic.
     let mut total = 0;
     for x in 0..1000 {
@@ -90,8 +86,29 @@ fn sum_overlaps(rects: &Vec<Rect>) -> i32 {
             }
         }
     }
-
     total
+}
+
+fn find_first_without_overlap(rects: &Vec<Rect>, sheet: &[[u8; 1000]; 1000]) -> Option<String> {
+    // Plot the rectangles. 0 = empty; 1 = no overlap; 2 = overlap
+    for rect in rects.iter() {
+        let (x1, y1) = rect.top_left();
+        let (x2, y2) = rect.bottom_right();
+
+        let mut overlapping = false;
+        'outer: for x in x1..x2 {
+            for y in y1..y2 {
+                if sheet[y][x] == 2 {
+                    overlapping = true;
+                    break 'outer;
+                }
+            }
+        }
+        if !overlapping {
+            return Some(rect.id.clone());
+        }
+    }
+    None
 }
 
 #[test]
@@ -119,5 +136,21 @@ fn test_sum() {
     let rects = vec![Rect::new("1", 1, 3, 4, 4),
                      Rect::new("2", 3, 1, 4, 4),
                      Rect::new("3", 5, 5, 2, 2)];
-    assert_eq!(sum_overlaps(&rects), 4)
+
+    let mut sheet: [[u8; 1000]; 1000] = [[0; 1000]; 1000];
+    plot_rectangles(&rects, &mut sheet);
+
+    assert_eq!(count_overlaps(&sheet), 4)
+}
+
+#[test]
+fn test_no_overlap() {
+    let rects = vec![Rect::new("1", 1, 3, 4, 4),
+                     Rect::new("2", 3, 1, 4, 4),
+                     Rect::new("3", 5, 5, 2, 2)];
+
+    let mut sheet: [[u8; 1000]; 1000] = [[0; 1000]; 1000];
+    plot_rectangles(&rects, &mut sheet);
+
+    assert_eq!(find_first_without_overlap(&rects, &sheet).unwrap(), "3")
 }

@@ -3,6 +3,7 @@ extern crate pest;
 extern crate pest_derive;
 
 use pest::Parser;
+use std::cmp;
 use std::fs;
 
 #[derive(Parser)]
@@ -10,12 +11,25 @@ use std::fs;
 pub struct GuardParser;
 
 // The state of the guard.
+#[derive(Eq, Debug)]
 enum State {
     StartShift(i32),
     FallAsleep,
     WakeUp,
 }
 
+impl PartialEq for State {
+    fn eq(&self, other: &State) -> bool {
+        match (&self, other) {
+           (State::FallAsleep, State::FallAsleep) => true,
+           (State::WakeUp, State::WakeUp)  => true,
+           (State::StartShift(id1), State::StartShift(id2)) => id1 == id2,
+           (_, _) => false,
+        }
+    }
+}
+
+#[derive(PartialEq, Eq, Debug)]
 struct Record {
     year: u16,
     month: u8,
@@ -23,6 +37,26 @@ struct Record {
     hour: u8,
     minute: u8,
     state: State,
+}
+
+impl PartialOrd for Record {
+    fn partial_cmp(&self, other: &Record) -> Option<cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for Record {
+    fn cmp(&self, other: &Record) -> cmp::Ordering {
+        // This isn't exactly correct: I'm ignoring the state in the comparison
+        // and really shouldn't. However, there shouldn't be any instances of
+        // events happening within the same second. If it turns out there are,
+        // then StartShift < FallAsleep < StartShift.
+        self.year.cmp(&other.year)
+            .then(self.month.cmp(&other.month))
+            .then(self.day.cmp(&other.day))
+            .then(self.hour.cmp(&other.hour))
+            .then(self.minute.cmp(&other.minute))
+    }
 }
 
 fn main() {
@@ -92,5 +126,10 @@ fn main() {
             Rule::EOI => (),
             _ => unreachable!(),
         }
+    }
+    records.sort();
+
+    for record in records {
+        println!("{:?}", record);
     }
 }

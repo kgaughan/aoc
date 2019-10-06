@@ -1,0 +1,45 @@
+year = {
+    ASCII_DIGIT{4}
+}
+month = {
+    ASCII_DIGIT{2}
+}
+day = {
+    ASCII_DIGIT{2}
+}
+hour = {
+    ASCII_DIGIT{2}
+}
+minute = {
+    ASCII_DIGIT{2}
+}
+timestamp = {
+    "["
+    ~ year ~ "-" ~ month ~ "-" ~ day
+    ~ " "
+    ~ hour ~ ":" ~ minute
+    ~ "]"
+}
+
+id = {
+    ASCII_DIGIT+
+}
+start_shift = {
+    "Guard #" ~ id ~ " begins shift"
+}
+fall_asleep = {
+    "falls asleep"
+}
+wake_up = {
+    "wakes up"
+}
+
+record = {
+    timestamp ~ " " ~ (start_shift | fall_asleep | wake_up)
+}
+
+file = {
+    SOI
+    ~ (record ~ ("\r\n" | "\n"))*
+    ~ EOI
+}

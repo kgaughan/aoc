@@ -4,19 +4,15 @@ use std::io::BufReader;
 use std::fs::File;
 
 fn get_fuel(mass: f64) -> f64 {
-    let mut total = 0.0;
-    let mut balance = mass;
-    loop {
-        let additional = ((balance / 3.0).floor() - 2.0).max(0.0);
+    fn get_fuel_rec(mass: f64, total: f64) -> f64 {
+        let additional = ((mass / 3.0).floor() - 2.0).max(0.0);
         if additional > 0.0 {
-            total += additional;
-            balance = additional
+            get_fuel_rec(additional, total + additional)
         } else {
-            // We've accounted for all the additional fuel
-            break
+            total
         }
     }
-    total
+    get_fuel_rec(mass, 0.0)
 }
 
 fn main() -> io::Result<()> {

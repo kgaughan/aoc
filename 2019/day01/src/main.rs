@@ -21,13 +21,11 @@ fn get_fuel(mass: f64) -> f64 {
 
 fn main() -> io::Result<()> {
     let f = File::open("input.txt")?;
-    let reader = BufReader::new(f);
 
-    let mut total = 0.0;
-    for line in reader.lines() {
-        let value: f64 = line?.parse().unwrap();
-        total += get_fuel(value);
-    }
+    let total: f64 = BufReader::new(f)
+        .lines()
+        .map(|l| l.unwrap().parse::<f64>().unwrap())
+        .map(get_fuel).sum();
 
     println!("Fuel requirement: {}", total);
 

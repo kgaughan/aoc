@@ -36,3 +36,11 @@ So, for each module mass, calculate its fuel and add it to the total. Then, trea
 What is the sum of the fuel requirements for all of the modules on your spacecraft when also taking into account the mass of the added fuel? (Calculate the fuel requirements for each module separately, then add them all up at the end.)
 
 > Fuel requirement: 4896902
+
+## Notes
+
+I could've attempted to clean up `calc()` to separate out the I/O by building a [vec](https://doc.rust-lang.org/std/macro.vec.html) and then iterating over that. However, I wanted to keep it so that the calculation was done lazily over the data as it streamed in from the file. I haven't figured out a nice way to do that, so I'm leaving the I/O code bundled into `calc()` for now.
+
+I probably need some intermediate code that can cleanly decouple the code for reading and parsing the stream from that which performs the calculations on it.
+
+I'm using `unwrap()` because I'm lazy and this is Advent of Code, not anything that'd be used in production.

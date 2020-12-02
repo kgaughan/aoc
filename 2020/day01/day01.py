@@ -2,16 +2,20 @@
 
 import argparse
 import itertools
-import sys
 
-def day01a(numbers):
+
+def parse(fh):
+    return [int(arg.strip()) for arg in fh]
+
+
+def part_a(numbers):
     for fst, snd in itertools.combinations(numbers, 2):
         if fst + snd == 2020:
             return fst * snd
     return None
 
 
-def day01b(numbers):
+def part_b(numbers):
     for fst, snd, trd in itertools.combinations(numbers, 3):
         if fst + snd + trd == 2020:
             return fst * snd * trd
@@ -22,9 +26,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("infile", type=argparse.FileType())
     args = parser.parse_args()
-    numbers = [int(arg.strip()) for arg in args.infile]
-    print("day01a:", day01a(numbers))
-    print("day01b:", day01b(numbers))
+    records = parse(args.infile)
+    print("a:", part_a(records))
+    print("b:", part_b(records))
 
 
 if __name__ == "__main__":

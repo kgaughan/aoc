@@ -8,6 +8,8 @@ import (
 	"strconv"
 )
 
+type criterion func(int, int) bool
+
 func main() {
 	f, err := os.Open("input.txt")
 	if err != nil {
@@ -49,62 +51,38 @@ func main() {
 	fmt.Printf("Power consumption: %v\n", gamma*epsilon)
 
 	highBit := len(totals) - 1
+	generatorRating := filter(lines, highBit, func(ones, scanLimit int) bool {
+		return ones*2 >= scanLimit
+	})
+	scrubberRating := filter(lines, highBit, func(ones, scanLimit int) bool {
+		return ones*2 < scanLimit
+	})
+	fmt.Printf("Life support rating: %v\n", generatorRating*scrubberRating)
+}
 
-	// Calculate O2 generation. We start with a full list of values, and for
-	// each bit from most to least significant, we determine the most common
-	// bit in that column, then go over all the data a second time, discarding
-	// any values that don't have that bit set.
-	o2Data := append([]int64{}, lines...)
-	o2ScanLimit := len(o2Data)
+func filter(lines []int64, highBit int, fn criterion) int64 {
+	data := append([]int64{}, lines...)
+	scanLimit := len(data)
 	for i := highBit; i >= 0; i-- {
 		ones := 0
-		for j := 0; j < o2ScanLimit; j++ {
-			if o2Data[j]&(1<<i) != 0 {
+		for j := 0; j < scanLimit; j++ {
+			if data[j]&(1<<i) != 0 {
 				ones++
 			}
 		}
-		filterSet := ones*2 >= o2ScanLimit
+		filterSet := fn(ones, scanLimit)
 		newLimit := 0
-		for j := 0; j < o2ScanLimit; j++ {
-			isSet := o2Data[j]&(1<<i) > 0
+		for j := 0; j < scanLimit; j++ {
+			isSet := data[j]&(1<<i) > 0
 			if isSet == filterSet {
-				o2Data[newLimit] = o2Data[j]
+				data[newLimit] = data[j]
 				newLimit++
 			}
 		}
-		o2ScanLimit = newLimit
-		if o2ScanLimit == 1 {
+		scanLimit = newLimit
+		if scanLimit == 1 {
 			break
 		}
 	}
-
-	// Calculate CO2 generation. We start with a full list of values, and for
-	// each bit from most to least significant, we determine the least common
-	// bit in that column, then go over all the data a second time, discarding
-	// any values that don't have that bit set.
-	co2Data := append([]int64{}, lines...)
-	co2ScanLimit := len(co2Data)
-	for i := highBit; i >= 0; i-- {
-		ones := 0
-		for j := 0; j < co2ScanLimit; j++ {
-			if co2Data[j]&(1<<i) != 0 {
-				ones++
-			}
-		}
-		filterSet := ones*2 < co2ScanLimit
-		newLimit := 0
-		for j := 0; j < co2ScanLimit; j++ {
-			isSet := co2Data[j]&(1<<i) > 0
-			if isSet == filterSet {
-				co2Data[newLimit] = co2Data[j]
-				newLimit++
-			}
-		}
-		co2ScanLimit = newLimit
-		if co2ScanLimit == 1 {
-			break
-		}
-	}
-
-	fmt.Printf("Life support rating: %v\n", co2Data[0]*o2Data[0])
+	return data[0]
 }

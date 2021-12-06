@@ -26,14 +26,22 @@ func main() {
 		log.Fatal(err)
 	}
 
+	var lastWinningGrid *bingo.Grid
+	eliminated := make(map[int]bool, len(grids))
+	lastWinningNumber := 0
 	for _, n := range numbers {
-		for _, grid := range grids {
+		for i, grid := range grids {
+			if _, exists := eliminated[i]; exists {
+				continue
+			}
 			grid.Mark(n)
 			if grid.IsWinning() {
-				score := grid.GetScore()
-				fmt.Printf("Score on winning grid: %d\n", n*score)
-				return
+				eliminated[i] = true
+				lastWinningGrid = grid
+				lastWinningNumber = n
 			}
 		}
 	}
+
+	fmt.Printf("Score on winning grid: %d\n", lastWinningGrid.GetScore()*lastWinningNumber)
 }

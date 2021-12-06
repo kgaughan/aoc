@@ -77,8 +77,6 @@ first. What will your final score be if you choose that board?
 
 Your puzzle answer was 8136.
 
-The first half of this puzzle is complete! It provides one gold star: *
-
 Part Two
 
 On the other hand, it might be wise to try a different strategy: let the giant
@@ -96,3 +94,7 @@ unmarked numbers equal to 148 for a final score of 148 * 13 = 1924.
 
 Figure out which board will win last. Once it wins, what would its final score
 be?
+
+Your puzzle answer was 12738.
+
+Both parts of this puzzle are complete! They provide two gold stars: **

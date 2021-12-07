@@ -50,5 +50,5 @@ func main() {
 		sum += n
 	}
 
-	fmt.Printf("Lanternfish after 256 days: %d\n", sum)
+	fmt.Printf("Lanternfish after %d days: %d\n", DAYS, sum)
 }

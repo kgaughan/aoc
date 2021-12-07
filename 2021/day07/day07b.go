@@ -6,7 +6,6 @@ import (
 	"log"
 	"math"
 	"os"
-	"sort"
 	"strconv"
 	"strings"
 )
@@ -27,16 +26,6 @@ func parseFloats(in []string) ([]float64, error) {
 	return out, nil
 }
 
-func harmonicMean(in []float64) float64 {
-	var sum float64 = 0.0
-	for _, n := range in {
-		if n != 0.0 {
-			sum += 1 / n
-		}
-	}
-	return float64(len(in)) / sum
-}
-
 func main() {
 	f, err := os.Open("input.txt")
 	if err != nil {
@@ -54,20 +43,22 @@ func main() {
 		log.Fatal(err)
 	}
 
-	/*
-		// Calculate the harmonic mean. Why the harmonic mean? Well, because
-		// that's the method used to calculate the resistance in parallel,
-		// and this looks a lot like that. The harmonic mean would be the
-		// position all the crabs need to move to in order to minimise fuel
-		// consumption amongst all of them.
-		pos := math.Round(harmonicMean(numbers))
-	*/
-	sort.Float64s(numbers)
-	pos := numbers[len(numbers)/2]
-
-	fuel := 0.0
+	// Cost is dominated by those furthest out, so an arithmetic mean is what's
+	// needed.
+	sum := 0.0
 	for _, n := range numbers {
-		fuel += math.Abs(n - pos)
+		sum += n
 	}
+	// Should really check math.Floor() and math.Ceil(), as it really could be
+	// either. Annoyingly, math.Round() won't work, as there appear to be edge
+	// cases for 0.5.
+	pos := math.Floor(sum / float64(len(numbers)))
+
+	fuel := 0
+	for _, n := range numbers {
+		dist := math.Abs(n - pos)
+		fuel += int((dist * (dist + 1)) / 2) // sum of arithmetic progression
+	}
+
 	fmt.Printf("Fuel use: %v\n", fuel)
 }

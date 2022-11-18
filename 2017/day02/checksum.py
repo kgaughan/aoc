@@ -10,8 +10,7 @@ def parse(line):
 def parse_file(path):
     lines = []
     with open(path) as fh:
-        for line in fh:
-            lines.append(parse(line))
+        lines.extend(parse(line) for line in fh)
     return lines
 
 

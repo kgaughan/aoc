@@ -34,18 +34,16 @@ def count_garbage(stream):
     score = 0
     mode = STREAM
     for ch in stream:
-        if mode == SKIP:
+        if mode != SKIP and mode == STREAM and ch == '<' or mode == SKIP:
             mode = JUNK
-        elif mode == STREAM:
-            if ch == '<':
-                mode = JUNK
-        elif mode == JUNK:
-            if ch == '!':
-                mode = SKIP
-            elif ch == '>':
-                mode = STREAM
-            else:
-                score += 1
+        elif mode == STREAM or mode != JUNK:
+            pass
+        elif ch == '!':
+            mode = SKIP
+        elif ch == '>':
+            mode = STREAM
+        else:
+            score += 1
     return score
 
 

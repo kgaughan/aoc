@@ -4,9 +4,7 @@
 def expand(n, pos, neg):
     if n > 0:
         return [pos] * n
-    if n < 0:
-        return [neg] * -n
-    return []
+    return [neg] * -n if n < 0 else []
 
 
 def simplify(directions):

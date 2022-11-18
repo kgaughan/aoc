@@ -4,8 +4,7 @@
 def slurp(path):
     result = []
     with open(path) as fh:
-        for line in fh:
-            result.append(line.rstrip())
+        result.extend(line.rstrip() for line in fh)
     return result
 
 
@@ -29,11 +28,7 @@ def has_no_anagram_dupe(passphrase):
 
 
 def runner(lines, fn):
-    result = 0
-    for line in lines:
-        if fn(line):
-            result += 1
-    return result
+    return sum(bool(fn(line)) for line in lines)
 
 
 def main():

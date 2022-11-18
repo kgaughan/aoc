@@ -9,17 +9,25 @@ def parse(fh):
 
 
 def part_a(numbers):
-    for fst, snd in itertools.combinations(numbers, 2):
-        if fst + snd == 2020:
-            return fst * snd
-    return None
+    return next(
+        (
+            fst * snd
+            for fst, snd in itertools.combinations(numbers, 2)
+            if fst + snd == 2020
+        ),
+        None,
+    )
 
 
 def part_b(numbers):
-    for fst, snd, trd in itertools.combinations(numbers, 3):
-        if fst + snd + trd == 2020:
-            return fst * snd * trd
-    return None
+    return next(
+        (
+            fst * snd * trd
+            for fst, snd, trd in itertools.combinations(numbers, 3)
+            if fst + snd + trd == 2020
+        ),
+        None,
+    )
 
 
 def main():

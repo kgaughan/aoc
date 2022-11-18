@@ -29,11 +29,8 @@ def eval_jumps2(jumps):
 
 
 def main():
-    jumps = []
     with open("input.txt") as fh:
-        for line in fh:
-            jumps.append(int(line))
-
+        jumps = [(int(line) for line in fh]
     print(eval_jumps1(jumps))
     print(eval_jumps2(jumps))
 

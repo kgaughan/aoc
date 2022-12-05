@@ -5,10 +5,25 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 )
 
 type rucksack struct {
 	compartment1, compartment2 string
+}
+
+type sortRunes []rune
+
+func (s sortRunes) Less(i, j int) bool {
+	return s[i] < s[j]
+}
+
+func (s sortRunes) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+
+func (s sortRunes) Len() int {
+	return len(s)
 }
 
 func readInput() []rucksack {
@@ -33,27 +48,54 @@ func readInput() []rucksack {
 	return result
 }
 
-func findCommon(sack rucksack) []rune {
+func findCommon(items ...string) []rune {
 	common := make([]rune, 0, 4)
-	// The data is short enough that it makes little sense to sort the
-	// contents, so On^2 comparisons is justifiable, I think.
-	for _, ch1 := range sack.compartment1 {
-		for _, ch2 := range sack.compartment2 {
-			if ch1 == ch2 {
-				add := true
-				// Skip any duplicates
-				for _, ch3 := range common {
-					if ch1 == ch3 {
-						add = false
-						break
-					}
-				}
-				if add {
-					common = append(common, ch1)
-				}
+	indices := make([]int, len(items))
+	runeSets := make([][]rune, len(items))
+	for i, item := range items {
+		runes := []rune(item)
+		sort.Sort(sortRunes(runes))
+		indices[i] = 0
+		runeSets[i] = runes
+	}
+loop:
+	for {
+		// If we've reached the end of any set, we're done
+		for i, index := range indices {
+			if index >= len(runeSets[i]) {
+				break loop
+			}
+		}
+
+		// Check if all the current elements are the same
+		same := true
+		candidate := runeSets[0][indices[0]]
+		lowest := candidate
+		for i, rs := range runeSets {
+			if rs[indices[i]] != candidate {
+				// This scan didn't find a good candidate
+				same = false
+			}
+			// Find the lowest rune: we increment the indices of anything with
+			// this later
+			if rs[indices[i]] < lowest {
+				lowest = rs[indices[i]]
+			}
+		}
+
+		// We have a good candidate, so append it
+		if same && (len(common) == 0 || common[len(common)-1] != candidate) {
+			common = append(common, candidate)
+		}
+
+		// Move forward where necessary
+		for i, rs := range runeSets {
+			if rs[indices[i]] == lowest {
+				indices[i]++
 			}
 		}
 	}
+
 	return common
 }
 
@@ -70,7 +112,7 @@ func getPriority(ch rune) int {
 func part1(input []rucksack) {
 	score := 0
 	for _, sack := range input {
-		for _, ch := range findCommon(sack) {
+		for _, ch := range findCommon(sack.compartment1, sack.compartment2) {
 			score += getPriority(ch)
 		}
 	}

@@ -7,12 +7,33 @@ import (
 	"os"
 )
 
+func min(x, y int) int {
+	if x > y {
+		return y
+	}
+	return x
+}
+
+func max(x, y int) int {
+	if x > y {
+		return x
+	}
+	return y
+}
+
 type span struct {
 	start, end int
 }
 
 func (s span) Contains(other span) bool {
 	return s.start >= other.start && s.end <= other.end
+}
+
+func (s span) Overlap(other span) int {
+	if s.start <= other.end && other.start <= s.end {
+		return min(s.end, other.end) - max(s.start, other.start) + 1
+	}
+	return 0
 }
 
 type pair struct {
@@ -50,6 +71,13 @@ func part1(input []pair) {
 }
 
 func part2(input []pair) {
+	n := 0
+	for _, entry := range input {
+		if entry.s1.Overlap(entry.s2) > 0 {
+			n++
+		}
+	}
+	fmt.Printf("Part 2: %v\n", n)
 }
 
 func main() {

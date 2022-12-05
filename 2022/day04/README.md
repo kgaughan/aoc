@@ -55,3 +55,31 @@ already be cleaning, so these seem like the most in need of reconsideration. In
 this example, there are `_2_` such pairs.
 
 _In how many assignment pairs does one range fully contain the other?_
+
+[Day 4 - Advent of Code 2022](https://adventofcode.com/2022/day/4#part2)
+
+Your puzzle answer was `485`.
+
+The first half of this puzzle is complete! It provides one gold star: \*
+
+# Part Two
+
+It seems like there is still quite a bit of duplicate work planned. Instead,
+the Elves would like to know the number of pairs that _overlap at all_.
+
+In the above example, the first two pairs (`2-4,6-8` and `2-3,4-5`) don't
+overlap, while the remaining four pairs (`5-7,7-9`, `2-8,3-7`, `6-6,4-6`, and
+`2-6,4-8`) do overlap:
+
+-   `5-7,7-9` overlaps in a single section, `7`.
+-   `2-8,3-7` overlaps all of the sections `3` through `7`.
+-   `6-6,4-6` overlaps in a single section, `6`.
+-   `2-6,4-8` overlaps in sections `4`, `5`, and `6`.
+
+So, in this example, the number of overlapping assignment pairs is `_4_`.
+
+_In how many assignment pairs do the ranges overlap?_
+
+Your puzzle answer was 857.
+
+Both parts of this puzzle are complete! They provide two gold stars: \*\*

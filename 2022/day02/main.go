@@ -39,24 +39,13 @@ const (
 
 const p2Offset = 23
 
-func scorePlay(p1, p2 rune) int {
-	beats := []struct {
-		choice, beats rune
-	}{
-		{
-			choice: rock,
-			beats:  scissors,
-		},
-		{
-			choice: scissors,
-			beats:  paper,
-		},
-		{
-			choice: paper,
-			beats:  rock,
-		},
-	}
+type trump struct {
+	choice, beats rune
+}
 
+var beats []trump
+
+func scorePlay(p1, p2 rune) int {
 	score := 0
 	switch p2 {
 	case rock:
@@ -89,10 +78,52 @@ func part1(guide []pair) {
 	for _, entry := range guide {
 		score += scorePlay(entry.p1, entry.p2-p2Offset)
 	}
-	fmt.Printf("Cumulative score: %v\n", score)
+	fmt.Printf("Part 1 score: %v\n", score)
+}
+
+func getCorrectPlay(p1, hint rune) rune {
+	switch hint {
+	case 'X': // Lose
+		for _, pairwise := range beats {
+			if p1 == pairwise.choice {
+				return pairwise.beats
+			}
+		}
+	case 'Z': // Win
+		for _, pairwise := range beats {
+			if p1 == pairwise.beats {
+				return pairwise.choice
+			}
+		}
+	}
+	// Default: draw
+	return p1
 }
 
 func part2(guide []pair) {
+	score := 0
+	for _, entry := range guide {
+		attempt := getCorrectPlay(entry.p1, entry.p2)
+		score += scorePlay(entry.p1, attempt)
+	}
+	fmt.Printf("Part 2 score: %v\n", score)
+}
+
+func init() {
+	beats = []trump{
+		{
+			choice: rock,
+			beats:  scissors,
+		},
+		{
+			choice: scissors,
+			beats:  paper,
+		},
+		{
+			choice: paper,
+			beats:  rock,
+		},
+	}
 }
 
 func main() {

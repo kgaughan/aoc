@@ -12,6 +12,10 @@ type rucksack struct {
 	compartment1, compartment2 string
 }
 
+func (sack rucksack) all() string {
+	return sack.compartment1 + sack.compartment2
+}
+
 type sortRunes []rune
 
 func (s sortRunes) Less(i, j int) bool {
@@ -120,6 +124,14 @@ func part1(input []rucksack) {
 }
 
 func part2(input []rucksack) {
+	score := 0
+	for i := 0; i < len(input); i += 3 {
+		for _, ch := range findCommon(input[i].all(), input[i+1].all(), input[i+2].all()) {
+			score += getPriority(ch)
+		}
+	}
+	fmt.Printf("Part 2, sum of priorities: %v\n", score)
+
 }
 
 func main() {

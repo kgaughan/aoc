@@ -94,7 +94,7 @@ loop:
 
 		// Move forward where necessary
 		for i, rs := range runeSets {
-			if rs[indices[i]] == lowest {
+			for indices[i] < len(runeSets[i]) && rs[indices[i]] == lowest {
 				indices[i]++
 			}
 		}

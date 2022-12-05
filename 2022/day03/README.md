@@ -88,8 +88,17 @@ And the second group's rucksacks are the next three lines:
     ttgJtRGJQctTZtZT
     CrZsJsPPZsGzwwsLwLmpwMDw
 
-In the first group, the only item type that appears in all three rucksacks is lowercase `r`; this must be their badges. In the second group, their badge item type must be `Z`.
+In the first group, the only item type that appears in all three rucksacks is
+lowercase `r`; this must be their badges. In the second group, their badge item
+type must be `Z`.
 
-Priorities for these items must still be found to organize the sticker attachment efforts: here, they are 18 (`r`) for the first group and 52 (`Z`) for the second group. The sum of these is `_70_`.
+Priorities for these items must still be found to organize the sticker
+attachment efforts: here, they are 18 (`r`) for the first group and 52 (`Z`)
+for the second group. The sum of these is `_70_`.
 
-Find the item type that corresponds to the badges of each three-Elf group. _What is the sum of the priorities of those item types?_
+Find the item type that corresponds to the badges of each three-Elf group.
+_What is the sum of the priorities of those item types?_
+
+Your puzzle answer was 2548.
+
+Both parts of this puzzle are complete! They provide two gold stars: \*\*

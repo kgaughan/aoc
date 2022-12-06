@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -31,6 +32,46 @@ func (s *stack) moveTo(other *stack, n int) bool {
 	s.stack = s.stack[:len(s.stack)-n]
 	return true
 }
+
+func (s *stack) moveBatch(other *stack, n int) bool {
+	if len(s.stack) < n {
+		return false
+	}
+	other.stack = append(other.stack, s.stack[len(s.stack)-n:]...)
+	s.stack = s.stack[:len(s.stack)-n]
+	return true
+}
+
+type rule struct {
+	n, from, to int
+}
+
+func printTop(stacks []stack) {
+	for i := 0; i < len(stacks); i++ {
+		fmt.Printf("%c", stacks[i].top())
+	}
+}
+
+func part1(stacks []stack, rules []rule) {
+	for _, rule := range rules {
+		stacks[rule.from-1].moveTo(&stacks[rule.to-1], rule.n)
+	}
+	fmt.Print("Part 1: ")
+	printTop(stacks)
+	fmt.Print("\n")
+}
+
+func part2(stacks []stack, rules []rule) {
+	for _, rule := range rules {
+		stacks[rule.from-1].moveBatch(&stacks[rule.to-1], rule.n)
+	}
+	fmt.Print("Part 2: ")
+	printTop(stacks)
+	fmt.Print("\n")
+}
+
+var doPart1 = flag.Bool("1", false, "Do part 1")
+var doPart2 = flag.Bool("2", false, "Do part 2")
 
 func main() {
 	f, err := os.Open("input.txt")
@@ -66,17 +107,26 @@ func main() {
 
 	// As we've used the scanner for the bits above, we need to continue using
 	// it, or we'll skip data that it has buffered.
+	rules := make([]rule, 0, 10)
 	for scanner.Scan() {
 		line := scanner.Text()
-		var n, from, to int
-		_, err := fmt.Sscanf(line, "move %d from %d to %d\n", &n, &from, &to)
+		var rule rule
+		_, err := fmt.Sscanf(line, "move %d from %d to %d\n", &rule.n, &rule.from, &rule.to)
 		if err == io.EOF {
 			break
 		}
-		stacks[from-1].moveTo(&stacks[to-1], n)
+		rules = append(rules, rule)
 	}
-	for i := 0; i < len(stacks); i++ {
-		fmt.Printf("%c", stacks[i].top())
+
+	// The only reason I'm using flags here is that there's an information
+	// leakage bug between parts one and two, and this was easier the fixing
+	// it.
+	flag.Parse()
+	if *doPart1 {
+		part1(stacks, rules)
+	} else if *doPart2 {
+		part2(stacks, rules)
+	} else {
+		flag.Usage()
 	}
-	fmt.Print("\n")
 }

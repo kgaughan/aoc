@@ -41,11 +41,8 @@ func scan(data []byte, markerLen int) int {
 	return -1
 }
 
-func part1(data []byte) {
-	fmt.Printf("Start of packet found at %d\n", scan(data, 4))
-}
-
 func main() {
 	data := readInput()
-	part1(data)
+	fmt.Printf("Start of packet found at %d\n", scan(data, 4))
+	fmt.Printf("Start of message found at %d\n", scan(data, 14))
 }

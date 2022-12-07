@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -31,7 +30,7 @@ func (d Directory) TotalSize() int {
 	return result
 }
 
-func (d *Directory) AddFile(path []string, file string, size int) {
+func (d *Directory) AddFile(path []string, size int) {
 	if len(path) == 0 {
 		d.size += size
 	} else {
@@ -40,41 +39,25 @@ func (d *Directory) AddFile(path []string, file string, size int) {
 			subdir = NewDirectory()
 			d.subdirectories[path[0]] = subdir
 		}
-		subdir.AddFile(path[1:], file, size)
+		subdir.AddFile(path[1:], size)
 	}
 }
 
-func (d *Directory) String() string {
-	buf := &strings.Builder{}
-	d.describe(buf, "/", "")
-	return buf.String()
-}
-
-func (d *Directory) describe(buf *strings.Builder, name, indent string) {
-	buf.WriteString(fmt.Sprintf("%s- %s (dir, files=%v)\n", indent, name, d.TotalSize()))
-	for name, dir := range d.subdirectories {
-		dir.describe(buf, name, indent+"  ")
-	}
-}
-
-func (d *Directory) Walk(fn func(string, int)) {
-	for name, dir := range d.subdirectories {
-		fn(name, dir.TotalSize())
+func (d *Directory) Walk(fn func(int)) {
+	for _, dir := range d.subdirectories {
+		fn(dir.TotalSize())
 		dir.Walk(fn)
 	}
 }
 
 const (
-	P1_MAX       = 100000
-	P2_TARGET    = 30000000
-	P2_DISCSPACE = 70000000
+	P1_MAX       = 100_000
+	P2_TARGET    = 30_000_000
+	P2_DISCSPACE = 70_000_000
 )
 
-var data = flag.String("data", "input.txt", "Name of input file")
-
 func main() {
-	flag.Parse()
-	f, err := os.Open(*data)
+	f, err := os.Open("input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -109,22 +92,20 @@ func main() {
 			if err != nil {
 				log.Fatalf("Could not parts %q as an int: %v", parts[0], err)
 			}
-			root.AddFile(cwd, parts[1], n)
+			root.AddFile(cwd, n)
 		}
 	}
 
 	// The amount of free space we need to free up
 	p2Target := P2_TARGET - (P2_DISCSPACE - root.TotalSize())
 
-	p1Answer := 0 // Part 1: find directories with a total size of at most P1_MAX
-	p2Answer := 0 // Part 2: find the smallest directory that's at least the larget
-	root.Walk(func(name string, size int) {
+	p1Answer := 0
+	p2Answer := root.TotalSize()
+	root.Walk(func(size int) {
 		if size <= P1_MAX {
 			p1Answer += size
 		}
-		// For part 2, we want the smallest directory larger than the target,
-		// but will settle for the largest directory less than the target.
-		if size >= p2Target && (size < p2Answer || p2Answer == 0) {
+		if size >= p2Target && size < p2Answer {
 			p2Answer = size
 		}
 	})

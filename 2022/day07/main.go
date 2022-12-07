@@ -24,6 +24,7 @@ func NewDirectory() *Directory {
 
 func (d Directory) TotalSize() int {
 	result := d.size
+	// This is wasteful. We could cache the result, but that's messy.
 	for _, dir := range d.subdirectories {
 		result += dir.TotalSize()
 	}
@@ -62,6 +63,12 @@ func (d *Directory) Walk(fn func(string, int)) {
 		dir.Walk(fn)
 	}
 }
+
+const (
+	P1_MAX       = 100000
+	P2_TARGET    = 30000000
+	P2_DISCSPACE = 70000000
+)
 
 var data = flag.String("data", "input.txt", "Name of input file")
 
@@ -106,12 +113,21 @@ func main() {
 		}
 	}
 
-	// Part 1: find directories with a total size of at most 100000
-	p1Answer := 0
+	// The amount of free space we need to free up
+	p2Target := P2_TARGET - (P2_DISCSPACE - root.TotalSize())
+
+	p1Answer := 0 // Part 1: find directories with a total size of at most P1_MAX
+	p2Answer := 0 // Part 2: find the smallest directory that's at least the larget
 	root.Walk(func(name string, size int) {
-		if size <= 100000 {
+		if size <= P1_MAX {
 			p1Answer += size
+		}
+		// For part 2, we want the smallest directory larger than the target,
+		// but will settle for the largest directory less than the target.
+		if size >= p2Target && (size < p2Answer || p2Answer == 0) {
+			p2Answer = size
 		}
 	})
 	fmt.Printf("Part 1: %v\n", p1Answer)
+	fmt.Printf("Part 2: %v\n", p2Answer)
 }

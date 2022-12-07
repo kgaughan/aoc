@@ -7,7 +7,6 @@ The device the Elves gave you has problems with more than just its communication
 
     $ system-update --please --pretty-please-with-sugar-on-top
     Error: No space left on device
-    
 
 Perhaps you can delete some files to make space for the update?
 
@@ -36,7 +35,6 @@ You browse around the filesystem to assess the situation and save the resulting 
     8033020 d.log
     5626152 d.ext
     7214296 k
-    
 
 The filesystem consists of a tree of files (plain data) and directories (which can contain other directories or files). The outermost directory is called `/`. You can navigate around the filesystem, moving into or out of directories and listing the contents of the directory you're currently in.
 
@@ -66,7 +64,6 @@ Given the commands and output in the example above, you can determine that the f
         - d.log (file, size=8033020)
         - d.ext (file, size=5626152)
         - k (file, size=7214296)
-    
 
 Here, there are four directories: `/` (the outermost directory), `a` and `d` (which are in `/`), and `e` (which is in `a`). These directories also contain files of various sizes.
 
@@ -82,3 +79,30 @@ The total sizes of the directories above can be found as follows:
 To begin, find all of the directories with a total size of _at most 100000_, then calculate the sum of their total sizes. In the example above, these directories are `a` and `e`; the sum of their total sizes is `_95437_` (94853 + 584). (As in this example, this process can count files more than once!)
 
 Find all of the directories with a total size of at most 100000. _What is the sum of the total sizes of those directories?_
+
+Your puzzle answer was `1611443`.
+
+The first half of this puzzle is complete! It provides one gold star: \*
+
+# Part Two
+
+Now, you're ready to choose a directory to delete.
+
+The total disk space available to the filesystem is `_70000000_`. To run the update, you need unused space of at least `_30000000_`. You need to find a directory you can delete that will _free up enough space_ to run the update.
+
+In the example above, the total size of the outermost directory (and thus the total amount of used space) is `48381165`; this means that the size of the _unused_ space must currently be `21618835`, which isn't quite the `30000000` required by the update. Therefore, the update still requires a directory with total size of at least `8381165` to be deleted before it can run.
+
+To achieve this, you have the following options:
+
+-   Delete directory `e`, which would increase unused space by `584`.
+-   Delete directory `a`, which would increase unused space by `94853`.
+-   Delete directory `d`, which would increase unused space by `24933642`.
+-   Delete directory `/`, which would increase unused space by `48381165`.
+
+Directories `e` and `a` are both too small; deleting them would not free up enough space. However, directories `d` and `/` are both big enough! Between these, choose the _smallest_: `d`, increasing unused space by `_24933642_`.
+
+Find the smallest directory that, if deleted, would free up enough space on the filesystem to run the update. _What is the total size of that directory?_
+
+Your puzzle answer was `2086088`.
+
+Both parts of this puzzle are complete! They provide two gold stars: \*\*

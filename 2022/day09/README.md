@@ -1,5 +1,3 @@
-[Day 9 - Advent of Code 2022](https://adventofcode.com/2022/day/9)
-
 # Day 9: Rope Bridge
 
 This rope bridge creaks as you walk along it. You aren't sure how old it is, or
@@ -43,12 +41,12 @@ If the head is ever two steps directly up, down, left, or right from the tail,
 the tail must also move one step in that direction so it remains close enough:
 
     .....    .....    .....
-    .TH.. -.T.H. -..TH.
+    .TH.. -> .T.H. -> ..TH.
     .....    .....    .....
 
     ...    ...    ...
     .T.    .T.    ...
-    .H. -... -.T.
+    .H. -> ... -> .T.
     ...    .H.    .H.
     ...    ...    ...
 
@@ -58,13 +56,13 @@ column, the tail always moves one step diagonally to keep up:
 
     .....    .....    .....
     .....    ..H..    ..H..
-    ..H.. -..... -..T..
+    ..H.. -> ..... -> ..T..
     .T...    .T...    .....
     .....    .....    .....
 
     .....    .....    .....
     .....    .....    .....
-    ..H.. -...H. -..TH.
+    ..H.. -> ...H. -> ..TH.
     .T...    .T...    .....
     .....    .....    .....
 
@@ -271,3 +269,7 @@ So, there are `_13_` positions the tail visited at least once.
 
 Simulate your complete hypothetical series of motions. _How many positions does
 the tail of the rope visit at least once?_
+
+Your puzzle answer was `5930`.
+
+The first half of this puzzle is complete! It provides one gold star: \*

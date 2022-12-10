@@ -86,13 +86,52 @@ func main() {
 	}
 
 	nVisible := 0
+	maxScenicScore := 0
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
 			if grid[y][x].IsVisible() {
 				nVisible++
 			}
+
+			// Calculate the 'scenic score for this tree, i.e, the product of
+			// the number of trees visible in each direction. There's probably
+			// a clever way to do this, but brute force will do just fine.
+			selfHeight := grid[y][x].Height
+			scenicScoreUp := 0
+			for i := y - 1; i >= 0; i-- {
+				scenicScoreUp++
+				if grid[i][x].Height >= selfHeight {
+					break
+				}
+			}
+			scenicScoreDown := 0
+			for i := y + 1; i < height; i++ {
+				scenicScoreDown++
+				if grid[i][x].Height >= selfHeight {
+					break
+				}
+			}
+			scenicScoreLeft := 0
+			for i := x - 1; i >= 0; i-- {
+				scenicScoreLeft++
+				if grid[y][i].Height >= selfHeight {
+					break
+				}
+			}
+			scenicScoreRight := 0
+			for i := x + 1; i < width; i++ {
+				scenicScoreRight++
+				if grid[y][i].Height >= selfHeight {
+					break
+				}
+			}
+			scenicScore := scenicScoreUp * scenicScoreDown * scenicScoreLeft * scenicScoreRight
+			if scenicScore > maxScenicScore {
+				maxScenicScore = scenicScore
+			}
 		}
 	}
 
 	fmt.Printf("Part 1: %v visible\n", nVisible)
+	fmt.Printf("Part 2: %v is the maximum scenic score\n", maxScenicScore)
 }

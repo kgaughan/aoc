@@ -5,7 +5,6 @@ import (
 	"io"
 	"log"
 	"os"
-	"strings"
 )
 
 type move struct {
@@ -27,10 +26,6 @@ func (m move) ToOffset() (int, int) {
 		dy = -m.distance
 	}
 	return dx, dy
-}
-
-func (m move) String() string {
-	return fmt.Sprintf("{%c %v}", m.direction, m.distance)
 }
 
 type coordinate struct {
@@ -77,60 +72,6 @@ func (r *rope) Move(move move) {
 			}
 		}
 	}
-}
-
-func (r *rope) String() string {
-	maxX, maxY := 0, 0
-	minX, minY := 0, 0
-	for _, knot := range r.knots {
-		maxX = max(knot.x, maxX)
-		maxY = max(knot.y, maxY)
-		minX = min(knot.x, minX)
-		minY = min(knot.y, minY)
-	}
-	for visited := range r.TailTrail {
-		maxX = max(visited.x, maxX)
-		maxY = max(visited.y, maxY)
-		minX = min(visited.x, minX)
-		minY = min(visited.y, minY)
-	}
-	result := &strings.Builder{}
-	for y := maxY; y >= minY; y-- {
-	line:
-		for x := minX; x <= maxX; x++ {
-			for i, knot := range r.knots {
-				if knot.x == x && knot.y == y {
-					if i == 0 {
-						result.WriteRune('H')
-					} else {
-						fmt.Fprintf(result, "%d", i)
-					}
-					continue line
-				}
-			}
-			if _, exists := r.TailTrail[coordinate{x: x, y: y}]; exists {
-				result.WriteRune('#')
-			} else {
-				result.WriteRune('.')
-			}
-		}
-		result.WriteRune('\n')
-	}
-	return result.String()
-}
-
-func min(a, b int) int {
-	if a > b {
-		return b
-	}
-	return a
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
 }
 
 func abs(n int) int {

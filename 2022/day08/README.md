@@ -42,3 +42,7 @@ With 16 trees visible on the edge and another 5 visible in the interior, a
 total of `_21_` trees are visible in this arrangement.
 
 Consider your map; _how many trees are visible from outside the grid?_
+
+Your puzzle answer was `1543`.
+
+The first half of this puzzle is complete! It provides one gold star: \*

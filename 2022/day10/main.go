@@ -6,23 +6,26 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
 
-type Machine struct {
+type CPU struct {
 	x        int
 	cycle    int
 	callback func(int, int)
+	screen   *strings.Builder
 }
 
-func NewMachine(callback func(int, int)) *Machine {
-	return &Machine{
+func NewCPU(callback func(int, int)) *CPU {
+	return &CPU{
 		x:        1,
 		cycle:    0,
 		callback: callback,
+		screen:   &strings.Builder{},
 	}
 }
 
-func (m *Machine) Execute(instruction string, operand int) {
+func (c *CPU) Execute(instruction string, operand int) {
 	countdown := 0
 	switch instruction {
 	case "noop":
@@ -32,15 +35,37 @@ func (m *Machine) Execute(instruction string, operand int) {
 	}
 
 	for ; countdown > 0; countdown-- {
-		m.cycle++
-		m.callback(m.x, m.cycle)
+		// Render the CRT
+		gun := (c.cycle % screenWidth)
+		if gun >= c.x-1 && gun <= c.x+1 {
+			c.screen.WriteRune('#')
+		} else {
+			c.screen.WriteRune('.')
+		}
+
+		c.cycle++
+		c.callback(c.x, c.cycle)
+
+		// Run the instruction on the last cycle
 		if countdown == 1 {
 			switch instruction {
 			case "addx":
-				m.x += operand
+				c.x += operand
 			}
 		}
 	}
+}
+
+const screenWidth = 40
+
+func (c CPU) String() string {
+	screen := []rune(c.screen.String())
+	result := &strings.Builder{}
+	for i := 0; i < len(screen); i += screenWidth {
+		result.WriteString(string(screen[i : i+screenWidth]))
+		result.WriteRune('\n')
+	}
+	return result.String()
 }
 
 func main() {
@@ -52,8 +77,8 @@ func main() {
 
 	signalSum := 0
 
-	machine := NewMachine(func(x, cycle int) {
-		if cycle == 20 || cycle == 60 || cycle == 100 || cycle == 140 || cycle == 180 || cycle == 220 {
+	machine := NewCPU(func(x, cycle int) {
+		if cycle%screenWidth == 20 {
 			fmt.Printf("X: %v; Cycle: %v\n", x, cycle)
 			signalSum += x * cycle
 		}
@@ -77,4 +102,5 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %v\n", signalSum)
+	fmt.Printf("Part 2:\n%v", machine)
 }

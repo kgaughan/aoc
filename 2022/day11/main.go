@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -28,6 +29,19 @@ const monkeyPattern = `Monkey \d+:
     If true: throw to monkey (\d+)
     If false: throw to monkey (\d+)
 `
+
+// Greatest common denominator
+func gcd(a, b int) int {
+	for b != 0 {
+		a, b = b, a%b
+	}
+	return a
+}
+
+// Least common multiple: needed to prevent the numbers from getting out of hand.
+func lcm(a, b int) int {
+	return a * b / gcd(a, b)
+}
 
 func extractMonkey(matches []string) (*Monkey, error) {
 	var err error
@@ -62,7 +76,12 @@ func extractMonkey(matches []string) (*Monkey, error) {
 	return monkey, nil
 }
 
+var worryReduction = flag.Int("reduction", 3, "worry reduction")
+var rounds = flag.Int("rounds", 20, "rounds to play")
+
 func main() {
+	flag.Parse()
+
 	f, err := os.Open("input.txt")
 	if err != nil {
 		log.Fatal(err)
@@ -85,13 +104,15 @@ func main() {
 		}
 	}
 
-	for i := 0; i < 20; i++ {
-		log.Printf("Round %d", i+1)
-		for j, monke := range monkeys {
-			log.Printf("  Monkey %d:", j)
+	leastCommonMultiple := 1
+	for _, monke := range monkeys {
+		leastCommonMultiple = lcm(leastCommonMultiple, monke.divisor)
+	}
+
+	for i := 0; i < *rounds; i++ {
+		for _, monke := range monkeys {
 			for _, worry := range monke.items {
 				monke.inspections++
-				log.Printf("    Inspecting item with worry level of %d", worry)
 				var operand int
 				if monke.operand == "old" {
 					operand = worry
@@ -103,23 +124,18 @@ func main() {
 				switch monke.operator {
 				case '+':
 					worry += operand
-				case '-':
-					worry -= operand
 				case '*':
 					worry *= operand
-				case '/':
-					worry /= operand
 				}
-				log.Printf("      Applying %c %v; worry level is now %d", monke.operator, monke.operand, worry)
-				worry /= 3
-				log.Printf("      Inspecting after reducing worry level to %d", worry)
+				worry /= *worryReduction
+				// LCM adjustment to prevent overflows...
+				worry %= leastCommonMultiple
 				var iReceiver int
 				if worry%monke.divisor == 0 {
 					iReceiver = monke.passToTrue
 				} else {
 					iReceiver = monke.passToFalse
 				}
-				log.Printf("      Passing to %d", iReceiver)
 				monkeys[iReceiver].items = append(monkeys[iReceiver].items, worry)
 			}
 			monke.items = monke.items[:0]
@@ -132,5 +148,5 @@ func main() {
 	}
 	sort.Sort(sort.Reverse(sort.IntSlice(inspections)))
 
-	fmt.Printf("Part 1: %v monkey business\n", inspections[0]*inspections[1])
+	fmt.Printf("%v monkey business\n", inspections[0]*inspections[1])
 }

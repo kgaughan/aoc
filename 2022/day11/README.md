@@ -216,3 +216,7 @@ Chasing all of the monkeys at once is impossible; you're going to have to focus 
 In this example, the two most active monkeys inspected items 101 and 105 times. The level of _monkey business_ in this situation can be found by multiplying these together: `_10605_`.
 
 Figure out which monkeys to chase by counting how many items they inspect over 20 rounds. _What is the level of monkey business after 20 rounds of stuff-slinging simian shenanigans?_
+
+Your puzzle answer was `55944`.
+
+The first half of this puzzle is complete! It provides one gold star: *

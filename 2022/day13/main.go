@@ -30,7 +30,7 @@ func compare(left, right any) int {
 		case []any:
 			return compare([]any{leftValue}, rightValue)
 		default:
-			log.Fatalf("Unexpected type!")
+			log.Fatal("Unexpected type!")
 		}
 	case []any:
 		switch rightValue := right.(type) {
@@ -51,10 +51,10 @@ func compare(left, right any) int {
 			}
 			return IN_ORDER
 		default:
-			log.Fatalf("Unexpected type!")
+			log.Fatal("Unexpected type!")
 		}
 	default:
-		log.Fatalf("Unexpected type!")
+		log.Fatal("Unexpected type!")
 	}
 	log.Fatal("Should be unreachable!")
 	return FAIL
@@ -73,11 +73,11 @@ func main() {
 		if len(scanner.Bytes()) == 0 {
 			continue
 		}
-		var lst []any
-		if err := json.Unmarshal(scanner.Bytes(), &lst); err != nil {
+		var packet any
+		if err := json.Unmarshal(scanner.Bytes(), &packet); err != nil {
 			log.Fatal(err)
 		}
-		packets = append(packets, lst)
+		packets = append(packets, packet)
 	}
 
 	indexSum := 0
@@ -86,14 +86,12 @@ func main() {
 			indexSum += (i / 2) + 1
 		}
 	}
-
 	fmt.Printf("Part 1: %v\n", indexSum)
 
 	dividerPackets := []any{
 		[]any{[]any{2.0}},
 		[]any{[]any{6.0}},
 	}
-
 	packets = append(packets, dividerPackets...)
 	sort.Slice(packets, func(i, j int) bool {
 		return compare(packets[i], packets[j]) != FAIL

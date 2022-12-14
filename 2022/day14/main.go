@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"log"
 	"math"
@@ -34,7 +35,11 @@ func max(a, b int) int {
 	return b
 }
 
+var addFloor = flag.Bool("floor", false, "Add the floor for part 2")
+
 func main() {
+	flag.Parse()
+
 	f, err := os.Open("input.txt")
 	if err != nil {
 		log.Fatal(err)
@@ -43,9 +48,7 @@ func main() {
 
 	scanner := bufio.NewScanner(f)
 	shapes := make([][]coordinate, 0, 10)
-	// Useful for finding the bounds of the rocks to figure out where the
-	// abyss is. Also good for figuring out how much memory we need.
-	maxX, minX, maxY := math.MinInt, math.MaxInt, math.MinInt
+	maxY := math.MinInt
 	for scanner.Scan() {
 		shape := strings.Split(scanner.Text(), " -> ")
 		parsedShape := make([]coordinate, 0)
@@ -55,8 +58,6 @@ func main() {
 			if err != nil {
 				log.Fatal(err)
 			}
-			maxX = max(maxX, x)
-			minX = min(minX, x)
 			y, err := strconv.Atoi(parts[1])
 			if err != nil {
 				log.Fatal(err)
@@ -67,14 +68,20 @@ func main() {
 		shapes = append(shapes, parsedShape)
 	}
 
-	// Adjust to give some buffer space to simplify bounds checks
-	minX--
-	maxX++
-	maxY++
+	if *addFloor {
+		shapes = append(shapes, []coordinate{
+			{x: 0, y: maxY + 2},
+			{x: 1000, y: maxY + 2},
+		})
+	}
+
+	// Adjust to give some buffer space to simplify bounds checks. Also needed
+	// for adding the floor
+	maxY += 2
 
 	grid := make([][]int8, maxY+1)
 	for y := 0; y < len(grid); y++ {
-		grid[y] = make([]int8, maxX-minX+1)
+		grid[y] = make([]int8, 1001)
 	}
 	for _, shape := range shapes {
 		for i := 1; i < len(shape); i++ {
@@ -83,14 +90,14 @@ func main() {
 				// Vertical line
 				start := min(shape[i-1].y, shape[i].y)
 				end := max(shape[i-1].y, shape[i].y)
-				adjustedX := shape[i].x - minX
+				adjustedX := shape[i].x
 				for y := start; y <= end; y++ {
 					grid[y][adjustedX] = ROCK
 				}
 			} else {
 				// Horizontal line
-				start := min(shape[i-1].x, shape[i].x) - minX
-				end := max(shape[i-1].x, shape[i].x) - minX
+				start := min(shape[i-1].x, shape[i].x)
+				end := max(shape[i-1].x, shape[i].x)
 				for x := start; x <= end; x++ {
 					grid[shape[i].y][x] = ROCK
 				}
@@ -101,8 +108,14 @@ func main() {
 	units := 0
 simulation:
 	for {
-		px := 500 - minX
+		px := 500
 		py := 0
+
+		// Check if the entrance is blocked
+		if grid[py][px] != EMPTY {
+			fmt.Println("Source blocked!")
+			break
+		}
 
 		for {
 			if grid[py+1][px] == EMPTY {
@@ -123,10 +136,11 @@ simulation:
 			}
 			// Has this grain slid off the edge?
 			if py >= maxY {
+				fmt.Println("Sand overflow!")
 				break simulation
 			}
 		}
 		units++
 	}
-	fmt.Printf("Part 1: %v units\n", units)
+	fmt.Printf("%v units\n", units)
 }

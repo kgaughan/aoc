@@ -1,6 +1,7 @@
 package main
 
 import (
+	"aoc/day12"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -8,8 +9,6 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-
-	"aoc/day12"
 )
 
 type pair struct {

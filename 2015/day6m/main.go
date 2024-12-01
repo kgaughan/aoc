@@ -1,13 +1,12 @@
 package main
 
 import (
+	"aoc/day6"
 	"flag"
 	"fmt"
 	"io"
 	"log"
 	"os"
-
-	"aoc/day6"
 )
 
 func main() {
@@ -35,7 +34,7 @@ func main() {
 					lights.TurnOn(from, to)
 				} else {
 					lights.TurnOff(from, to)
-					}
+				}
 			case "toggle":
 				lights.Toggle(from, to)
 			}

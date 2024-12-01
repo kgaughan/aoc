@@ -30,10 +30,10 @@ func TestLights(t *testing.T) {
 	assertAddPoint(t, &lights, Coord{999, 999}, 4)
 
 	// Flip everything.
-	lights.Toggle(Coord{0,0}, Coord{999,999})
+	lights.Toggle(Coord{0, 0}, Coord{999, 999})
 	assertLightCount(t, &lights, 999996)
 
 	// Turn everything off.
-	lights.TurnOff(Coord{0,0}, Coord{999,999})
+	lights.TurnOff(Coord{0, 0}, Coord{999, 999})
 	assertLightCount(t, &lights, 0)
 }

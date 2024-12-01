@@ -1,12 +1,11 @@
 package main
 
 import (
+	"aoc/day3"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
-
-	"aoc/day3"
 )
 
 func main() {

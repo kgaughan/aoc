@@ -1,13 +1,12 @@
 package main
 
 import (
+	"aoc/day5"
 	"bufio"
 	"flag"
 	"fmt"
 	"log"
 	"os"
-
-	"aoc/day5"
 )
 
 func main() {

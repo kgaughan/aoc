@@ -131,7 +131,6 @@ func part2(input []rucksack) {
 		}
 	}
 	fmt.Printf("Part 2, sum of priorities: %v\n", score)
-
 }
 
 func main() {

@@ -1,7 +1,7 @@
 package day13
 
 type Entry struct {
-	Person string
+	Person    string
 	Happiness int
-	Other string
+	Other     string
 }

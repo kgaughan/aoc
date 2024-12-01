@@ -76,8 +76,10 @@ func extractMonkey(matches []string) (*Monkey, error) {
 	return monkey, nil
 }
 
-var worryReduction = flag.Int("reduction", 3, "worry reduction")
-var rounds = flag.Int("rounds", 20, "rounds to play")
+var (
+	worryReduction = flag.Int("reduction", 3, "worry reduction")
+	rounds         = flag.Int("rounds", 20, "rounds to play")
+)
 
 func main() {
 	flag.Parse()

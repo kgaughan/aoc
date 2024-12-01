@@ -109,4 +109,57 @@ func main() {
 		area += adjacency.Exposed()
 	}
 	fmt.Printf("Part 1: %v exposed voxel surfaces\n", area)
+
+	// Assumption for part 2: the outer surface is continuous and convex
+	for v, adjacency := range surface {
+		if !adjacency.left {
+			for x := v.x + 1; x <= maxX; x++ {
+				if right, exists := surface[voxel{x: x, y: v.y, z: v.z}]; exists {
+					right.left = true
+				}
+			}
+		}
+		if !adjacency.right {
+			for x := minX; x < v.x; x++ {
+				if left, exists := surface[voxel{x: x, y: v.y, z: v.z}]; exists {
+					left.right = true
+				}
+			}
+		}
+
+		if !adjacency.top {
+			for y := v.y + 1; y <= maxY; y++ {
+				if bottom, exists := surface[voxel{x: v.x, y: y, z: v.z}]; exists {
+					bottom.top = true
+				}
+			}
+		}
+		if !adjacency.bottom {
+			for y := minX; y < v.y; y++ {
+				if top, exists := surface[voxel{x: v.x, y: y, z: v.z}]; exists {
+					top.bottom = true
+				}
+			}
+		}
+
+		if !adjacency.front {
+			for z := v.z + 1; z <= maxZ; z++ {
+				if back, exists := surface[voxel{x: v.x, y: v.y, z: z}]; exists {
+					back.front = true
+				}
+			}
+		}
+		if !adjacency.back {
+			for z := minX; z < v.z; z++ {
+				if front, exists := surface[voxel{x: v.x, y: v.y, z: z}]; exists {
+					front.back = true
+				}
+			}
+		}
+	}
+	area = 0
+	for _, adjacency := range surface {
+		area += adjacency.Exposed()
+	}
+	fmt.Printf("Part 2: %v exposed voxel surfaces\n", area)
 }

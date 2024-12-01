@@ -1,11 +1,10 @@
 package main
 
 import (
+	"aoc/day4"
 	"flag"
 	"fmt"
 	"math"
-
-	"aoc/day4"
 )
 
 func main() {

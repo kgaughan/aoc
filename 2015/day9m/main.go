@@ -1,14 +1,13 @@
 package main
 
 import (
+	"aoc/common/graph"
+	"aoc/day9"
 	"flag"
 	"fmt"
 	"io"
 	"log"
 	"os"
-
-	"aoc/common/graph"
-	"aoc/day9"
 )
 
 func main() {

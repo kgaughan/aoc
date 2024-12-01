@@ -3,7 +3,7 @@ package day10
 import "testing"
 
 type fixture struct {
-	test string
+	test     string
 	expected string
 }
 

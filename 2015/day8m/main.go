@@ -1,14 +1,13 @@
 package main
 
 import (
+	"aoc/day8"
 	"flag"
 	"fmt"
 	"io"
 	"log"
 	"os"
 	"strconv"
-
-	"aoc/day8"
 )
 
 func main() {

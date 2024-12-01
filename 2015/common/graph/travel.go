@@ -1,9 +1,8 @@
 package graph
 
 import (
-	"math"
-
 	"aoc/common/permute"
+	"math"
 )
 
 func travel(start int, nodes []string, edges Edges, closed bool, cond func(int, int) bool) int {

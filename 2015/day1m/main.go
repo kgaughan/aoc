@@ -1,10 +1,9 @@
 package main
 
 import (
+	"aoc/day1"
 	"fmt"
 	"os"
-
-	"aoc/day1"
 )
 
 func main() {

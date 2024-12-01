@@ -1,11 +1,11 @@
 package main
 
 import (
+	"aoc/day7"
 	"flag"
 	"io"
 	"log"
 	"os"
-	"aoc/day7"
 )
 
 func main() {

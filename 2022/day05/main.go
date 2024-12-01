@@ -70,8 +70,10 @@ func part2(stacks []stack, rules []rule) {
 	fmt.Print("\n")
 }
 
-var doPart1 = flag.Bool("1", false, "Do part 1")
-var doPart2 = flag.Bool("2", false, "Do part 2")
+var (
+	doPart1 = flag.Bool("1", false, "Do part 1")
+	doPart2 = flag.Bool("2", false, "Do part 2")
+)
 
 func main() {
 	f, err := os.Open("input.txt")

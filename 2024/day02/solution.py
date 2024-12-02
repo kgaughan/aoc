@@ -20,22 +20,19 @@ def is_safe_dampened(readings):
     if is_safe(readings):
         return True
     # Ugly bruteforcing...
-    for i in range(len(readings)):
-        if is_safe([n for j, n in enumerate(readings) if i != j]):
-            return True
-    return False
+    return any(is_safe(readings[:i] + readings[i + 1 :]) for i in range(len(readings)))
 
+
+def check_all(reports, check):
+    return sum((1 if check(readings) else 0) for readings in reports)
 
 
 def main():
     with open("input") as fh:
         reports = [list(map(int, line.rstrip().split(" "))) for line in fh]
 
-    part1 = sum((1 if is_safe(readings) else 0) for readings in reports)
-    print("Part 1:", part1)
-
-    part2 = sum((1 if is_safe_dampened(readings) else 0) for readings in reports)
-    print("Part 2:", part2)
+    print("Part 1:", check_all(reports, is_safe))
+    print("Part 2:", check_all(reports, is_safe_dampened))
 
 
 if __name__ == "__main__":

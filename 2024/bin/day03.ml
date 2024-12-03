@@ -17,13 +17,10 @@ let extract_instructions contents =
   let mul_pat = Str.regexp {|mul(\([0-9]+\),\([0-9]+\))\|do()\|don't()|} in
   let get_group i = int_of_string (Str.matched_group i contents) in
   let make_instruction () =
-    let full_match = Str.matched_string contents in
-    if String.starts_with ~prefix:"mul(" full_match then
-      Mul ((get_group 1), (get_group 2))
-    else if String.starts_with ~prefix:"do(" full_match then
-      Do
-    else
-      Dont
+    match Str.matched_string contents with
+    | "do()" -> Do
+    | "don't()" -> Dont
+    | _ -> Mul ((get_group 1), (get_group 2))
   in get_all_matches mul_pat contents (fun acc -> make_instruction () :: acc)
 
 let part2 instructions =

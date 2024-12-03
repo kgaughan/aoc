@@ -26,14 +26,6 @@ let extract_instructions contents =
       Dont
   in get_all_matches mul_pat contents (fun acc -> make_instruction () :: acc)
 
-let part1 instructions =
-  let eval acc inst =
-    match inst with
-    | Mul (a, b) -> acc + (a * b)
-    | Do
-    | Dont -> acc
-  in List.fold_left eval 0 instructions
-
 let part2 instructions =
   let rec eval instructions acc active =
     match instructions with
@@ -42,6 +34,9 @@ let part2 instructions =
     | Dont :: tl -> eval tl acc false
     | [] -> acc
   in eval instructions 0 true
+
+let part1 instructions =
+  List.filter (function Mul _ -> true | _ -> false) instructions |> part2
 
 let _ =
   let instructions = extract_instructions (read_file "input/day03.txt") in

@@ -3,12 +3,8 @@ type instruction =
   | Do
   | Dont
 
-let read_file path = 
-  let stream = open_in path in
-  let length = Int64.to_int (In_channel.length stream) in
-  let contents = really_input_string stream length in
-  close_in stream;
-  contents
+let read_file path =
+  In_channel.with_open_text path In_channel.input_all
 
 let get_all_matches pattern contents fn =
   let rec next_match i acc =

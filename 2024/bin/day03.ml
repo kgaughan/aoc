@@ -1,6 +1,3 @@
-#use "topfind"
-#require "str"
-
 type instruction = 
   | Mul of int * int
   | Do
@@ -51,5 +48,5 @@ let part2 instructions =
   in eval instructions 0 true
 
 let _ =
-  let instructions = extract_instructions (read_file "input") in
+  let instructions = extract_instructions (read_file "input/day03.txt") in
   Printf.printf "Part 1: %d; Part 2: %d\n" (part1 instructions) (part2 instructions)

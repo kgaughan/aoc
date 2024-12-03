@@ -6,14 +6,20 @@ type instruction =
   | Do
   | Dont
 
-let read_all stream =
-  really_input_string stream (Int64.to_int (In_channel.length stream))
-
 let read_file path = 
   let stream = open_in path in
-  let contents = read_all stream in
+  let length = Int64.to_int (In_channel.length stream)
+  let contents = really_input_string stream length in
   close_in stream;
   contents
+
+let get_all_matches pattern contents fn =
+  let rec next_match i acc =
+    match Str.search_forward pattern contents i with
+    | _ -> next_match (Str.match_end ()) (fn acc)
+    | exception Not_found -> acc
+  in
+  next_match 0 []
 
 let extract_instructions contents =
   let mul_pat = Str.regexp {|mul(\([0-9]+\),\([0-9]+\))\|do()\|don't()|} in
@@ -27,12 +33,7 @@ let extract_instructions contents =
     else
       Dont
   in
-  let rec get_all_matches i acc =
-    match Str.search_forward mul_pat contents i with
-    | _ -> get_all_matches (Str.match_end ()) (make_instruction () :: acc)
-    | exception Not_found -> acc
-  in
-  List.rev (get_all_matches 0 [])
+  List.rev (get_all_matches mul_pat contents (fun acc -> make_instruction () :: acc))
 
 let _ =
   let contents = read_file "input" in

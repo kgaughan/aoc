@@ -4,7 +4,9 @@ let read_input () =
     match Scanf.bscanf stream "%d %d\n" (fun x y -> (x :: xacc, y :: yacc)) with
     | (xs, ys) -> read_line xs ys
     | exception Scanf.Scan_failure _
-    | exception End_of_file -> (xacc, yacc)
+    | exception End_of_file ->
+      close_in stream;
+      (xacc, yacc)
   in
   read_line [] []
 

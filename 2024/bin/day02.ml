@@ -1,13 +1,6 @@
 let read_file path =
-  let stream = open_in path in
   let to_ints line = String.split_on_char ' ' line |> List.map int_of_string in
-  let rec read_line acc =
-    match input_line stream with
-    | line -> read_line ((to_ints line) :: acc)
-    | exception End_of_file ->
-      close_in stream;
-      acc
-  in List.rev (read_line [])
+  In_channel.with_open_text path (fun ic -> In_channel.input_lines ic |> List.map to_ints)
 
 let rec delta = function
   | a :: b :: tl -> (b - a) :: delta (b :: tl)

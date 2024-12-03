@@ -1,14 +1,7 @@
-let read_input () =
-  let stream = Scanf.Scanning.open_in "input/day01.txt" in
-  let rec read_line xacc yacc =
-    match Scanf.bscanf stream "%d %d\n" (fun x y -> (x :: xacc, y :: yacc)) with
-    | (xs, ys) -> read_line xs ys
-    | exception Scanf.Scan_failure _
-    | exception End_of_file ->
-      Scanf.Scanning.close_in stream;
-      (xacc, yacc)
-  in
-  read_line [] []
+let read_input path =
+  let parse_line line = Scanf.sscanf line "%d %d" (fun x y -> (x, y)) in
+  let read_lines ic = In_channel.input_lines ic |> List.map parse_line in
+  In_channel.with_open_text path read_lines |> List.split
 
 let make_counter_table xs =
   let tbl = Hashtbl.create 1000 in
@@ -21,7 +14,7 @@ let make_counter_table xs =
   tbl
 
 let _ =
-  let lhs, rhs = read_input () in
+  let lhs, rhs = read_input "input/day01.txt" in
   let part1 = List.fold_left2
       (fun acc a b -> acc + Int.abs(a - b))
       0

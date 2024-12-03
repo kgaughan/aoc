@@ -35,24 +35,23 @@ let extract_instructions contents =
   in
   List.rev (get_all_matches mul_pat contents (fun acc -> make_instruction () :: acc))
 
-let _ =
-  let contents = read_file "input" in
-  let part1_impl acc inst =
+let part1 instructions =
+  let eval acc inst =
     match inst with
     | Mul (a, b) -> acc + (a * b)
     | Do
     | Dont -> acc
-  in
-  let part2_impl instructions =
-    let rec eval instructions acc active =
-      match instructions with
-      | Mul (a, b) :: tl -> eval tl (if active then acc + (a * b) else acc) active
-      | Do :: tl -> eval tl acc true
-      | Dont :: tl -> eval tl acc false
-      | [] -> acc
-    in eval instructions 0 true
-  in
-  let instructions = extract_instructions contents in
-  let part1 = List.fold_left part1_impl 0 instructions in
-  let part2 = part2_impl instructions in
-  Printf.printf "Part 1: %d; Part 2: %d\n" part1 part2
+  in List.fold_left eval 0 instructions
+
+let part2 instructions =
+  let rec eval instructions acc active =
+    match instructions with
+    | Mul (a, b) :: tl -> eval tl (if active then acc + (a * b) else acc) active
+    | Do :: tl -> eval tl acc true
+    | Dont :: tl -> eval tl acc false
+    | [] -> acc
+  in eval instructions 0 true
+
+let _ =
+  let instructions = extract_instructions (read_file "input") in
+  Printf.printf "Part 1: %d; Part 2: %d\n" (part1 instructions) (part2 instructions)

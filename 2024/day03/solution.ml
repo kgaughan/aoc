@@ -8,7 +8,7 @@ type instruction =
 
 let read_file path = 
   let stream = open_in path in
-  let length = Int64.to_int (In_channel.length stream)
+  let length = Int64.to_int (In_channel.length stream) in
   let contents = really_input_string stream length in
   close_in stream;
   contents
@@ -46,12 +46,9 @@ let _ =
   let part2_impl instructions =
     let rec eval instructions acc active =
       match instructions with
-      | hd :: tl -> (
-          match hd with
-          | Mul (a, b) -> eval tl (if active then acc + (a * b) else acc) active
-          | Do -> eval tl acc true
-          | Dont -> eval tl acc false
-        )
+      | Mul (a, b) :: tl -> eval tl (if active then acc + (a * b) else acc) active
+      | Do :: tl -> eval tl acc true
+      | Dont :: tl -> eval tl acc false
       | [] -> acc
     in eval instructions 0 true
   in

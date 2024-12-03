@@ -1,11 +1,11 @@
 let read_input () =
-  let stream = Scanf.Scanning.open_in "input" in
+  let stream = Scanf.Scanning.open_in "input/day01.txt" in
   let rec read_line xacc yacc =
     match Scanf.bscanf stream "%d %d\n" (fun x y -> (x :: xacc, y :: yacc)) with
     | (xs, ys) -> read_line xs ys
     | exception Scanf.Scan_failure _
     | exception End_of_file ->
-      close_in stream;
+      Scanf.Scanning.close_in stream;
       (xacc, yacc)
   in
   read_line [] []

@@ -28,7 +28,7 @@ def check_all(reports, check):
 
 
 def main():
-    with open("input") as fh:
+    with open("input/day02.txt") as fh:
         reports = [list(map(int, line.rstrip().split(" "))) for line in fh]
 
     print("Part 1:", check_all(reports, is_safe))

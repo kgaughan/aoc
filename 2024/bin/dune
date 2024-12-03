@@ -1,0 +1,8 @@
+(executable
+ (name day01)
+ (public_name day01))
+
+(executable
+ (name day03)
+ (public_name day03)
+ (libraries str))

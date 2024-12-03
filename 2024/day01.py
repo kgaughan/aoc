@@ -7,7 +7,7 @@ import re
 def main():
     lhs = []
     rhs = []
-    with open("input") as fh:
+    with open("input/day01.txt") as fh:
         for line in fh:
             match = re.match(r"^(?P<lhs>\d+)\s+(?P<rhs>\d+)", line)
             lhs.append(int(match["lhs"]))

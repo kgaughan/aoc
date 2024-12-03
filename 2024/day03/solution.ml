@@ -18,8 +18,7 @@ let get_all_matches pattern contents fn =
     match Str.search_forward pattern contents i with
     | _ -> next_match (Str.match_end ()) (fn acc)
     | exception Not_found -> acc
-  in
-  next_match 0 []
+  in List.rev (next_match 0 [])
 
 let extract_instructions contents =
   let mul_pat = Str.regexp {|mul(\([0-9]+\),\([0-9]+\))\|do()\|don't()|} in
@@ -32,8 +31,7 @@ let extract_instructions contents =
       Do
     else
       Dont
-  in
-  List.rev (get_all_matches mul_pat contents (fun acc -> make_instruction () :: acc))
+  in get_all_matches mul_pat contents (fun acc -> make_instruction () :: acc)
 
 let part1 instructions =
   let eval acc inst =

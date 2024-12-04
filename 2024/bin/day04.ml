@@ -26,7 +26,25 @@ let count_occurrences str grid =
   done;
   !total
 
+let count_crosses grid =
+  let height = Array.length grid in
+  let width = String.length grid.(0) in
+  let is_match x y =
+    grid.(y + 1).[x + 1] = 'A' &&
+    (grid.(y).[x] = 'M' && grid.(y + 2).[x + 2] = 'S' || grid.(y).[x] = 'S' && grid.(y + 2).[x + 2] = 'M') &&
+    (grid.(y + 2).[x] = 'M' && grid.(y).[x + 2] = 'S' || grid.(y + 2).[x] = 'S' && grid.(y).[x + 2] = 'M')
+  in
+  let total = ref 0 in
+  for y = 0 to height - 3 do
+    for x = 0 to width - 3 do
+      if is_match x y then
+        total := !total + 1
+    done
+  done;
+  !total
+
 let _ =
   let grid = read_file "input/day04.txt" |> Array.of_list in
-  let count = (count_occurrences "XMAS" grid) + (count_occurrences "SAMX" grid) in
-  Printf.printf "Part 1: %d\n" count
+  let part1 = (count_occurrences "XMAS" grid) + (count_occurrences "SAMX" grid) in
+  let part2 = count_crosses grid in
+  Printf.printf "Part 1: %d; Part 2: %d\n" part1 part2

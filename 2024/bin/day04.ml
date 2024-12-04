@@ -5,19 +5,19 @@ let count_occurrences str grid =
   let height = Array.length grid in
   let width = String.length grid.(0) in
   let max_offset = String.length str in
-  let rec match_at (x, y) offset next =
+  let rec match_at (x, y) offset (dx, dy) =
     if x < 0 || x = width || y = height || grid.(y).[x] <> str.[offset] then
       0
     else if offset < max_offset - 1 then
-      match_at (next x y) (offset + 1) next
+      match_at (x + dx, y + dy) (offset + 1) (dx, dy)
     else
       1
   in
   let count_at x y =
-    match_at (x, y) 0 (fun x y -> (x + 1, y)) +
-    match_at (x, y) 0 (fun x y -> (x - 1, y + 1)) +
-    match_at (x, y) 0 (fun x y -> (x + 1, y + 1)) +
-    match_at (x, y) 0 (fun x y -> (x, y  + 1))
+    match_at (x, y) 0 (1, 0) +
+    match_at (x, y) 0 (-1, 1) +
+    match_at (x, y) 0 (1, 1) +
+    match_at (x, y) 0 (0, 1)
   and total = ref 0 in
   for y = 0 to height - 1 do
     for x = 0 to width - 1 do

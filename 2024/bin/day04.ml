@@ -6,18 +6,15 @@ let count_occurrences str grid =
   let width = String.length grid.(0) in
   let max_offset = String.length str in
   let rec match_at (x, y) offset (dx, dy) =
-    if x < 0 || x = width || y = height || grid.(y).[x] <> str.[offset] then
+    if x < 0 || y < 0 || x >= width || y >= height || grid.(y).[x] <> str.[offset] then
       0
     else if offset < max_offset - 1 then
       match_at (x + dx, y + dy) (offset + 1) (dx, dy)
     else
       1
   in
-  let count_at x y =
-    match_at (x, y) 0 (1, 0) +
-    match_at (x, y) 0 (-1, 1) +
-    match_at (x, y) 0 (1, 1) +
-    match_at (x, y) 0 (0, 1)
+  let deltas = [(-1, 0); (1, 0); (0, -1); (0, 1); (-1, -1); (1, -1); (-1, 1); (1, 1)] in
+  let count_at x y = List.map (match_at (x, y) 0) deltas |> List.fold_left (+) 0
   and total = ref 0 in
   for y = 0 to height - 1 do
     for x = 0 to width - 1 do
@@ -45,6 +42,6 @@ let count_crosses grid =
 
 let _ =
   let grid = read_file "input/day04.txt" |> Array.of_list in
-  let part1 = (count_occurrences "XMAS" grid) + (count_occurrences "SAMX" grid) in
+  let part1 = (count_occurrences "XMAS" grid) in
   let part2 = count_crosses grid in
   Printf.printf "Part 1: %d; Part 2: %d\n" part1 part2

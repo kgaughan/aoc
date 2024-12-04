@@ -14,14 +14,14 @@ let get_all_matches pattern contents fn =
   in List.rev (next_match 0 [])
 
 let extract_instructions contents =
-  let mul_pat = Str.regexp {|mul(\([0-9]+\),\([0-9]+\))\|do()\|don't()|} in
   let get_group i = int_of_string (Str.matched_group i contents) in
   let make_instruction () =
     match Str.matched_string contents with
     | "do()" -> Do
     | "don't()" -> Dont
     | _ -> Mul ((get_group 1), (get_group 2))
-  in get_all_matches mul_pat contents (fun acc -> make_instruction () :: acc)
+  and mul_pat = Str.regexp {|mul(\([0-9]+\),\([0-9]+\))\|do()\|don't()|} in
+  get_all_matches mul_pat contents (fun acc -> make_instruction () :: acc)
 
 let part2 instructions =
   let rec eval instructions acc active =

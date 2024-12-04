@@ -2,9 +2,9 @@ let read_file path =
   In_channel.with_open_text path In_channel.input_lines
 
 let count_occurrences str grid =
-  let height = Array.length grid in
-  let width = String.length grid.(0) in
-  let max_offset = String.length str in
+  let height = Array.length grid
+  and width = String.length grid.(0)
+  and max_offset = String.length str in
   let rec match_at (x, y) offset (dx, dy) =
     if x < 0 || y < 0 || x >= width || y >= height || grid.(y).[x] <> str.[offset] then
       0
@@ -24,14 +24,13 @@ let count_occurrences str grid =
   !total
 
 let count_crosses grid =
-  let height = Array.length grid in
-  let width = String.length grid.(0) in
   let is_match x y =
     grid.(y + 1).[x + 1] = 'A' &&
     (grid.(y).[x] = 'M' && grid.(y + 2).[x + 2] = 'S' || grid.(y).[x] = 'S' && grid.(y + 2).[x + 2] = 'M') &&
     (grid.(y + 2).[x] = 'M' && grid.(y).[x + 2] = 'S' || grid.(y + 2).[x] = 'S' && grid.(y).[x + 2] = 'M')
-  in
-  let total = ref 0 in
+  and height = Array.length grid
+  and width = String.length grid.(0)
+  and total = ref 0 in
   for y = 0 to height - 3 do
     for x = 0 to width - 3 do
       if is_match x y then
@@ -42,6 +41,6 @@ let count_crosses grid =
 
 let _ =
   let grid = read_file "input/day04.txt" |> Array.of_list in
-  let part1 = (count_occurrences "XMAS" grid) in
-  let part2 = count_crosses grid in
+  let part1 = (count_occurrences "XMAS" grid)
+  and part2 = count_crosses grid in
   Printf.printf "Part 1: %d; Part 2: %d\n" part1 part2

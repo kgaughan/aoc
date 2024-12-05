@@ -1,20 +1,24 @@
 (executable
  (name day01)
- (public_name day01))
+ (public_name day01)
+ (libraries utils))
 
 (executable
  (name day02)
- (public_name day02))
+ (public_name day02)
+ (libraries utils))
 
 (executable
  (name day03)
  (public_name day03)
- (libraries str))
+ (libraries utils))
 
 (executable
  (name day04)
- (public_name day04))
+ (public_name day04)
+ (libraries utils))
 
 (executable
  (name day05)
- (public_name day05))
+ (public_name day05)
+ (libraries utils))

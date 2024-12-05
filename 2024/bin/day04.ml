@@ -1,6 +1,3 @@
-let read_file path =
-  In_channel.with_open_text path In_channel.input_lines
-
 let count_occurrences str grid =
   let height = Array.length grid
   and width = String.length grid.(0)
@@ -14,7 +11,7 @@ let count_occurrences str grid =
       1
   in
   let deltas = [(-1, 0); (1, 0); (0, -1); (0, 1); (-1, -1); (1, -1); (-1, 1); (1, 1)] in
-  let count_at x y = List.map (match_at (x, y) 0) deltas |> List.fold_left (+) 0
+  let count_at x y = List.map (match_at (x, y) 0) deltas |> Utils.sum
   and total = ref 0 in
   for y = 0 to height - 1 do
     for x = 0 to width - 1 do
@@ -40,7 +37,7 @@ let count_crosses grid =
   !total
 
 let _ =
-  let grid = read_file "input/day04.txt" |> Array.of_list in
+  let grid = Utils.read_lines "input/day04.txt" (fun line -> line) |> Array.of_list in
   let part1 = (count_occurrences "XMAS" grid)
   and part2 = count_crosses grid in
   Printf.printf "Part 1: %d; Part 2: %d\n" part1 part2

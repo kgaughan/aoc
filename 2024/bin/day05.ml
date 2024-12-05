@@ -33,14 +33,7 @@ let is_valid_update orderings =
 
 let fix_order orderings =
   let must_precede first second = List.exists (fun entry -> entry = (second, first)) orderings in
-  let split_following page = List.partition (must_precede page) in
-  let rec reorder = function
-    | page :: tl ->
-      let predecessors, followers = split_following page tl in
-      (* this is kind of ugly *)
-      List.concat [reorder predecessors; [page]; reorder followers]
-    | [] -> []
-  in reorder
+  List.sort (fun a b -> if must_precede a b then -1 else 1)
 
 let get_middle_entry lst =
   List.nth lst ((List.length lst) / 2)

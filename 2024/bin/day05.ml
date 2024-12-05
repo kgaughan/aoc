@@ -31,11 +31,24 @@ let is_valid_update orderings =
     | [] -> true
   in in_order
 
+let fix_order orderings =
+  let must_precede first second = List.exists (fun entry -> entry = (second, first)) orderings in
+  let split_following page = List.partition (must_precede page) in
+  let rec reorder = function
+    | page :: tl ->
+      let predecessors, followers = split_following page tl in
+      (* this is kind of ugly *)
+      List.concat [reorder predecessors; [page]; reorder followers]
+    | [] -> []
+  in reorder
+
 let get_middle_entry lst =
   List.nth lst ((List.length lst) / 2)
 
 let _ =
   let orderings, updates = read_input "input/day05.txt" in
-  let valid_updates = List.filter (is_valid_update orderings) updates in
-  let part1 = List.map get_middle_entry valid_updates |> List.fold_left (+) 0 in
-  Printf.printf "Part 1: %d\n" part1
+  let valid_updates, invalid_updates = List.partition (is_valid_update orderings) updates in
+  let sum_middle_entries updates = List.map get_middle_entry updates |> List.fold_left (+) 0 in
+  let part1 = sum_middle_entries valid_updates
+  and part2 = List.map (fix_order orderings) invalid_updates |> sum_middle_entries in
+  Printf.printf "Part 1: %d; Part 2: %d\n" part1 part2

@@ -9,7 +9,7 @@ let extract_instructions contents =
     match Str.matched_string contents with
     | "do()" -> Do
     | "don't()" -> Dont
-    | _ -> Mul ((get_group 1), (get_group 2))
+    | _ -> Mul (get_group 1, get_group 2)
   and mul_pat = Str.regexp {|mul(\([0-9]+\),\([0-9]+\))\|do()\|don't()|} in
   Utils.get_all_matches mul_pat contents (fun acc -> make_instruction () :: acc)
 
@@ -20,7 +20,8 @@ let part2 instructions =
     | Do :: tl -> eval tl acc true
     | Dont :: tl -> eval tl acc false
     | [] -> acc
-  in eval instructions 0 true
+  in
+  eval instructions 0 true
 
 let part1 instructions =
   List.filter (function Mul _ -> true | _ -> false) instructions |> part2

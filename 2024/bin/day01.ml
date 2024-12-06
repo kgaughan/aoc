@@ -15,5 +15,5 @@ let _ =
     | None -> 0
     | Some v -> n * v
   in
-  let part2 = List.fold_left (fun acc n -> acc + (similarity n)) 0 lhs in
+  let part2 = List.fold_left (fun acc n -> acc + similarity n) 0 lhs in
   Printf.printf "Part 1: %d; Part 2: %d\n" part1 part2

@@ -10,12 +10,11 @@ let count_occurrences str grid =
     else
       1
   in
-  let deltas = [(-1, 0); (1, 0); (0, -1); (0, 1); (-1, -1); (1, -1); (-1, 1); (1, 1)] in
   let count_at x y = List.map (match_at (x, y) 0) deltas |> Utils.sum
   and total = ref 0 in
   for y = 0 to height - 1 do
     for x = 0 to width - 1 do
-      total := !total + (count_at x y)
+      total := !total + count_at x y
     done
   done;
   !total

@@ -20,7 +20,8 @@ let get_all_matches pattern contents fn =
     match Str.search_forward pattern contents i with
     | _ -> next_match (Str.match_end ()) (fn acc)
     | exception Not_found -> acc
-  in List.rev (next_match 0 [])
+  in
+  List.rev (next_match 0 [])
 
 let sum =
   List.fold_left (+) 0

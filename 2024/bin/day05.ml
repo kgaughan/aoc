@@ -6,7 +6,8 @@ let read_input path =
       | "" :: tl -> (acc, tl)
       | hd :: tl -> loop (hd :: acc) tl
       | [] -> (acc, [])
-    in loop [] lines
+    in
+    loop [] lines
   in
   let parse lines =
     let orderings, updates = split_sections lines in
@@ -19,8 +20,8 @@ let must_precede first second =
 
 let rec is_in_order orderings = function
   | page :: tl ->
-    List.for_all (fun following -> must_precede following page orderings) tl &&
-    is_in_order orderings tl
+      List.for_all (fun following -> must_precede following page orderings) tl &&
+      is_in_order orderings tl
   | [] -> true
 
 let fix_order orderings =

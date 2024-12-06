@@ -20,7 +20,7 @@ let is_safe_dampened readings =
     List.exists is_safe
 
 let check_all check =
-  List.fold_left (fun acc n -> if check(n) then acc + 1 else acc) 0
+  List.fold_left (fun acc n -> if check n then acc + 1 else acc) 0
 
 let _ =
   let reports = read_input "input/day02.txt" in

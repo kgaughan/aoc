@@ -6,8 +6,7 @@ let find_guard grid =
     | line :: tail -> (
         match String.index line '^' with
         | x -> (x, y)
-        | exception Not_found -> loop (y + 1) tail
-      )
+        | exception Not_found -> loop (y + 1) tail)
     | [] -> raise Not_found
   in
   loop 0 grid
@@ -17,16 +16,14 @@ let find_obstructions grid =
     match lines with
     | line :: tail -> (
         match String.index_from line x '#' with
-        | x' ->
-          find_obstructions (x' + 1) y lines (IntPairSet.add (x', y) obstructions)
-        | exception Not_found ->
-          find_obstructions 0 (y + 1) tail obstructions
-      )
+        | x' -> find_obstructions (x' + 1) y lines (IntPairSet.add (x', y) obstructions)
+        | exception Not_found -> find_obstructions 0 (y + 1) tail obstructions)
     | [] -> obstructions
-  in find_obstructions 0 0 grid IntPairSet.empty
+  in
+  find_obstructions 0 0 grid IntPairSet.empty
 
 let clockwise = function
-    (0, -1) -> (1, 0)
+  | (0, -1) -> (1, 0)
   | (1, 0) -> (0, 1)
   | (0, 1) -> (-1, 0)
   | (-1, 0) -> (0, -1)
@@ -44,7 +41,7 @@ let get_visited_cells height width guard obstructions =
       | _ -> loop (gx, gy) (clockwise (dx, dy)) visited'
       | exception Not_found -> loop next (dx, dy) visited'
   in
-  loop guard (0, -1) (IntPairSet.empty)
+  loop guard (0, -1) IntPairSet.empty
 
 let _ =
   let grid = read_lines "input/day06.txt" (fun line -> line) in

@@ -1,14 +1,9 @@
-let read_input path =
-  Utils.read_lines path (fun line -> Scanf.sscanf line "%d %d" (fun x y -> (x, y)))
+let read_input path = Utils.read_lines path (fun line -> Scanf.sscanf line "%d %d" (fun x y -> (x, y)))
 
 let _ =
-  let lhs, rhs = read_input "input/day01.txt" |> List.split in
-  let part1 = List.fold_left2
-      (fun acc a b -> acc + Int.abs(a - b))
-      0
-      (List.sort compare lhs)
-      (List.sort compare rhs)
-  in
+  let (lhs, rhs) = read_input "input/day01.txt" |> List.split in
+  let sum_distances acc a b = acc + Int.abs (a - b) in
+  let part1 = List.fold_left2 sum_distances 0 (List.sort compare lhs) (List.sort compare rhs) in
   let rhs_counters = Utils.make_counter_table 1000 rhs in
   let similarity n =
     match Hashtbl.find_opt rhs_counters n with

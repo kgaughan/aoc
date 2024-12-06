@@ -10,8 +10,7 @@ let read_lines path line_parser =
   let read_lines ic = input_lines ic |> List.map line_parser in
   In_channel.with_open_text path read_lines
 
-let read_all path =
-  In_channel.with_open_text path In_channel.input_all
+let read_all path = In_channel.with_open_text path In_channel.input_all
 
 let make_counter_table size xs =
   let tbl = Hashtbl.create size in
@@ -31,15 +30,15 @@ let get_all_matches pattern contents fn =
   in
   List.rev (next_match 0 [])
 
-let sum =
-  List.fold_left (+) 0
+let sum = List.fold_left ( + ) 0
 
 module IntPair = struct
   type t = int * int
+
   let compare (x0, y0) (x1, y1) =
     match Stdlib.compare x0 x1 with
     | 0 -> Stdlib.compare y0 y1
     | c -> c
 end
 
-module IntPairSet = Set.Make(IntPair)
+module IntPairSet = Set.Make (IntPair)

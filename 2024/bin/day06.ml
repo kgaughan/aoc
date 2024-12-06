@@ -43,6 +43,52 @@ let get_visited_cells height width guard obstructions =
   in
   loop guard (0, -1) IntPairSet.empty
 
+module LoopVisit = struct
+  type t = {
+    guard : int * int;
+    direction : int * int;
+  }
+
+  let compare v1 v2 =
+    match Stdlib.compare v1.guard v2.guard with
+    | 0 -> Stdlib.compare v1.direction v2.direction
+    | c -> c
+end
+
+module LoopVisitSet = Set.Make (LoopVisit)
+
+let find_loop height width guard obstructions =
+  let out_of_bounds (x, y) = x < 0 || y < 0 || x >= width || y >= height in
+  let rec loop (gx, gy) (dx, dy) visited =
+    let loop_rec = { LoopVisit.guard = (gx, gy); LoopVisit.direction = (dx, dy) } in
+    match LoopVisitSet.find_opt loop_rec visited with
+    | Some _ -> true
+    | None -> (
+        let next_pos = (gx + dx, gy + dy) in
+        if out_of_bounds next_pos then
+          false
+        else
+          let visited' = LoopVisitSet.add loop_rec visited in
+          match IntPairSet.find next_pos obstructions with
+          | _ -> loop (gx, gy) (clockwise (dx, dy)) visited'
+          | exception Not_found -> loop next_pos (dx, dy) visited')
+  in
+  loop guard (0, -1) LoopVisitSet.empty
+
+let count_all_obstructions height width guard obstructions =
+  let result = ref 0 in
+  for x = 0 to width - 1 do
+    for y = 0 to height - 1 do
+      match IntPairSet.find (x, y) obstructions with
+      | _ -> ()
+      | exception Not_found ->
+          let obstructions' = IntPairSet.add (x, y) obstructions in
+          if guard != (x, y) && find_loop height width guard obstructions' then
+            result := !result + 1
+    done
+  done;
+  !result
+
 let _ =
   let grid = read_lines "input/day06.txt" (fun line -> line) in
   let height = List.length grid
@@ -50,4 +96,7 @@ let _ =
   and guard = find_guard grid
   and obstructions = find_obstructions grid in
   let part1 = get_visited_cells height width guard obstructions |> IntPairSet.cardinal in
-  Printf.printf "Part 1: %d\n" part1
+  Printf.printf "Part 1: %d\n" part1;
+  print_endline "This may take a while...";
+  let part2 = count_all_obstructions height width guard obstructions in
+  Printf.printf "Part 2: %d\n" part2

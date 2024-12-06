@@ -4,9 +4,9 @@ let find_guard grid =
   let rec loop y lines =
     match lines with
     | line :: tail -> (
-        match String.index line '^' with
-        | x -> (x, y)
-        | exception Not_found -> loop (y + 1) tail)
+        match String.index_opt line '^' with
+        | Some x -> (x, y)
+        | None -> loop (y + 1) tail)
     | [] -> raise Not_found
   in
   loop 0 grid
@@ -15,9 +15,9 @@ let find_obstructions grid =
   let rec find_obstructions x y lines obstructions =
     match lines with
     | line :: tail -> (
-        match String.index_from line x '#' with
-        | x' -> find_obstructions (x' + 1) y lines (IntPairSet.add (x', y) obstructions)
-        | exception Not_found -> find_obstructions 0 (y + 1) tail obstructions)
+        match String.index_from_opt line x '#' with
+        | Some x' -> find_obstructions (x' + 1) y lines (IntPairSet.add (x', y) obstructions)
+        | None -> find_obstructions 0 (y + 1) tail obstructions)
     | [] -> obstructions
   in
   find_obstructions 0 0 grid IntPairSet.empty
@@ -37,9 +37,9 @@ let get_visited_cells height width guard obstructions =
     if out_of_bounds next then
       visited'
     else
-      match IntPairSet.find next obstructions with
-      | _ -> loop (gx, gy) (clockwise (dx, dy)) visited'
-      | exception Not_found -> loop next (dx, dy) visited'
+      match IntPairSet.find_opt next obstructions with
+      | Some _ -> loop (gx, gy) (clockwise (dx, dy)) visited'
+      | None -> loop next (dx, dy) visited'
   in
   loop guard (0, -1) IntPairSet.empty
 
@@ -68,10 +68,9 @@ let find_loop height width guard obstructions =
         if out_of_bounds next_pos then
           false
         else
-          let visited' = LoopVisitSet.add loop_rec visited in
-          match IntPairSet.find next_pos obstructions with
-          | _ -> loop (gx, gy) (clockwise (dx, dy)) visited'
-          | exception Not_found -> loop next_pos (dx, dy) visited')
+          match IntPairSet.find_opt next_pos obstructions with
+          | Some _ -> loop (gx, gy) (clockwise (dx, dy)) (LoopVisitSet.add loop_rec visited)
+          | None -> loop next_pos (dx, dy) visited)
   in
   loop guard (0, -1) LoopVisitSet.empty
 

@@ -75,19 +75,21 @@ let find_loop height width guard obstructions =
   in
   loop guard (0, -1) LoopVisitSet.empty
 
-let count_all_obstructions height width guard obstructions =
-  let result = ref 0 in
-  for x = 0 to width - 1 do
-    for y = 0 to height - 1 do
+let count_loops height width guard obstructions candidates =
+  let check (x, y) acc =
+    if (x, y) = guard then
+      acc
+    else
       match IntPairSet.find (x, y) obstructions with
-      | _ -> ()
+      | _ -> acc
       | exception Not_found ->
           let obstructions' = IntPairSet.add (x, y) obstructions in
-          if guard != (x, y) && find_loop height width guard obstructions' then
-            result := !result + 1
-    done
-  done;
-  !result
+          if find_loop height width guard obstructions' then
+            acc + 1
+          else
+            acc
+  in
+  IntPairSet.fold check candidates 0
 
 let _ =
   let grid = read_lines "input/day06.txt" (fun line -> line) in
@@ -95,8 +97,9 @@ let _ =
   and width = String.length (List.hd grid)
   and guard = find_guard grid
   and obstructions = find_obstructions grid in
-  let part1 = get_visited_cells height width guard obstructions |> IntPairSet.cardinal in
+  let visited = get_visited_cells height width guard obstructions in
+  let part1 = IntPairSet.cardinal visited in
   Printf.printf "Part 1: %d\n" part1;
   print_endline "This may take a while...";
-  let part2 = count_all_obstructions height width guard obstructions in
+  let part2 = count_loops height width guard obstructions visited in
   Printf.printf "Part 2: %d\n" part2

@@ -1,8 +1,16 @@
+let input_lines ic =
+  let rec loop acc =
+    match In_channel.input_line ic with
+    | Some line -> loop (line :: acc)
+    | None -> acc
+  in
+  loop [] |> List.rev
+
 let read_lines path line_parser =
-  let read_lines ic = In_channel.input_lines ic |> List.map line_parser in
+  let read_lines ic = input_lines ic |> List.map line_parser in
   In_channel.with_open_text path read_lines
 
-let read_all path = 
+let read_all path =
   In_channel.with_open_text path In_channel.input_all
 
 let make_counter_table size xs =
@@ -25,3 +33,13 @@ let get_all_matches pattern contents fn =
 
 let sum =
   List.fold_left (+) 0
+
+module IntPair = struct
+  type t = int * int
+  let compare (x0, y0) (x1, y1) =
+    match Stdlib.compare x0 x1 with
+    | 0 -> Stdlib.compare y0 y1
+    | c -> c
+end
+
+module IntPairSet = Set.Make(IntPair)

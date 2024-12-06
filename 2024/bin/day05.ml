@@ -13,7 +13,7 @@ let read_input path =
     let orderings, updates = split_sections lines in
     (List.map parse_order_line orderings, List.map parse_page_list updates)
   in
-  In_channel.with_open_text path In_channel.input_lines |> parse
+  In_channel.with_open_text path Utils.input_lines |> parse
 
 let must_precede first second =
   List.exists (fun entry -> entry = (second, first))

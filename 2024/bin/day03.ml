@@ -1,4 +1,4 @@
-type instruction = 
+type instruction =
   | Mul of int * int
   | Do
   | Dont
@@ -24,7 +24,12 @@ let part2 instructions =
   eval instructions 0 true
 
 let part1 instructions =
-  List.filter (function Mul _ -> true | _ -> false) instructions |> part2
+  List.filter
+    (function
+      | Mul _ -> true
+      | _ -> false)
+    instructions
+  |> part2
 
 let _ =
   let instructions = extract_instructions (Utils.read_all "input/day03.txt") in

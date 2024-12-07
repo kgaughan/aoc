@@ -79,9 +79,9 @@ let count_loops height width guard obstructions candidates =
     if (x, y) = guard then
       acc
     else
-      match IntPairSet.find (x, y) obstructions with
-      | _ -> acc
-      | exception Not_found ->
+      match IntPairSet.find_opt (x, y) obstructions with
+      | Some _ -> acc
+      | None ->
           let obstructions' = IntPairSet.add (x, y) obstructions in
           if find_loop height width guard obstructions' then
             acc + 1

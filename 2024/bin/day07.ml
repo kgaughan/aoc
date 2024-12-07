@@ -10,18 +10,30 @@ let read_input path =
   in
   In_channel.with_open_text path Utils.input_lines |> List.map parse
 
-let find_solvable equations =
-  let solve (sum, numbers) =
-    let rec check numbers acc =
-      match numbers with
-      | hd :: tl -> check tl (hd + acc) || check tl (hd * acc)
-      | [] -> acc = sum
-    in
-    check numbers 0
+let solve1 (sum, numbers) =
+  let rec check numbers acc =
+    match numbers with
+    | hd :: tl -> check tl (hd + acc) || check tl (hd * acc)
+    | [] -> acc = sum
   in
-  List.filter solve equations
+  check numbers 0
+
+let solve2 (sum, numbers) =
+  let rec check numbers acc =
+    match numbers with
+    | hd :: tl ->
+        if check tl (hd + acc) || check tl (hd * acc) then
+          true
+        else
+          check tl (int_of_string (string_of_int acc ^ string_of_int hd))
+    | [] -> acc = sum
+  in
+  check numbers 0
+
+let sum_solvable solve equations = List.filter solve equations |> List.map fst |> Utils.sum
 
 let _ =
-  let equations = read_input "input/day07.txt" in
-  let part1 = find_solvable equations |> List.map fst |> Utils.sum in
-  Printf.printf "Part 1: %d\n" part1
+  let equations = read_input "input/day07-sample.txt" in
+  let part1 = sum_solvable solve1 equations in
+  let part2 = sum_solvable solve2 equations in
+  Printf.printf "Part 1: %d; Part 2: %d\n" part1 part2

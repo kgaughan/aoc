@@ -45,13 +45,13 @@ let get_visited_cells height width guard obstructions =
 
 module LoopVisit = struct
   type t = {
-    guard : int * int;
-    direction : int * int;
+    guard : IntPair.t;
+    direction : IntPair.t;
   }
 
   let compare v1 v2 =
-    match Stdlib.compare v1.guard v2.guard with
-    | 0 -> Stdlib.compare v1.direction v2.direction
+    match IntPair.compare v1.guard v2.guard with
+    | 0 -> IntPair.compare v1.direction v2.direction
     | c -> c
 end
 

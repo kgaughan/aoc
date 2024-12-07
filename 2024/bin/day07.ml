@@ -16,11 +16,7 @@ let solve1 (sum, numbers) =
       false
     else
       match numbers with
-      | hd :: tl ->
-          if acc >= sum then
-            false
-          else
-            check tl (hd + acc) || check tl (hd * acc)
+      | hd :: tl -> check tl (hd + acc) || (hd > 0 && check tl (hd * acc))
       | [] -> acc = sum
   in
   check numbers 0
@@ -32,7 +28,7 @@ let solve2 (sum, numbers) =
     else
       match numbers with
       | hd :: tl ->
-          if check tl (hd + acc) || check tl (hd * acc) then
+          if check tl (hd + acc) || (hd > 0 && check tl (hd * acc)) then
             true
           else
             check tl (int_of_string (string_of_int acc ^ string_of_int hd))

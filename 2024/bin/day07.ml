@@ -12,21 +12,31 @@ let read_input path =
 
 let solve1 (sum, numbers) =
   let rec check numbers acc =
-    match numbers with
-    | hd :: tl -> check tl (hd + acc) || check tl (hd * acc)
-    | [] -> acc = sum
+    if acc > sum then
+      false
+    else
+      match numbers with
+      | hd :: tl ->
+          if acc >= sum then
+            false
+          else
+            check tl (hd + acc) || check tl (hd * acc)
+      | [] -> acc = sum
   in
   check numbers 0
 
 let solve2 (sum, numbers) =
   let rec check numbers acc =
-    match numbers with
-    | hd :: tl ->
-        if check tl (hd + acc) || check tl (hd * acc) then
-          true
-        else
-          check tl (int_of_string (string_of_int acc ^ string_of_int hd))
-    | [] -> acc = sum
+    if acc > sum then
+      false
+    else
+      match numbers with
+      | hd :: tl ->
+          if check tl (hd + acc) || check tl (hd * acc) then
+            true
+          else
+            check tl (int_of_string (string_of_int acc ^ string_of_int hd))
+      | [] -> acc = sum
   in
   check numbers 0
 

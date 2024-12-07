@@ -21,17 +21,15 @@ let solve1 (sum, numbers) =
   in
   check numbers 0
 
+let ( |^ ) a b = int_of_string (string_of_int a ^ string_of_int b)
+
 let solve2 (sum, numbers) =
   let rec check numbers acc =
     if acc > sum then
       false
     else
       match numbers with
-      | hd :: tl ->
-          if check tl (hd + acc) || (hd > 0 && check tl (hd * acc)) then
-            true
-          else
-            check tl (int_of_string (string_of_int acc ^ string_of_int hd))
+      | hd :: tl -> check tl (hd + acc) || (hd > 0 && check tl (hd * acc)) || check tl (acc |^ hd)
       | [] -> acc = sum
   in
   check numbers 0

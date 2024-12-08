@@ -16,7 +16,7 @@ let solve1 (sum, numbers) =
       false
     else
       match numbers with
-      | hd :: tl -> check tl (hd + acc) || (hd > 0 && check tl (hd * acc))
+      | hd :: tl -> check tl (hd + acc) || (hd > 0 && acc mod hd == 0 && check tl (hd * acc))
       | [] -> acc = sum
   in
   check numbers 0
@@ -29,7 +29,7 @@ let solve2 (sum, numbers) =
       false
     else
       match numbers with
-      | hd :: tl -> check tl (hd + acc) || (hd > 0 && check tl (hd * acc)) || check tl (acc |^ hd)
+      | hd :: tl -> check tl (hd + acc) || (hd > 0 && acc mod hd == 0 && check tl (hd * acc)) || check tl (acc |^ hd)
       | [] -> acc = sum
   in
   check numbers 0

@@ -35,13 +35,49 @@ let mark_antinodes width height towers =
   Hashtbl.iter (fun _ locations -> loop (Array.of_list locations)) towers;
   antinodes
 
+let mark_antinodes_repeating width height towers =
+  let antinodes = Array.make_matrix height width false in
+  let in_bounds x y = x >= 0 && y >= 0 && x < width && y < height in
+  (* There are better ways of doing this, but I just can't be bothered *)
+  let set_antinodes x y dx dy =
+    let x' = ref x
+    and y' = ref y in
+    while in_bounds !x' !y' do
+      antinodes.(!y').(!x') <- true;
+      x' := !x' - dx;
+      y' := !y' - dy
+    done;
+    x' := x + dx;
+    y' := y + dy;
+    while in_bounds !x' !y' do
+      antinodes.(!y').(!x') <- true;
+      x' := !x' + dx;
+      y' := !y' + dy
+    done
+  in
+  let loop locations =
+    let last = Array.length locations - 1 in
+    for i = 0 to last do
+      let (x1, y1) = locations.(i) in
+      for j = i + 1 to last do
+        let (x2, y2) = locations.(j) in
+        let (dx, dy) = (x1 - x2, y1 - y2) in
+        set_antinodes x1 y1 dx dy
+      done
+    done
+  in
+  Hashtbl.iter (fun _ locations -> loop (Array.of_list locations)) towers;
+  antinodes
+
 let count_antinodes antinodes =
   Array.fold_left (fun acc row -> Array.fold_left (fun acc b -> if b then acc + 1 else acc) acc row) 0 antinodes
 
 let _ =
-  let grid = read_input "input/day08-sample.txt" in
+  let grid = read_input "input/day08.txt" in
   let height = Array.length grid
   and width = String.length grid.(0)
   and towers = find_towers grid in
   let part1 = mark_antinodes width height towers |> count_antinodes in
-  Printf.printf "Part 1: %d\n" part1
+  let antinodes = mark_antinodes_repeating width height towers in
+  let part2 = count_antinodes antinodes in
+  Printf.printf "Part 1: %d; Part 2: %d\n" part1 part2

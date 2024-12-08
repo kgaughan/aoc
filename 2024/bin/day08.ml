@@ -14,59 +14,51 @@ let find_towers grid =
   Array.iteri search_vertically grid;
   towers
 
+let check_pairs marker locations =
+  let last = Array.length locations - 1 in
+  for i = 0 to last do
+    for j = i + 1 to last do
+      marker locations.(i) locations.(j)
+    done
+  done
+
 let mark_antinodes width height towers =
   let antinodes = Array.make_matrix height width false in
   let set_antinode x y =
     if x >= 0 && y >= 0 && x < width && y < height then
       antinodes.(y).(x) <- true
   in
-  let loop locations =
-    let last = Array.length locations - 1 in
-    for i = 0 to last do
-      let (x1, y1) = locations.(i) in
-      for j = i + 1 to last do
-        let (x2, y2) = locations.(j) in
-        let (dx, dy) = (x2 - x1, y2 - y1) in
-        set_antinode (x1 - dx) (y1 - dy);
-        set_antinode (x2 + dx) (y2 + dy)
-      done
-    done
+  let mark (x1, y1) (x2, y2) =
+    let (dx, dy) = (x2 - x1, y2 - y1) in
+    set_antinode (x1 - dx) (y1 - dy);
+    set_antinode (x2 + dx) (y2 + dy)
   in
-  Hashtbl.iter (fun _ locations -> loop (Array.of_list locations)) towers;
+  Hashtbl.iter (fun _ locations -> check_pairs mark (Array.of_list locations)) towers;
   antinodes
 
 let mark_antinodes_repeating width height towers =
   let antinodes = Array.make_matrix height width false in
   let in_bounds x y = x >= 0 && y >= 0 && x < width && y < height in
   (* There are better ways of doing this, but I just can't be bothered *)
-  let set_antinodes x y dx dy =
-    let x' = ref x
-    and y' = ref y in
+  let mark (x1, y1) (x2, y2) =
+    let dx = x1 - x2
+    and dy = y1 - y2
+    and x' = ref x1
+    and y' = ref y1 in
     while in_bounds !x' !y' do
       antinodes.(!y').(!x') <- true;
       x' := !x' - dx;
       y' := !y' - dy
     done;
-    x' := x + dx;
-    y' := y + dy;
+    x' := x1 + dx;
+    y' := y1 + dy;
     while in_bounds !x' !y' do
       antinodes.(!y').(!x') <- true;
       x' := !x' + dx;
       y' := !y' + dy
     done
   in
-  let loop locations =
-    let last = Array.length locations - 1 in
-    for i = 0 to last do
-      let (x1, y1) = locations.(i) in
-      for j = i + 1 to last do
-        let (x2, y2) = locations.(j) in
-        let (dx, dy) = (x1 - x2, y1 - y2) in
-        set_antinodes x1 y1 dx dy
-      done
-    done
-  in
-  Hashtbl.iter (fun _ locations -> loop (Array.of_list locations)) towers;
+  Hashtbl.iter (fun _ locations -> check_pairs mark (Array.of_list locations)) towers;
   antinodes
 
 let count_antinodes antinodes =

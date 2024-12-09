@@ -70,6 +70,5 @@ let _ =
   and width = String.length grid.(0)
   and towers = find_towers grid in
   let part1 = mark_antinodes width height towers |> count_antinodes in
-  let antinodes = mark_antinodes_repeating width height towers in
-  let part2 = count_antinodes antinodes in
+  let part2 = mark_antinodes_repeating width height towers |> count_antinodes in
   Printf.printf "Part 1: %d; Part 2: %d\n" part1 part2

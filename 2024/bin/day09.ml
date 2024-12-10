@@ -41,7 +41,21 @@ let pack_aggressively blocks =
   done;
   duplicate
 
-(* this is awful *)
+(*
+ * This is awful. A better approach I only thought of after I'd done this, and
+ * closer to the original way I was thinking of structuring things, would be to
+ * scan for all the windows first, then scan backwards through the files
+ * comparing them to each of the windows until a suitable window was found. The
+ * file would be adjusted so its offset is at the start of the window, and the
+ * window would be shrank suitably and its offset also adjusted.
+ *
+ * This would be far less fussy than the procedural method below, which is also
+ * hamstrung by the fact that there's no way to break out of loops in OCaml. I
+ * only implemented it the way I did because I got lazy with part 1. Even then,
+ * the file could be chopped up similarly to the windows, so.. *shrug*
+ *
+ * Anyway, witness my shame.
+ *)
 let pack_carefully blocks =
   let dup = Array.copy blocks in
   let i = ref 0

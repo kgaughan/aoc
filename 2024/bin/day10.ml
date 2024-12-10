@@ -9,20 +9,19 @@ let follow_trail grid (x, y) =
   let width = String.length grid.(0)
   and height = Array.length grid in
   let get_altitude x y = Utils.parse_digit grid.(y).[x] in
-  let in_bounds x y = x >= 0 && y >= 0 && x < width && y < height in
   let directions = [(1, 0); (0, 1); (-1, 0); (0, -1)] in
-  let rec walk (x, y) acc =
+  let rec walk (x, y) =
     let altitude = get_altitude x y in
     let is_valid (dx, dy) =
       let (x', y') = (x + dx, y + dy) in
-      in_bounds x' y' && get_altitude x' y' = altitude + 1
+      x' >= 0 && y' >= 0 && x' < width && y' < height && get_altitude x' y' = altitude + 1
     in
     if altitude = 9 then
-      (x, y) :: acc
+      [(x, y)]
     else
-      List.filter is_valid directions |> List.map (fun (dx, dy) -> walk (x + dx, y + dy) acc) |> List.flatten
+      List.filter is_valid directions |> List.map (fun (dx, dy) -> walk (x + dx, y + dy)) |> List.flatten
   in
-  walk (x, y) []
+  walk (x, y)
 
 let _ =
   let topology = Utils.read_lines "input/day10.txt" (fun x -> x) |> Array.of_list in

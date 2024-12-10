@@ -13,17 +13,14 @@ let follow_trail grid (x, y) =
   let directions = [(1, 0); (0, 1); (-1, 0); (0, -1)] in
   let rec walk (x, y) acc =
     let altitude = get_altitude x y in
-    let try_ascent (dx, dy) =
+    let is_valid (dx, dy) =
       let (x', y') = (x + dx, y + dy) in
-      if in_bounds x' y' && get_altitude x' y' = altitude + 1 then
-        walk (x', y') acc
-      else
-        []
+      in_bounds x' y' && get_altitude x' y' = altitude + 1
     in
     if altitude = 9 then
       (x, y) :: acc
     else
-      List.append (List.map try_ascent directions |> List.flatten) acc
+      List.filter is_valid directions |> List.map (fun (dx, dy) -> walk (x + dx, y + dy) acc) |> List.flatten
   in
   walk (x, y) []
 

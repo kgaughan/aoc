@@ -1,21 +1,15 @@
-let read_input path = In_channel.with_open_text path In_channel.input_line |> Option.value ~default:""
-
 type block =
   | Block of int
   | Empty
 
-let parse_digit ch =
-  let zero = int_of_char '0' in
-  int_of_char ch - zero
-
-let count_blocks = String.fold_left (fun acc ch -> acc + parse_digit ch) 0
+let count_blocks = String.fold_left (fun acc ch -> acc + Utils.parse_digit ch) 0
 
 let populate_blocks disc_map =
   let block_count = count_blocks disc_map in
   let blocks = Array.make block_count Empty in
   let offset = ref 0 in
   let collect i ch =
-    let length = parse_digit ch in
+    let length = Utils.parse_digit ch in
     if i mod 2 = 0 then
       for j = !offset to !offset + length - 1 do
         blocks.(j) <- Block (i / 2)
@@ -122,7 +116,7 @@ let checksum blocks =
   snd (Array.fold_left sum_block (0, 0) blocks)
 
 let _ =
-  let disc_map = read_input "input/day09.txt" in
+  let disc_map = Utils.read_line "input/day09.txt" in
   let blocks = populate_blocks disc_map in
   let part1 = pack_aggressively blocks |> checksum in
   let part2 = pack_carefully blocks |> checksum in

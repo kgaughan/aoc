@@ -8,7 +8,7 @@ let read_input path =
     let numbers = String.split_on_char ' ' rest |> List.map int_of_string in
     (sum, numbers)
   in
-  In_channel.with_open_text path Utils.input_lines |> List.map parse
+  Utils.read_lines path parse
 
 let solve1 (sum, numbers) =
   let rec check numbers acc =

@@ -6,11 +6,13 @@ let input_lines ic =
   in
   loop [] |> List.rev
 
+let read_all path = In_channel.with_open_text path In_channel.input_all
+
 let read_lines path line_parser =
   let read_lines ic = input_lines ic |> List.map line_parser in
   In_channel.with_open_text path read_lines
 
-let read_all path = In_channel.with_open_text path In_channel.input_all
+let read_line path = In_channel.with_open_text path In_channel.input_line |> Option.value ~default:""
 
 let make_counter_table size xs =
   let tbl = Hashtbl.create size in
@@ -29,6 +31,10 @@ let get_all_matches pattern contents fn =
     | exception Not_found -> acc
   in
   List.rev (next_match 0 [])
+
+let parse_digit ch =
+  let zero = int_of_char '0' in
+  int_of_char ch - zero
 
 let sum = List.fold_left ( + ) 0
 

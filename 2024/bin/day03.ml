@@ -32,5 +32,5 @@ let part1 instructions =
   |> part2
 
 let _ =
-  let instructions = extract_instructions (Utils.read_all "input/day03.txt") in
+  let instructions = Utils.read_all "input/day03.txt" |> extract_instructions in
   Printf.printf "Part 1: %d; Part 2: %d\n" (part1 instructions) (part2 instructions)

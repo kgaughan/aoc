@@ -47,3 +47,8 @@
  (name day10)
  (public_name day10)
  (libraries utils))
+
+(executable
+ (name day11)
+ (public_name day11)
+ (libraries utils))

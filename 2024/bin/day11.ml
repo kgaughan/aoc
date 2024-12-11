@@ -7,26 +7,26 @@ let split_number n =
 
 let process n tiles =
   let cache = Hashtbl.create 100000 in
-  let rec transform tile n =
+  let rec blink tile n =
     if n = 0 then
       1
     else
       match Hashtbl.find_opt cache (tile, n) with
-      | Some r -> r
+      | Some result -> result
       | None ->
           let result =
             if tile = 0 then
-              transform 1 (n - 1)
-            else if has_even_number_of_digits tile && tile > 9 then
+              blink 1 (n - 1)
+            else if has_even_number_of_digits tile then
               let (a, b) = split_number tile in
-              transform a (n - 1) + transform b (n - 1)
+              blink a (n - 1) + blink b (n - 1)
             else
-              transform (tile * 2024) (n - 1)
+              blink (tile * 2024) (n - 1)
           in
           Hashtbl.add cache (tile, n) result;
           result
   in
-  List.map (fun tile -> transform tile n) tiles |> Utils.sum
+  List.map (fun tile -> blink tile n) tiles |> Utils.sum
 
 let _ =
   let tiles = Utils.read_line "input/day11.txt" |> String.split_on_char ' ' |> List.map int_of_string in

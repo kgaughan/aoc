@@ -28,8 +28,48 @@ let process n tiles =
   in
   List.map (fun tile -> blink tile n) tiles |> Utils.sum
 
+module IntMap = Map.Make (Int)
+
+(* Something I've seen other people do other than memoisation is to keep a
+   map of the frequencies of each number. I would expect the frequency method
+   is faster for smaller numbers of iterations, but that the memoisation method
+   comes to dominate later as it can short-circuit paths. Now, part of this
+   slowness could be down to how Map (as opposed to Hashtbl) is implemented in
+   OCaml, but I haven't benchmarked that. May use of the IntMap.update function
+   might also impact its speed.
+
+   If nothing else, this is a demonstration of a significant chunk of the Map
+   module's interface. *)
+let process_freq n tiles =
+  let incr k v map =
+    match IntMap.find_opt k map with
+    | Some v' -> IntMap.update k (Option.map (fun _ -> v + v')) map
+    | None -> IntMap.add k v map
+  in
+  let initial = List.fold_left (fun map tile -> incr tile 1 map) IntMap.empty tiles in
+  let rec blink n map =
+    if n = 0 then
+      map
+    else
+      blink (n - 1)
+        (IntMap.fold
+           (fun tile v map ->
+             (match tile with
+             | 0 -> map |> incr 1 v
+             | _ when has_even_number_of_digits tile ->
+                 let (a, b) = split_number tile in
+                 map |> incr a v |> incr b v
+             | _ -> map |> incr (tile * 2024) v)
+             |> incr tile ~-v)
+           map map)
+  in
+  IntMap.fold (fun _ v total -> v + total) (blink n initial) 0
+
 let _ =
   let tiles = Utils.read_line "input/day11.txt" |> String.split_on_char ' ' |> List.map int_of_string in
   let part1 = process 25 tiles in
+  Printf.printf "Part 1: %d\n" part1;
   let part2 = process 75 tiles in
-  Printf.printf "Part 1: %d; Part 2: %d\n" part1 part2
+  Printf.printf "Part 2: %d\n" part2;
+  let part2_freq = process_freq 75 tiles in
+  Printf.printf "Bonus part 2 (frequency): %d\n" part2_freq

@@ -53,8 +53,35 @@ module IntPairSet = Set.Make (IntPair)
 
 let split_sections lines =
   let rec loop acc = function
-    | "" :: tl -> (acc, tl)
+    | "" :: tl -> (acc |> List.rev, tl)
     | hd :: tl -> loop (hd :: acc) tl
     | [] -> (acc, [])
   in
   loop [] lines
+
+let fold_matrix fn init matrix =
+  Array.fold_left
+    (fun (y, acc) row -> (y + 1, Array.fold_left (fun (x, acc) cell -> (x + 1, fn x y acc cell)) (0, acc) row |> snd))
+    (0, init) matrix
+  |> snd
+
+let find_cell fn matrix =
+  let height = Array.length matrix
+  and width = Array.length matrix.(0) in
+  let rec loop_rows y =
+    let rec loop_cols x =
+      if x = width then
+        None
+      else if fn matrix.(y).(x) then
+        Some (x, y)
+      else
+        loop_cols (x + 1)
+    in
+    if y = height then
+      None
+    else
+      match loop_cols 0 with
+      | Some pos -> Some pos
+      | None -> loop_rows (y + 1)
+  in
+  loop_rows 0

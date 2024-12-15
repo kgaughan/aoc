@@ -1,14 +1,6 @@
 let read_input path =
-  let split_sections lines =
-    let rec loop acc = function
-      | "" :: tl -> (acc, tl)
-      | hd :: tl -> loop (hd :: acc) tl
-      | [] -> (acc, [])
-    in
-    loop [] lines
-  in
   let parse lines =
-    let (orderings, updates) = split_sections lines in
+    let (orderings, updates) = Utils.split_sections lines in
     (List.map (Utils.parse_pair "%d|%d") orderings, List.map (Utils.parse_ints ~sep:',') updates)
   in
   In_channel.with_open_text path Utils.input_lines |> parse

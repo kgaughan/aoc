@@ -15,13 +15,12 @@ let process n tiles =
       | Some result -> result
       | None ->
           let result =
-            if tile = 0 then
-              blink 1 (n - 1)
-            else if has_even_number_of_digits tile then
-              let (a, b) = split_number tile in
-              blink a (n - 1) + blink b (n - 1)
-            else
-              blink (tile * 2024) (n - 1)
+            match tile with
+            | 0 -> blink 1 (n - 1)
+            | _ when has_even_number_of_digits tile ->
+                let (a, b) = split_number tile in
+                blink a (n - 1) + blink b (n - 1)
+            | _ -> blink (tile * 2024) (n - 1)
           in
           Hashtbl.add cache (tile, n) result;
           result

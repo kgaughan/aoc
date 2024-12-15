@@ -57,3 +57,8 @@
  (name day15)
  (public_name day15)
  (libraries utils))
+
+(env
+ (dev
+  (flags
+   (:standard -warn-error -A))))

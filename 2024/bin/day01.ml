@@ -1,4 +1,4 @@
-let read_input path = Utils.read_lines path (fun line -> Scanf.sscanf line "%d %d" (fun x y -> (x, y)))
+let read_input path = Utils.read_lines path (Utils.parse_pair "%d %d")
 
 let _ =
   let (lhs, rhs) = read_input "input/day01.txt" |> List.split in

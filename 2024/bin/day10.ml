@@ -24,7 +24,7 @@ let follow_trail grid (x, y) =
   walk (x, y)
 
 let _ =
-  let topology = Utils.read_lines "input/day10.txt" (fun x -> x) |> Array.of_list in
+  let topology = Utils.read_lines "input/day10.txt" Fun.id |> Array.of_list in
   let trailheads = find_trailheads topology in
   let paths = List.map (follow_trail topology) trailheads in
   let part1 = List.map (List.sort_uniq compare) paths |> List.map List.length |> Utils.sum in

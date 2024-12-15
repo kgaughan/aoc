@@ -15,6 +15,8 @@ let ( % ) x y =
   else
     result + y
 
+let shannon_entropy np pf = List.map pf np |> List.map (fun p -> p *. Float.log2 p) |> List.fold_left ( +. ) 0.
+
 let as_grid width height robots =
   let grid = Array.make_matrix height width 0 in
   List.iter (fun r -> grid.(r.py).(r.px) <- grid.(r.py).(r.px) + 1) robots;
@@ -36,16 +38,17 @@ let render ?(skip = false) grid =
     print_newline ()
   done
 
-let simulate width height seconds robots =
-  let rec loop robots seconds =
+let simulate_once width height =
+  List.map (fun r -> { px = (r.px + r.vx) % width; py = (r.py + r.vy) % height; vx = r.vx; vy = r.vy })
+
+let simulate fn seconds robots =
+  let rec loop seconds robots =
     if seconds = 0 then
       robots
     else
-      loop
-        (List.map (fun r -> { px = (r.px + r.vx) % width; py = (r.py + r.vy) % height; vx = r.vx; vy = r.vy }) robots)
-        (seconds - 1)
+      loop (seconds - 1) (fn robots)
   in
-  loop robots seconds
+  loop seconds robots
 
 let get_safety_factor width height robots =
   let get_quadrant x y =
@@ -68,7 +71,7 @@ let _ =
   let width = 101
   and height = 103 in
   let robots = read_input "input/day14.txt" in
-  let result = simulate width height 100 robots in
+  let result = simulate (simulate_once width height) 100 robots in
   as_grid width height result |> render;
   let part1 = get_safety_factor width height result in
   Printf.printf "Part 1: %d\n" part1

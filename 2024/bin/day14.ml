@@ -15,7 +15,23 @@ let ( % ) x y =
   else
     result + y
 
-let shannon_entropy np pf = List.map pf np |> List.map (fun p -> p *. Float.log2 p) |> List.fold_left ( +. ) 0.
+(* As a rough estimate of the amount of entropy in a grid, this does a
+   simplified run-length encode of the data by counting how often we flip
+   between zero and non-zero in the grid. The result is the number of tokens
+   and RLE encoder would spit out. *)
+let rle_entropy grid =
+  let height = Array.length grid
+  and width = Array.length grid.(0)
+  and previous = ref (grid.(0).(0) > 0)
+  and flips = ref 0 in
+  for y = 0 to height - 1 do
+    for x = 0 to width - 1 do
+      if grid.(y).(x) > 0 <> !previous then (
+        previous := not !previous;
+        flips := !flips + 1)
+    done
+  done;
+  float_of_int !flips /. float_of_int (width * height)
 
 let as_grid width height robots =
   let grid = Array.make_matrix height width 0 in
@@ -72,6 +88,21 @@ let _ =
   and height = 103 in
   let robots = read_input "input/day14.txt" in
   let result = simulate (simulate_once width height) 100 robots in
-  as_grid width height result |> render;
   let part1 = get_safety_factor width height result in
   Printf.printf "Part 1: %d\n" part1
+
+let _ =
+  let width = 101
+  and height = 103 in
+  let robots = read_input "input/day14.txt" in
+  let rec loop robots attempts =
+    let result = simulate_once width height robots in
+    let grid = as_grid width height result in
+    let entropy = rle_entropy grid in
+    if entropy < 0.05 then (
+      Printf.printf "%d -> %f\n" (attempts + 1) entropy;
+      render grid);
+    if attempts < 10000 then
+      loop result (attempts + 1)
+  in
+  loop robots 0

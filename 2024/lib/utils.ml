@@ -50,3 +50,11 @@ module IntPair = struct
 end
 
 module IntPairSet = Set.Make (IntPair)
+
+let split_sections lines =
+  let rec loop acc = function
+    | "" :: tl -> (acc, tl)
+    | hd :: tl -> loop (hd :: acc) tl
+    | [] -> (acc, [])
+  in
+  loop [] lines

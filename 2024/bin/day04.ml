@@ -36,7 +36,7 @@ let count_crosses grid =
   !total
 
 let _ =
-  let grid = Utils.read_lines "input/day04.txt" (fun line -> line) |> Array.of_list in
+  let grid = Utils.read_lines "input/day04.txt" Fun.id |> Array.of_list in
   let part1 = count_occurrences "XMAS" grid
   and part2 = count_crosses grid in
   Printf.printf "Part 1: %d; Part 2: %d\n" part1 part2

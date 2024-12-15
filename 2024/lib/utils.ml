@@ -36,6 +36,8 @@ let parse_digit ch =
   let zero = int_of_char '0' in
   int_of_char ch - zero
 
+let parse_pair fmt line = Scanf.sscanf line fmt (fun x y -> (x, y))
+let parse_ints ?(sep = ' ') line = String.split_on_char sep line |> List.map int_of_string
 let sum = List.fold_left ( + ) 0
 
 module IntPair = struct

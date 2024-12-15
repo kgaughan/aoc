@@ -4,8 +4,8 @@
 
 let read_input path =
   let parse line =
-    let (sum, rest) = Scanf.sscanf line "%d: %s@\n" (fun sum rest -> (sum, rest)) in
-    let numbers = String.split_on_char ' ' rest |> List.map int_of_string in
+    let (sum, rest) = Utils.parse_pair "%d: %s@\n" line in
+    let numbers = Utils.parse_ints rest in
     (sum, numbers)
   in
   Utils.read_lines path parse

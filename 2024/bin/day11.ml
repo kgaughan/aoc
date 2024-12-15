@@ -43,7 +43,7 @@ module IntMap = Map.Make (Int)
 let process_freq n tiles =
   let incr k v map =
     match IntMap.find_opt k map with
-    | Some v' -> IntMap.update k (Option.map (fun _ -> v + v')) map
+    | Some _ -> IntMap.update k (Option.map (( + ) v)) map
     | None -> IntMap.add k v map
   in
   let initial = List.fold_left (fun map tile -> incr tile 1 map) IntMap.empty tiles in
@@ -66,7 +66,7 @@ let process_freq n tiles =
   IntMap.fold (fun _ v total -> v + total) (blink n initial) 0
 
 let _ =
-  let tiles = Utils.read_line "input/day11.txt" |> String.split_on_char ' ' |> List.map int_of_string in
+  let tiles = Utils.read_line "input/day11.txt" |> Utils.parse_ints in
   let part1 = process 25 tiles in
   Printf.printf "Part 1: %d\n" part1;
   let part2 = process 75 tiles in

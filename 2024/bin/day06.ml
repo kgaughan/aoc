@@ -91,7 +91,7 @@ let count_loops height width guard obstructions candidates =
   IntPairSet.fold check candidates 0
 
 let _ =
-  let grid = read_lines "input/day06.txt" (fun line -> line) in
+  let grid = read_lines "input/day06.txt" Fun.id in
   let height = List.length grid
   and width = String.length (List.hd grid)
   and guard = find_guard grid

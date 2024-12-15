@@ -54,6 +54,11 @@
  (libraries utils))
 
 (executable
+ (name day14)
+ (public_name day14)
+ (libraries utils))
+
+(executable
  (name day15)
  (public_name day15)
  (libraries utils))

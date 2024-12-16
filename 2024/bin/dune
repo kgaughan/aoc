@@ -68,6 +68,11 @@
  (public_name day15)
  (libraries utils))
 
+(executable
+ (name day16)
+ (public_name day16)
+ (libraries utils))
+
 (env
  (dev
   (flags

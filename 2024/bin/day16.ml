@@ -54,10 +54,10 @@ let anticlockwise = function
   | West -> South
 
 let travel start_cell end_cell maze =
-  let turn movement r = { direction = movement r.direction; score = r.score + 1000; x = r.x; y = r.y }
+  let turn movement r = { r with direction = movement r.direction; score = r.score + 1000 }
   and try_move r =
     let (dx, dy) = forward r.direction in
-    let next_pos = { direction = r.direction; score = r.score + 1; x = r.x + dx; y = r.y + dy } in
+    let next_pos = { r with score = r.score + 1; x = r.x + dx; y = r.y + dy } in
     match maze.(next_pos.y).(next_pos.x) with
     | Wall -> None
     | Visited score when score <= next_pos.score -> None
@@ -84,10 +84,10 @@ let travel start_cell end_cell maze =
   loop ()
 
 let backtrace start_cell end_cell initial_score maze =
-  let turn movement r = { direction = movement r.direction; score = r.score - 1000; x = r.x; y = r.y }
+  let turn movement r = { r with direction = movement r.direction; score = r.score - 1000 }
   and try_move r =
     let (dx, dy) = forward r.direction in
-    let next_pos = { direction = r.direction; score = r.score - 1; x = r.x + dx; y = r.y + dy } in
+    let next_pos = { r with score = r.score - 1; x = r.x + dx; y = r.y + dy } in
     (* The 1000 here looks like a fudge, but it's not: it's to deal with tiles
        with turns *)
     match maze.(next_pos.y).(next_pos.x) with

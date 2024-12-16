@@ -19,21 +19,13 @@ type reindeer = {
 }
 
 let read_input path =
-  let make_maze_line line =
-    let result = Array.make (String.length line) Empty in
-    String.iteri
-      (fun i ch ->
-        result.(i) <-
-          (match ch with
-          | '#' -> Wall
-          | 'S' -> Start
-          | 'E' -> End
-          | _ -> Empty))
-      line;
-    result
+  let to_make_element = function
+    | '#' -> Wall
+    | 'S' -> Start
+    | 'E' -> End
+    | _ -> Empty
   in
-  let lines = Utils.read_lines path make_maze_line |> Array.of_list in
-  lines
+  Utils.read_lines path (Utils.array_of_string to_make_element Empty) |> Array.of_list
 
 let forward = function
   | North -> (0, -1)

@@ -36,6 +36,11 @@ let parse_digit ch =
   let zero = int_of_char '0' in
   int_of_char ch - zero
 
+let array_of_string fn empty line =
+  let result = Array.make (String.length line) empty in
+  String.iteri (fun i ch -> result.(i) <- fn ch) line;
+  result
+
 let parse_pair fmt line = Scanf.sscanf line fmt (fun x y -> (x, y))
 let parse_ints ?(sep = ' ') line = String.split_on_char sep line |> List.map int_of_string
 let sum = List.fold_left ( + ) 0

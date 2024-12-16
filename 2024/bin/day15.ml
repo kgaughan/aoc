@@ -13,11 +13,7 @@ let read_input path =
     | 'O' -> Box
     | _ -> Empty (* note: '[' and ']' don't appear in the input *)
   in
-  let parse_map grid =
-    let result = Array.make_matrix (List.length grid) (List.hd grid |> String.length) Empty in
-    List.iteri (fun y line -> String.iteri (fun x ch -> result.(y).(x) <- to_cell ch) line) grid;
-    result
-  in
+  let parse_map grid = List.map (Utils.array_of_string to_cell Empty) grid |> Array.of_list in
   let parse lines =
     let (map, movements) = Utils.split_sections lines in
     (parse_map map, String.concat "" movements)

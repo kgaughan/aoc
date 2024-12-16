@@ -53,22 +53,6 @@ let anticlockwise = function
   | East -> North
   | West -> South
 
-let dump maze =
-  let height = Array.length maze
-  and width = Array.length maze.(0) in
-  for y = 0 to height - 1 do
-    for x = 0 to width - 1 do
-      print_char
-        (match maze.(y).(x) with
-        | Wall -> '#'
-        | Empty -> '.'
-        | Visited _ -> 'v'
-        | Start -> 'S'
-        | End -> 'E')
-    done;
-    print_newline ()
-  done
-
 let travel start_cell end_cell maze =
   let turn movement r = { direction = movement r.direction; score = r.score + 1000; x = r.x; y = r.y }
   and try_move r =
@@ -99,6 +83,39 @@ let travel start_cell end_cell maze =
   in
   loop ()
 
+let backtrace start_cell end_cell initial_score maze =
+  let turn movement r = { direction = movement r.direction; score = r.score - 1000; x = r.x; y = r.y }
+  and try_move r =
+    let (dx, dy) = forward r.direction in
+    let next_pos = { direction = r.direction; score = r.score - 1; x = r.x + dx; y = r.y + dy } in
+    (* The 1000 here looks like a fudge, but it's not: it's to deal with tiles
+       with turns *)
+    match maze.(next_pos.y).(next_pos.x) with
+    | Visited score when next_pos.score = score || next_pos.score - 1000 = score -> Some next_pos
+    | _ -> None
+  and visited = Hashtbl.create 64
+  and paths = Queue.create () in
+  let push r =
+    if (r.x, r.y) <> start_cell then
+      Queue.add r paths;
+    match Hashtbl.find_opt visited (r.x, r.y) with
+    | Some _ -> ()
+    | None -> Hashtbl.add visited (r.x, r.y) true
+  in
+  push { direction = West; score = initial_score; x = fst end_cell; y = snd end_cell };
+  push { direction = South; score = initial_score; x = fst end_cell; y = snd end_cell };
+  let rec loop () =
+    if Queue.length paths = 0 then
+      Hashtbl.length visited
+    else
+      let head = Queue.take paths in
+      head |> try_move |> Option.iter push;
+      head |> turn anticlockwise |> try_move |> Option.iter push;
+      head |> turn clockwise |> try_move |> Option.iter push;
+      loop ()
+  in
+  loop ()
+
 let _ =
   let maze = read_input "input/day16.txt" in
   let start_cell = Utils.find_cell (fun cell -> cell = Start) maze |> Option.get
@@ -106,4 +123,6 @@ let _ =
   maze.(snd start_cell).(fst start_cell) <- Empty;
   maze.(snd end_cell).(fst end_cell) <- Empty;
   let score = travel start_cell end_cell maze in
-  Printf.printf "Part 1: %d\n" score
+  Printf.printf "Part 1: %d\n" score;
+  let in_best_path = backtrace start_cell end_cell score maze in
+  Printf.printf "Part 2: %d\n" in_best_path

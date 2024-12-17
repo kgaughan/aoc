@@ -54,6 +54,11 @@
  (libraries utils))
 
 (executable
+ (name day12)
+ (public_name day12)
+ (libraries utils))
+
+(executable
  (name day13)
  (public_name day13)
  (libraries utils))
@@ -71,6 +76,11 @@
 (executable
  (name day16)
  (public_name day16)
+ (libraries utils))
+
+(executable
+ (name day17)
+ (public_name day17)
  (libraries utils))
 
 (env

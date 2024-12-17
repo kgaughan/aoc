@@ -44,12 +44,35 @@ let simulate machine =
     if machine.ic = Array.length machine.program then
       List.rev output
     else
-      let (next_iteration, next_output) = simulate_once machine output in
-      loop next_iteration next_output
+      let (machine', output') = simulate_once machine output in
+      loop machine' output'
   in
   loop machine []
+
+let find_quine original_machine =
+  let rec loop machine output n =
+    (* machine exited unexpectedly? *)
+    if machine.ic >= Array.length machine.program then
+      loop { original_machine with reg_a = n + 1 } [] (n + 1)
+    else (* normal flow *)
+      let check_for_emit = machine.program.(machine.ic) = 5
+      and (machine', output') = simulate_once machine output in
+      if check_for_emit then
+        let emitted = List.length output' in
+        if List.hd output' <> machine.program.(emitted - 1) then
+          loop { original_machine with reg_a = n + 1 } [] (n + 1)
+        else if emitted = Array.length machine.program then
+          n
+        else
+          loop machine' output' n
+      else
+        loop machine' output' n
+  in
+  loop { original_machine with reg_a = 0 } [] 0
 
 let _ =
   let machine = read_file "input/day17.txt" in
   let part1 = simulate machine in
-  Printf.printf "Part 1: %s\n" (Utils.int_concat part1)
+  Printf.printf "Part 1: %s\n" (Utils.int_concat part1);
+  let part2 = find_quine machine in
+  Printf.printf "Part 2: %d\n" part2

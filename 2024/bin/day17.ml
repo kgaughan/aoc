@@ -42,37 +42,44 @@ let simulate_once machine output =
 let simulate machine =
   let rec loop machine output =
     if machine.ic = Array.length machine.program then
-      List.rev output
+      output
     else
       let (machine', output') = simulate_once machine output in
       loop machine' output'
   in
   loop machine []
 
-let find_quine original_machine =
-  let rec loop machine output n =
-    (* machine exited unexpectedly? *)
-    if machine.ic >= Array.length machine.program then
-      loop { original_machine with reg_a = n + 1 } [] (n + 1)
-    else (* normal flow *)
-      let check_for_emit = machine.program.(machine.ic) = 5
-      and (machine', output') = simulate_once machine output in
-      if check_for_emit then
-        let emitted = List.length output' in
-        if List.hd output' <> machine.program.(emitted - 1) then
-          loop { original_machine with reg_a = n + 1 } [] (n + 1)
-        else if emitted = Array.length machine.program then
-          n
-        else
-          loop machine' output' n
-      else
-        loop machine' output' n
+let find_quine machine =
+  let check_trailing lst =
+    let rec loop n = function
+      | hd :: tl when hd = machine.program.(n) -> loop (n - 1) tl
+      | [] -> true
+      | _ -> false
+    in
+    loop (Array.length machine.program - 1) lst
   in
-  loop { original_machine with reg_a = 0 } [] 0
+  let rec loop offset acc =
+    let rec loop_candidate c =
+      let attempt = (acc * 8) + c in
+      if simulate { machine with reg_a = attempt } |> check_trailing then
+        if offset = 0 then
+          Some attempt
+        else
+          match loop (offset - 1) attempt with
+          | Some n -> Some n
+          | None -> if c < 7 then loop_candidate (c + 1) else None
+      else if c < 7 then
+        loop_candidate (c + 1)
+      else
+        None
+    in
+    loop_candidate 0
+  in
+  loop (Array.length machine.program - 1) 0 |> Option.get
 
 let _ =
   let machine = read_file "input/day17.txt" in
-  let part1 = simulate machine in
+  let part1 = simulate machine |> List.rev in
   Printf.printf "Part 1: %s\n" (Utils.int_concat part1);
   let part2 = find_quine machine in
   Printf.printf "Part 2: %d\n" part2

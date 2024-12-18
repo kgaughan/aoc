@@ -47,48 +47,45 @@ let a_star start goal heuristic grid =
     | Some v -> v
     | None -> max_int
   in
-  let get_weight _current _neighbour = 1 in
+  let score_neighbour current get_weight ((open_set, closed_set, came_from, g_scores, f_scores) as ctx) neighbour =
+    if IntPairSet.mem neighbour closed_set then
+      ctx
+    else
+      let tentative_g_score = get_g_score current g_scores + get_weight neighbour in
+      if tentative_g_score < get_g_score neighbour g_scores then
+        let came_from = IntPairMap.add neighbour current came_from
+        and g_scores = IntPairMap.add neighbour tentative_g_score g_scores in
+        let f_score = get_g_score neighbour g_scores + heuristic neighbour goal in
+        let f_scores = IntPairMap.add neighbour f_score f_scores
+        and open_set =
+          if not (IntPairSet.mem neighbour open_set) then
+            IntPairSet.add neighbour open_set
+          else
+            open_set
+        in
+        (open_set, closed_set, came_from, g_scores, f_scores)
+      else
+        ctx
+  in
+  let prioritise f_scores p1 p2 =
+    if p2 = sentinel then
+      p1
+    else
+      let s1 = IntPairMap.find p1 f_scores
+      and s2 = IntPairMap.find p2 f_scores in
+      if s1 < s2 then p1 else p2
+  in
   let rec loop (open_set, closed_set, came_from, g_scores, f_scores) =
     if IntPairSet.is_empty open_set then
       None
     else
-      let current =
-        IntPairSet.fold
-          (fun p1 p2 ->
-            if p2 = sentinel then
-              p1
-            else
-              let s1 = IntPairMap.find p1 f_scores
-              and s2 = IntPairMap.find p2 f_scores in
-              if s1 < s2 then p1 else p2)
-          open_set sentinel
-      in
+      let current = IntPairSet.fold (prioritise f_scores) open_set sentinel in
       if current = goal then
         Some (reconstruct_path came_from current)
       else
         let open_set = IntPairSet.remove current open_set in
         find_neighbours current
-        |> List.fold_left
-             (fun ((open_set, closed_set, came_from, g_scores, f_scores) as ctx) neighbour ->
-               if IntPairSet.mem neighbour closed_set then
-                 ctx
-               else
-                 let tentative_g_score = get_g_score current g_scores + get_weight current neighbour in
-                 if tentative_g_score < get_g_score neighbour g_scores then
-                   let came_from = IntPairMap.add neighbour current came_from
-                   and g_scores = IntPairMap.add neighbour tentative_g_score g_scores in
-                   let f_score = get_g_score neighbour g_scores + heuristic neighbour goal in
-                   let f_scores = IntPairMap.add neighbour f_score f_scores
-                   and open_set =
-                     if not (IntPairSet.mem neighbour open_set) then
-                       IntPairSet.add neighbour open_set
-                     else
-                       open_set
-                   in
-                   (open_set, closed_set, came_from, g_scores, f_scores)
-                 else
-                   ctx)
-             (open_set, closed_set, came_from, g_scores, f_scores)
+        |> List.fold_left (score_neighbour current (fun _ -> 1)) (open_set, closed_set, came_from, g_scores, f_scores)
         |> loop
   in
   loop (open_set, closed_set, came_from, g_scores, f_scores)

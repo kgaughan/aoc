@@ -14,12 +14,11 @@ let populate_grid width height limit points =
       | (x, y) :: tl ->
           grid.(y).(x) <- Corrupted;
           loop (n - 1) tl
-      | [] -> ()
+      | [] -> (grid, [])
     else
-      ()
+      (grid, lst)
   in
-  loop limit points;
-  grid
+  loop limit points
 
 let a_star start goal heuristic grid =
   let sentinel = (-1, -1)
@@ -99,7 +98,27 @@ let walk grid =
   let goal = (Array.length grid.(0) - 1, Array.length grid - 1) in
   a_star (0, 0) goal manhattan_distance grid
 
+let try_remaining path grid remaining =
+  let corrupt (x, y) = grid.(y).(x) <- Corrupted
+  and build_visited path = List.fold_left (fun acc p -> IntPairSet.add p acc) IntPairSet.empty path in
+  let rec loop visited remaining =
+    match remaining with
+    | p :: tl ->
+        corrupt p;
+        if IntPairSet.mem p visited then
+          match walk grid with
+          | Some path -> loop (build_visited path) tl
+          | None -> Some p
+        else
+          loop visited tl
+    | [] -> None
+  in
+  loop (build_visited path) remaining
+
 let _ =
   let points = read_input "input/day18.txt" in
-  let path = populate_grid 71 71 1024 points |> walk |> Option.get in
-  Printf.printf "Part 1: %d\n" (List.length path - 1)
+  let (grid, remaining) = populate_grid 71 71 1024 points in
+  let path = walk grid |> Option.get in
+  Printf.printf "Part 1: %d\n" (List.length path - 1);
+  let coordinate = try_remaining path grid remaining |> Option.get in
+  Printf.printf "Part 2: %d,%d\n" (fst coordinate) (snd coordinate)

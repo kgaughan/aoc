@@ -96,21 +96,20 @@ let walk grid =
   a_star (0, 0) goal manhattan_distance grid
 
 let try_remaining path grid remaining =
-  let corrupt (x, y) = grid.(y).(x) <- Corrupted
-  and build_visited path = List.fold_left (fun acc p -> IntPairSet.add p acc) IntPairSet.empty path in
+  let corrupt (x, y) = grid.(y).(x) <- Corrupted in
   let rec loop visited remaining =
     match remaining with
     | p :: tl ->
         corrupt p;
         if IntPairSet.mem p visited then
           match walk grid with
-          | Some path -> loop (build_visited path) tl
+          | Some path -> loop (IntPairSet.of_list path) tl
           | None -> Some p
         else
           loop visited tl
     | [] -> None
   in
-  loop (build_visited path) remaining
+  loop (IntPairSet.of_list path) remaining
 
 let _ =
   let points = read_input "input/day18.txt" in

@@ -55,7 +55,7 @@ let a_star start goal heuristic grid =
       if tentative_g_score < get_g_score neighbour g_scores then
         let came_from = IntPairMap.add neighbour current came_from
         and g_scores = IntPairMap.add neighbour tentative_g_score g_scores in
-        let f_score = get_g_score neighbour g_scores + heuristic neighbour goal in
+        let f_score = tentative_g_score + heuristic neighbour goal in
         let f_scores = IntPairMap.add neighbour f_score f_scores
         and open_set =
           if not (IntPairSet.mem neighbour open_set) then

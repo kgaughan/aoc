@@ -34,29 +34,15 @@ let trace_region x y ch map =
       None
   in
   let count_corners x y =
+    let check s1 s2 c = if (s1 && s2) || (c && not (s1 || s2)) then 1 else 0 in
     let np = is_perimeter x (y - 1)
     and sp = is_perimeter x (y + 1)
     and wp = is_perimeter (x - 1) y
-    and ep = is_perimeter (x + 1) y
-    and nwc = is_perimeter (x - 1) (y - 1)
-    and nec = is_perimeter (x + 1) (y - 1)
-    and swc = is_perimeter (x - 1) (y + 1)
-    and sec = is_perimeter (x + 1) (y + 1) in
-    List.fold_left
-      (fun acc b -> acc + if b then 1 else 0)
-      0
-      [
-        (* convex corners *)
-        np && wp;
-        np && ep;
-        sp && wp;
-        sp && ep;
-        (* concave corners *)
-        nwc && not (np || wp);
-        nec && not (np || ep);
-        swc && not (sp || wp);
-        sec && not (sp || ep);
-      ]
+    and ep = is_perimeter (x + 1) y in
+    check np wp (is_perimeter (x - 1) (y - 1))
+    + check np ep (is_perimeter (x + 1) (y - 1))
+    + check sp wp (is_perimeter (x - 1) (y + 1))
+    + check sp ep (is_perimeter (x + 1) (y + 1))
   in
   let push (x, y) =
     Queue.add (x, y) pending;

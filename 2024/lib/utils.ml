@@ -46,6 +46,16 @@ let parse_pair fmt line = Scanf.sscanf line fmt (fun x y -> (x, y))
 let parse_ints ?(sep = ' ') line = String.split_on_char sep line |> List.map int_of_string
 let sum = List.fold_left ( + ) 0
 
+let render fn grid =
+  let width = Array.length grid.(0)
+  and height = Array.length grid in
+  for y = 0 to height - 1 do
+    for x = 0 to width - 1 do
+      fn x y grid.(y).(x)
+    done;
+    print_newline ()
+  done
+
 module IntPair = struct
   type t = int * int
 
@@ -56,6 +66,7 @@ module IntPair = struct
 end
 
 module IntPairSet = Set.Make (IntPair)
+module IntPairMap = Map.Make (IntPair)
 
 let split_sections lines =
   let rec loop acc = function

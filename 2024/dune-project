@@ -16,7 +16,10 @@
 (package
  (name aoc2024)
  (synopsis "Advent of Code 2024")
- (depends ocaml dune)
+ (depends
+  (ocaml
+   (< 5))
+  dune)
  (tags ("advent-of-code")))
 
 ; See the complete stanza docs at https://dune.readthedocs.io/en/stable/reference/dune-project/index.html

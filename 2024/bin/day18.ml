@@ -4,8 +4,6 @@ type tile =
   | Empty
   | Corrupted
 
-let read_input path = read_lines path (parse_pair "%d,%d")
-
 let populate_grid width height limit points =
   let grid = Array.make_matrix width height Empty in
   let rec loop n lst =
@@ -91,9 +89,8 @@ let a_star start goal heuristic grid =
   loop (open_set, closed_set, came_from, g_scores, f_scores)
 
 let walk grid =
-  let manhattan_distance (x1, y1) (x2, y2) = abs (x1 - x2) + abs (y1 - y2) in
   let goal = (Array.length grid.(0) - 1, Array.length grid - 1) in
-  a_star (0, 0) goal manhattan_distance grid
+  a_star (0, 0) goal Utils.manhattan_distance grid
 
 let try_remaining path grid remaining =
   let corrupt (x, y) = grid.(y).(x) <- Corrupted in
@@ -112,7 +109,7 @@ let try_remaining path grid remaining =
   loop (IntPairSet.of_list path) remaining
 
 let _ =
-  let points = read_input "input/day18.txt" in
+  let points = read_lines "input/day18.txt" (parse_pair "%d,%d") in
   let (grid, remaining) = populate_grid 71 71 1024 points in
   let path = walk grid |> Option.get in
   Printf.printf "Part 1: %d\n" (List.length path - 1);

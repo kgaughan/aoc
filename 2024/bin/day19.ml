@@ -7,7 +7,7 @@ let read_input path =
   In_channel.with_open_text path Utils.input_lines |> parse
 
 let count_possible pattern trie =
-  let cache = Hashtbl.create 128 in
+  let cache = Hashtbl.create (String.length pattern) in
   let rec loop pattern trie =
     let count acc m = acc + loop (Utils.rest_of pattern (String.length m)) trie in
     if pattern = "" then

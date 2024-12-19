@@ -3,10 +3,7 @@ Advent of Code
 
 This repo contains my answers for Advent of Code.
 
-The answers for each day are split into two modules. Those named 'dayX'
-contain library code for implementing the problem solution, while those
-named 'dayXm' contain command-line drivers for running the code in matching
-'dayX' package.
+Run the exercise with `go run main.go` in the directory for each day.
 
 Why?
 ====

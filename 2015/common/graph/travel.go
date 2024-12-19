@@ -1,7 +1,7 @@
 package graph
 
 import (
-	"aoc/common/permute"
+	"github.com/kgaughan/aoc/2015/common/permute"
 	"math"
 )
 

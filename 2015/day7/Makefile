@@ -1,18 +1,21 @@
-build: parser
-	go build -o ${GOPATH}/bin/day7m aoc/day7m
+run: parser
+	go run main.go
 
 test:
-	go test aoc/day7
+	go test ./...
 
-parser: parser.go lexer.go
+parser: lib/parser.go lib/lexer.go
 
-parser.go: parser.y
-	go tool yacc -o $@ $<
+lib/parser.go: lib/parser.y
+	goyacc -o $@ $<
 
-lexer.go: lexer.nex
-	nex -o $@ $<
+lib/lexer.go: lib/lexer.nex
+	nex-lexer -o $@ $<
 
 clean:
-	rm -f parser.go lexer.go y.output
+	rm -f lib/parser.go lib/lexer.go lib/y.output
 
-.PHONY: build clean parser test
+tools:
+	go install golang.org/x/tools/cmd/goyacc@v0.28.0
+
+.PHONY: run clean parser test tools

@@ -22,6 +22,11 @@ let add s t =
   in
   insert 0 t
 
+let of_list lst =
+  let trie = create () in
+  List.iter (fun s -> add s trie) lst;
+  trie
+
 let find_prefixes s t =
   let rec loop i acc t =
     let acc' = if t.is_leaf then String.sub s 0 i :: acc else acc in

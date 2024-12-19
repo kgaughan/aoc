@@ -25,24 +25,10 @@ let read_input path =
 
 let make_monsterous (a1, a2, b1, b2, c1, c2) = (a1, a2, b1, b2, 10000000000000 + c1, 10000000000000 + c2)
 
-(* Cramer's rule for solving a series of linear equations, as cogged from
-   https://www.youtube.com/watch?v=vXqlIOX2itM - TBH, I don't entirely
-   understand this anymore, and it's pretty clear that I need to go back and
-   revise how systems of linear equations work.
-
-   Also:
-    * https://en.wikipedia.org/wiki/System_of_linear_equations
-    * https://en.wikipedia.org/wiki/Cramer%27s_rule
-    * https://en.wikipedia.org/wiki/Gaussian_elimination
-*)
 let play (a1, a2, b1, b2, c1, c2) =
-  let determiner = (a1 * b2) - (b1 * a2) in
-  let x = ((c1 * b2) - (b1 * c2)) / determiner
-  and y = ((a1 * c2) - (c1 * a2)) / determiner in
-  if (a1 * x) + (b1 * y) = c1 && (a2 * x) + (b2 * y) = c2 then
-    Some ((3 * x) + y)
-  else
-    None
+  match Utils.cramer (a1, a2) (b1, b2) (c1, c2) with
+  | Some (x, y) -> Some ((3 * x) + y)
+  | None -> None
 
 let _ =
   let machines = read_input "input/day13.txt" in

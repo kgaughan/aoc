@@ -47,6 +47,18 @@ let parse_ints ?(sep = ' ') line = String.split_on_char sep line |> List.map int
 let sum = List.fold_left ( + ) 0
 let rest_of s i = String.sub s i (String.length s - i)
 
+(* Cramer's rule *)
+let cramer (a1, a2) (b1, b2) (c1, c2) =
+  let determiner = (a1 * b2) - (b1 * a2) in
+  let x = ((c1 * b2) - (b1 * c2)) / determiner
+  and y = ((a1 * c2) - (c1 * a2)) / determiner in
+  if (a1 * x) + (b1 * y) = c1 && (a2 * x) + (b2 * y) = c2 then
+    Some (x, y)
+  else
+    None
+
+let manhattan_distance (x1, y1) (x2, y2) = abs (x1 - x2) + abs (y1 - y2)
+
 let render fn grid =
   let width = Array.length grid.(0)
   and height = Array.length grid in

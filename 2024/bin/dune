@@ -91,7 +91,7 @@
 (executable
  (name day19)
  (public_name day19)
- (libraries utils))
+ (libraries utils trie))
 
 (env
  (dev

@@ -24,9 +24,8 @@ let count_possible pattern trie =
 
 let _ =
   let (patterns, desired) = read_input "input/day19.txt" in
-  let trie = Trie.create () in
-  List.iter (fun s -> Trie.add s trie) patterns;
-  let part1 = List.fold_left (fun acc pattern -> acc + if count_possible pattern trie > 0 then 1 else 0) 0 desired in
-  Printf.printf "Part 1: %d\n" part1;
-  let part2 = List.fold_left (fun acc pattern -> acc + count_possible pattern trie) 0 desired in
-  Printf.printf "Part 2: %d\n" part2
+  let trie = Trie.of_list patterns in
+  let possible_counts = List.map (fun pattern -> count_possible pattern trie) desired in
+  let part1 = List.fold_left (fun acc n -> acc + if n > 0 then 1 else 0) 0 possible_counts
+  and part2 = Utils.sum possible_counts in
+  Printf.printf "Part 1: %d; part 2: %d\n" part1 part2

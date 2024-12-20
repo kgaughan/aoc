@@ -1,7 +1,7 @@
 let read_input path =
   let parse lines =
     let (valid, desired) = Utils.split_sections lines in
-    let patterns = List.hd valid |> String.split_on_char ',' |> List.map String.trim in
+    let patterns = List.hd valid |> Utils.split_line in
     (patterns, desired)
   in
   In_channel.with_open_text path Utils.input_lines |> parse

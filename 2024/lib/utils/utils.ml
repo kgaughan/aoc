@@ -47,6 +47,15 @@ let parse_pair fmt line = Scanf.sscanf line fmt (fun x y -> (x, y))
 let parse_ints ?(sep = ' ') line = String.split_on_char sep line |> List.map int_of_string
 let sum = List.fold_left ( + ) 0
 let rest_of s i = String.sub s i (String.length s - i)
+let in_bounds matrix (x, y) = x >= 0 && y >= 0 && x < Array.length matrix.(0) && y < Array.length matrix
+let turns_90 (a, b) = [(a, b); (b, -a); (-b, a)]
+
+let find_neighbours (x, y) directions check =
+  List.filter_map
+    (fun (dx, dy) ->
+      let next = (x + dx, y + dy) in
+      if check next then Some next else None)
+    directions
 
 (* Cramer's rule *)
 let cramer (a1, a2) (b1, b2) (c1, c2) =

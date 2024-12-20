@@ -93,6 +93,11 @@
  (public_name day19)
  (libraries utils trie))
 
+(executable
+ (name day20)
+ (public_name day20)
+ (libraries utils))
+
 (env
  (dev
   (flags

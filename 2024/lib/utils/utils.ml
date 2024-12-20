@@ -41,6 +41,7 @@ let array_of_string fn empty line =
   String.iteri (fun i ch -> result.(i) <- fn ch) line;
   result
 
+let split_line ?(delim = ',') line = String.split_on_char delim line |> List.map String.trim
 let int_concat ?(delim = ",") ns = List.map string_of_int ns |> String.concat delim
 let parse_pair fmt line = Scanf.sscanf line fmt (fun x y -> (x, y))
 let parse_ints ?(sep = ' ') line = String.split_on_char sep line |> List.map int_of_string

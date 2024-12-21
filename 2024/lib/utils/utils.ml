@@ -69,6 +69,22 @@ let cramer (a1, a2) (b1, b2) (c1, c2) =
 
 let manhattan_distance (x1, y1) (x2, y2) = abs (x1 - x2) + abs (y1 - y2)
 
+let manhattan_circle i r =
+  let rec loop r offset acc =
+    if offset = 0 then
+      acc
+    else
+      loop r (offset - 1)
+        ((offset, r - offset) :: (r - offset, -offset) :: (-offset, offset - r) :: (offset - r, offset) :: acc)
+  in
+  let rec fill width acc =
+    if width = i then
+      acc
+    else
+      fill (width - 1) (loop width width acc)
+  in
+  fill r []
+
 let render fn grid =
   let width = Array.length grid.(0)
   and height = Array.length grid in
@@ -78,6 +94,14 @@ let render fn grid =
     done;
     print_newline ()
   done
+
+let time name fn =
+  let start = Unix.gettimeofday () in
+  let result = fn () in
+  let finish = Unix.gettimeofday () in
+  Printf.printf "Time for %s: %fms\n" name ((finish -. start) *. 1000.0);
+  flush stdout;
+  result
 
 module IntPair = struct
   type t = int * int

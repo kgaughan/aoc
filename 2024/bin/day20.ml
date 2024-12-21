@@ -15,28 +15,21 @@ let trace start endpoint track =
   in
   loop start initial_direction [] 0
 
-let find_adjacents (x, y) width height trail jumps =
-  let visited = Hashtbl.create 1000 in
-  List.filter_map
-    (fun (dx, dy) ->
-      let (x', y') = (x + dx, y + dy) in
-      if x' < 0 || x >= width || y < 0 || y >= height || Hashtbl.mem visited (x', y') then
-        None
-      else
-        match Utils.IntPairMap.find_opt (x', y') trail with
-        | Some d ->
-            Hashtbl.add visited (x', y') true;
-            Some (d - abs dx - abs dy)
-        | None -> None)
-    jumps
-
-let race dist threshold width height trail =
-  let jumps = Utils.manhattan_circle 1 dist in
-  Utils.IntPairMap.fold
-    (fun pos distance acc ->
-      find_adjacents pos width height trail jumps
-      |> List.fold_left (fun acc v -> acc + if v - distance >= threshold then 1 else 0) acc)
-    trail 0
+let race jump_radius threshold width height trail =
+  let jumps = Utils.manhattan_circle 1 jump_radius in
+  let find_adjacents_past_threshold (x, y) distance acc =
+    List.fold_left
+      (fun acc (dx, dy) ->
+        let (x', y') = (x + dx, y + dy) in
+        if x' < 0 || x >= width || y < 0 || y >= height then
+          acc
+        else
+          match Utils.IntPairMap.find_opt (x', y') trail with
+          | Some d -> acc + if d - abs dx - abs dy - distance >= threshold then 1 else 0
+          | None -> acc)
+      acc jumps
+  in
+  Utils.IntPairMap.fold find_adjacents_past_threshold trail 0
 
 let _ =
   let track = Utils.read_lines "input/day20.txt" (fun line -> String.to_seq line |> Array.of_seq) |> Array.of_list in

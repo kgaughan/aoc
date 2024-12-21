@@ -15,18 +15,14 @@ let trace start endpoint track =
   in
   loop start initial_direction [] 0
 
-let race jump_radius threshold width height trail =
+let race jump_radius threshold trail =
   let jumps = Utils.manhattan_circle 1 jump_radius in
   let find_adjacents_past_threshold (x, y) distance acc =
     List.fold_left
       (fun acc (dx, dy) ->
-        let (x', y') = (x + dx, y + dy) in
-        if x' < 0 || x >= width || y < 0 || y >= height then
-          acc
-        else
-          match Utils.IntPairMap.find_opt (x', y') trail with
-          | Some d -> acc + if d - abs dx - abs dy - distance >= threshold then 1 else 0
-          | None -> acc)
+        match Utils.IntPairMap.find_opt (x + dx, y + dy) trail with
+        | Some d -> acc + if d - abs dx - abs dy - distance >= threshold then 1 else 0
+        | None -> acc)
       acc jumps
   in
   Utils.IntPairMap.fold find_adjacents_past_threshold trail 0
@@ -36,6 +32,6 @@ let _ =
   let start = Utils.find_cell (fun ch -> ch = 'S') track |> Option.get in
   let endpoint = Utils.find_cell (fun ch -> ch = 'E') track |> Option.get in
   let points = trace start endpoint track |> List.to_seq |> Utils.IntPairMap.of_seq in
-  let part1 = Utils.time "part 1" (fun () -> race 2 100 (Array.length track.(0)) (Array.length track) points) in
-  let part2 = Utils.time "part 2" (fun () -> race 20 100 (Array.length track.(0)) (Array.length track) points) in
+  let part1 = Utils.time "part 1" (fun () -> race 2 100 points) in
+  let part2 = Utils.time "part 2" (fun () -> race 20 100 points) in
   Printf.printf "Part 1: %d; Part 2: %d\n" part1 part2

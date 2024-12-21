@@ -96,7 +96,12 @@
 (executable
  (name day20)
  (public_name day20)
- (libraries utils unix))
+ (libraries utils))
+
+(executable
+ (name day21)
+ (public_name day21)
+ (libraries utils))
 
 (env
  (dev

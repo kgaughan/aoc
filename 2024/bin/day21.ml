@@ -62,7 +62,7 @@ let convolute_numpad =
   convolute numpad (2, 3) strategy
 
 let convolute_dpad =
-  let strategy buf ((x, y), (dx, dy)) =
+  let strategy buf ((x, _), (dx, dy)) =
     if x + dx > 0 && dx > 1 then (
       gen_move '^' 'v' dy buf;
       gen_move '<' '>' dx buf)
@@ -76,17 +76,40 @@ let convolute_dpad =
   in
   convolute dpad (2, 0) strategy
 
-let dump codes results = List.iter2 (fun code result -> Printf.printf "%s: %s\n" code result) codes results
+let trim_last ?(n = 1) s = String.sub s 0 (String.length s - n)
 
-let get_complexity codes results =
-  List.map2
-    (fun code result -> int_of_string (String.sub code 0 (String.length code - 1)) * String.length result)
-    codes results
+let recursive_convolute_dpad n s =
+  (* Breaks a set of moves into a list we can process *)
+  let chunks s = trim_last s |> String.split_on_char 'A' |> List.map (fun s -> String.cat s "A") in
+  let cache = Hashtbl.create 100000 in
+  let rec loop n s =
+    if n = 0 then
+      String.length s
+    else
+      let parts = chunks s in
+      List.fold_left
+        (fun acc chunk ->
+          match Hashtbl.find_opt cache (chunk, n) with
+          | Some result -> acc + result
+          | None ->
+              let result = loop (n - 1) (convolute_dpad chunk) in
+              Hashtbl.add cache (chunk, n) result;
+              acc + result)
+        0 parts
+  in
+  loop n s
+
+let get_complexity codes results = List.map2 (fun code result -> code * String.length result) codes results |> Utils.sum
+let get_complexity2 codes results = List.map2 ( * ) codes results |> Utils.sum
 
 let _ =
   let codes = Utils.read_lines "input/day21.txt" Fun.id in
+  let convoluted_codes = List.map convolute_numpad codes in
+  let numeric_codes = List.map (fun code -> int_of_string (trim_last code)) codes in
   let part1 =
-    List.map (fun code -> convolute_numpad code |> convolute_dpad |> convolute_dpad) codes
-    |> get_complexity codes |> Utils.sum
+    List.map (fun code -> convolute_dpad code |> convolute_dpad) convoluted_codes |> get_complexity numeric_codes
   in
-  Printf.printf "Part 1: %d\n" part1
+  let part2 =
+    List.map (fun code -> recursive_convolute_dpad 4 code) convoluted_codes |> get_complexity2 numeric_codes
+  in
+  Printf.printf "Part 1: %d; Part 2: %d\n" part1 part2

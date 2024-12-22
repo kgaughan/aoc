@@ -41,6 +41,14 @@ let convolute mapping initial_pos strategy code =
   in
   loop 0 initial_pos [] |> List.rev |> to_dpad
 
+let general_strategy buf dx dy =
+  if dx < 0 then (
+    gen_move '<' '>' dx buf;
+    gen_move '^' 'v' dy buf)
+  else (
+    gen_move '^' 'v' dy buf;
+    gen_move '<' '>' dx buf)
+
 let convolute_numpad =
   let strategy buf ((x, y), (dx, dy)) =
     (match ((x, y), (x + dx, y + dy)) with
@@ -50,28 +58,21 @@ let convolute_numpad =
     | ((x', 3), (0, y')) when y' < 3 && x' > 0 ->
         gen_move '^' 'v' dy buf;
         gen_move '<' '>' dx buf
-    | _ ->
-        if dx < 0 then (
-          gen_move '<' '>' dx buf;
-          gen_move '^' 'v' dy buf)
-        else (
-          gen_move '^' 'v' dy buf;
-          gen_move '<' '>' dx buf));
+    | _ -> general_strategy buf dx dy);
     Buffer.add_char buf 'A'
   in
   convolute numpad (2, 3) strategy
 
 let convolute_dpad =
-  let strategy buf ((x, _), (dx, dy)) =
-    if x + dx > 0 && dx > 1 then (
-      gen_move '^' 'v' dy buf;
-      gen_move '<' '>' dx buf)
-    else if x + dx > 0 then (
-      gen_move '<' '>' dx buf;
-      gen_move '^' 'v' dy buf)
-    else (
-      gen_move '^' 'v' dy buf;
-      gen_move '<' '>' dx buf);
+  let strategy buf ((x, y), (dx, dy)) =
+    (match ((x, y), (x + dx, y + dy)) with
+    | ((0, _), (_, _)) ->
+        gen_move '<' '>' dx buf;
+        gen_move '^' 'v' dy buf
+    | ((_, _), (0, _)) ->
+        gen_move '^' 'v' dy buf;
+        gen_move '<' '>' dx buf
+    | _ -> general_strategy buf dx dy);
     Buffer.add_char buf 'A'
   in
   convolute dpad (2, 0) strategy
@@ -110,6 +111,6 @@ let _ =
     List.map (fun code -> convolute_dpad code |> convolute_dpad) convoluted_codes |> get_complexity numeric_codes
   in
   let part2 =
-    List.map (fun code -> recursive_convolute_dpad 4 code) convoluted_codes |> get_complexity2 numeric_codes
+    List.map (fun code -> recursive_convolute_dpad 25 code) convoluted_codes |> get_complexity2 numeric_codes
   in
   Printf.printf "Part 1: %d; Part 2: %d\n" part1 part2

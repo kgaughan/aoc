@@ -41,8 +41,6 @@ let convolute mapping initial_pos strategy code =
   in
   loop 0 initial_pos [] |> List.rev |> to_dpad
 
-let convolute_all mapping initial_pos strategy codes = List.map (convolute mapping initial_pos strategy) codes
-
 let convolute_numpad =
   let strategy buf ((x, y), (dx, dy)) =
     (match ((x, y), (x + dx, y + dy)) with
@@ -61,7 +59,7 @@ let convolute_numpad =
           gen_move '<' '>' dx buf));
     Buffer.add_char buf 'A'
   in
-  convolute_all numpad (2, 3) strategy
+  convolute numpad (2, 3) strategy
 
 let convolute_dpad =
   let strategy buf ((x, y), (dx, dy)) =
@@ -76,7 +74,7 @@ let convolute_dpad =
       gen_move '<' '>' dx buf);
     Buffer.add_char buf 'A'
   in
-  convolute_all dpad (2, 0) strategy
+  convolute dpad (2, 0) strategy
 
 let dump codes results = List.iter2 (fun code result -> Printf.printf "%s: %s\n" code result) codes results
 
@@ -87,5 +85,8 @@ let get_complexity codes results =
 
 let _ =
   let codes = Utils.read_lines "input/day21.txt" Fun.id in
-  let part1 = convolute_numpad codes |> convolute_dpad |> convolute_dpad |> get_complexity codes |> Utils.sum in
+  let part1 =
+    List.map (fun code -> convolute_numpad code |> convolute_dpad |> convolute_dpad) codes
+    |> get_complexity codes |> Utils.sum
+  in
   Printf.printf "Part 1: %d\n" part1

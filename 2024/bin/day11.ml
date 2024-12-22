@@ -66,9 +66,9 @@ let process_freq n tiles =
 
 let _ =
   let tiles = Utils.read_line "input/day11.txt" |> Utils.parse_ints in
-  let part1 = process 25 tiles in
+  let part1 = Utils.time "part 1" (fun () -> process 25 tiles) in
   Printf.printf "Part 1: %d\n" part1;
-  let part2 = process 75 tiles in
+  let part2 = Utils.time "part 2 " (fun () -> process 75 tiles) in
   Printf.printf "Part 2: %d\n" part2;
-  let part2_freq = process_freq 75 tiles in
+  let part2_freq = Utils.time "part 2 (bonus)" (fun () -> process_freq 75 tiles) in
   Printf.printf "Bonus part 2 (frequency): %d\n" part2_freq

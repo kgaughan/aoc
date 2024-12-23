@@ -53,9 +53,12 @@ let seq_sums secret_numbers =
 
 let max_value map = IntMap.fold (fun _ v max -> Int.max v max) map 0
 
+let sum_secret_numbers secret_numbers =
+  List.map (fun secret -> repeat next_secret 2000 secret) secret_numbers |> Utils.sum
+
 let _ =
   let secret_numbers = Utils.read_lines "input/day22.txt" int_of_string in
-  let part1 = List.map (fun secret -> repeat next_secret 2000 secret) secret_numbers |> Utils.sum in
+  let part1 = Utils.time "part 1" (fun () -> sum_secret_numbers secret_numbers) in
   Printf.printf "Part 1: %d\n" part1;
-  let part2 = seq_sums secret_numbers |> max_value in
+  let part2 = Utils.time "part 2" (fun () -> seq_sums secret_numbers |> max_value) in
   Printf.printf "Part 2: %d\n" part2

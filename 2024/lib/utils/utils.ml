@@ -57,6 +57,14 @@ let find_neighbours (x, y) directions check =
       if check next then Some next else None)
     directions
 
+let rec factorial n =
+  if n <= 1 then
+    1
+  else
+    factorial (n - 1) * n
+
+let nCr n r = factorial n / (factorial (n - r) * factorial r)
+
 (* Cramer's rule *)
 let cramer (a1, a2) (b1, b2) (c1, c2) =
   let determiner = (a1 * b2) - (b1 * a2) in

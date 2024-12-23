@@ -24,12 +24,12 @@ let generate_prices_and_diffs n s =
 let recognise_sequences lst =
   let rec loop lst acc =
     match lst with
-    | e1 :: e2 :: e3 :: e4 :: tl ->
+    | e1 :: (e2 :: e3 :: e4 :: _ as tl) ->
         if fst e4 > 0 then
           let key = List.fold_left (fun acc (_, diff) -> diff + 10 + (acc * 20)) 0 [e1; e2; e3; e4] in
-          loop (e2 :: e3 :: e4 :: tl) ((key, fst e4) :: acc)
+          loop tl ((key, fst e4) :: acc)
         else
-          loop (e2 :: e3 :: e4 :: tl) acc
+          loop tl acc
     | _ -> acc
   in
   loop lst []

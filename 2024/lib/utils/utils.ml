@@ -41,6 +41,26 @@ let array_of_string fn empty line =
   String.iteri (fun i ch -> result.(i) <- fn ch) line;
   result
 
+let as_binary n =
+  let int_size = Sys.word_size - 1 in
+  let buf = Bytes.create int_size in
+  for i = 0 to int_size - 1 do
+    let pos = int_size - 1 - i in
+    Bytes.set buf pos (if n land (1 lsl i) != 0 then '1' else '0')
+  done;
+  match Bytes.index_opt buf '1' with
+  | None -> "0b0"
+  | Some i -> "0b" ^ Bytes.sub_string buf i (int_size - i)
+
+let lpad ?(prefix = ' ') n s =
+  let excess = Int.max 0 (n - String.length s) in
+  let buf = Buffer.create (String.length s) in
+  for _ = 1 to excess do
+    Buffer.add_char buf prefix
+  done;
+  Buffer.add_string buf s;
+  Buffer.contents buf
+
 let split_line ?(delim = ',') line = String.split_on_char delim line |> List.map String.trim
 let int_concat ?(delim = ",") ns = List.map string_of_int ns |> String.concat delim
 let parse_pair fmt line = Scanf.sscanf line fmt (fun x y -> (x, y))

@@ -111,7 +111,7 @@
 (executable
  (name day23)
  (public_name day23)
- (libraries ocamlgraph utils))
+ (libraries utils))
 
 (executable
  (name day24)

@@ -145,11 +145,19 @@ module IntPairMap = Map.Make (IntPair)
 
 let split_sections lines =
   let rec loop acc = function
-    | "" :: tl -> (acc |> List.rev, tl)
+    | "" :: tl -> (List.rev acc, tl)
     | hd :: tl -> loop (hd :: acc) tl
     | [] -> (acc, [])
   in
   loop [] lines
+
+let split_blocks convert lines =
+  let rec loop sections acc = function
+    | "" :: tl -> loop ((List.rev acc |> convert) :: sections) [] tl
+    | hd :: tl -> loop sections (hd :: acc) tl
+    | [] -> List.rev ((List.rev acc |> convert) :: sections)
+  in
+  loop [] [] lines
 
 let fold_matrix fn init matrix =
   Array.fold_left
@@ -177,3 +185,15 @@ let find_cell fn matrix =
       | None -> loop_rows (y + 1)
   in
   loop_rows 0
+
+let combinations fn init l1 l2 =
+  let rec outer acc = function
+    | hd :: tl ->
+        let rec inner acc = function
+          | hd' :: tl' -> inner (fn acc hd hd') tl'
+          | [] -> acc
+        in
+        outer (inner acc l2) tl
+    | [] -> acc
+  in
+  outer init l1

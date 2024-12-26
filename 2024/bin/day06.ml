@@ -98,7 +98,6 @@ let _ =
   and obstructions = find_obstructions grid in
   let visited = get_visited_cells height width guard obstructions in
   let part1 = IntPairSet.cardinal visited in
-  Printf.printf "Part 1: %d\n" part1;
-  print_endline "This may take a while...";
-  let part2 = count_loops height width guard obstructions visited in
+  Printf.printf "Part 1: %d\n%!" part1;
+  let part2 = Utils.time "part 2" (fun () -> count_loops height width guard obstructions visited) in
   Printf.printf "Part 2: %d\n" part2

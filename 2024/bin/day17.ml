@@ -79,7 +79,6 @@ let find_quine machine =
 
 let _ =
   let machine = read_file "input/day17.txt" in
-  let part1 = simulate machine |> List.rev in
-  Printf.printf "Part 1: %s\n" (Utils.int_concat part1);
-  let part2 = find_quine machine in
-  Printf.printf "Part 2: %d\n" part2
+  let part1 = Utils.time "part 1" (fun () -> simulate machine |> List.rev |> Utils.int_concat) in
+  let part2 = Utils.time "part 2" (fun () -> find_quine machine) in
+  Printf.printf "Part 1: %s; Part 2: %d\n" part1 part2

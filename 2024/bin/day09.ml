@@ -118,6 +118,6 @@ let checksum blocks =
 let _ =
   let disc_map = Utils.read_line "input/day09.txt" in
   let blocks = populate_blocks disc_map in
-  let part1 = pack_aggressively blocks |> checksum in
-  let part2 = pack_carefully blocks |> checksum in
+  let part1 = Utils.time "part 1" (fun () -> pack_aggressively blocks |> checksum) in
+  let part2 = Utils.time "part 2" (fun () -> pack_carefully blocks |> checksum) in
   Printf.printf "Part 1: %d; Part 2: %d\n" part1 part2

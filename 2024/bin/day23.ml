@@ -52,15 +52,17 @@ let find_3_cliques graph =
     graph []
   |> List.sort_uniq compare
 
+let part1 graph =
+  find_3_cliques graph |> List.filter (fun l -> List.exists (String.starts_with ~prefix:"t") l) |> List.length
+
+let part2 graph =
+  bron_kerbosch graph
+  |> List.fold_left
+       (fun acc clique -> if StringSet.cardinal clique > StringSet.cardinal acc then clique else acc)
+       StringSet.empty
+  |> StringSet.to_seq |> List.of_seq |> List.sort compare |> String.concat ","
+
 let _ =
   let graph = read_edges "input/day23.txt" |> to_adjacency_list in
-  let part1 = find_3_cliques graph |> List.filter (fun l -> List.exists (String.starts_with ~prefix:"t") l) in
-  Printf.printf "Part 1: %d\n" (List.length part1);
-  let cliques = bron_kerbosch graph in
-  let longest =
-    List.fold_left
-      (fun acc clique -> if StringSet.cardinal clique > StringSet.cardinal acc then clique else acc)
-      StringSet.empty cliques
-  in
-  let password = StringSet.to_seq longest |> List.of_seq |> List.sort compare |> String.concat "," in
-  Printf.printf "Part 2: %s\n" password
+  Printf.printf "Part 1: %d\n" (Utils.time "part 1" (fun () -> part1 graph));
+  Printf.printf "Part 2: %s\n" (Utils.time "part 2" (fun () -> part2 graph))

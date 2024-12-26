@@ -14,7 +14,7 @@ let read_lines path line_parser =
 
 let read_line path = In_channel.with_open_text path In_channel.input_line |> Option.value ~default:""
 
-let make_counter_table size xs =
+let make_counter_table ~size xs =
   let tbl = Hashtbl.create size in
   let add k =
     match Hashtbl.find_opt tbl k with
@@ -52,7 +52,7 @@ let as_binary n =
   | None -> "0b0"
   | Some i -> "0b" ^ Bytes.sub_string buf i (int_size - i)
 
-let lpad ?(prefix = ' ') n s =
+let lpad ?(prefix = ' ') ~n s =
   let excess = Int.max 0 (n - String.length s) in
   let buf = Buffer.create (String.length s) in
   for _ = 1 to excess do
@@ -127,8 +127,7 @@ let time name fn =
   let start = Unix.gettimeofday () in
   let result = fn () in
   let finish = Unix.gettimeofday () in
-  Printf.printf "Time for %s: %fms\n" name ((finish -. start) *. 1000.0);
-  flush stdout;
+  Printf.printf "Time for %s: %fms\n%!" name ((finish -. start) *. 1000.0);
   result
 
 module IntPair = struct

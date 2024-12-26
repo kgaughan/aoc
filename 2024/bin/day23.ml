@@ -17,7 +17,7 @@ let to_adjacency_list lst =
 
 module StringSet = Set.Make (String)
 
-let find_cliques graph =
+let bron_kerbosch graph =
   let intersection lst set = List.filter (fun n -> StringSet.mem n set) lst |> StringSet.of_list in
   let rec aux acc potential remaining skip =
     if StringSet.is_empty remaining && StringSet.is_empty skip then
@@ -38,12 +38,29 @@ let find_cliques graph =
   in
   aux [] StringSet.empty (Hashtbl.to_seq_keys graph |> StringSet.of_seq) StringSet.empty
 
+let find_3_cliques graph =
+  Hashtbl.fold
+    (fun node neighbours acc ->
+      Utils.pairwise_combinations neighbours
+      |> List.fold_left
+           (fun acc (a, b) ->
+             if List.mem a (Hashtbl.find graph b) then
+               List.sort compare [a; b; node] :: acc
+             else
+               acc)
+           acc)
+    graph []
+  |> List.sort_uniq compare
+
 let _ =
-  let graph = read_edges "input/day23-sample.txt" |> to_adjacency_list in
-  let cliques = find_cliques graph in
-  Printf.printf "%d\n" (List.length cliques);
-  List.iter (fun set -> StringSet.to_seq set |> List.of_seq |> String.concat ", " |> print_endline) cliques;
-  let part1 =
-    List.filter (fun s -> StringSet.cardinal s = 3 && StringSet.exists (String.starts_with ~prefix:"t") s) cliques
+  let graph = read_edges "input/day23.txt" |> to_adjacency_list in
+  let part1 = find_3_cliques graph |> List.filter (fun l -> List.exists (String.starts_with ~prefix:"t") l) in
+  Printf.printf "Part 1: %d\n" (List.length part1);
+  let cliques = bron_kerbosch graph in
+  let longest =
+    List.fold_left
+      (fun acc clique -> if StringSet.cardinal clique > StringSet.cardinal acc then clique else acc)
+      StringSet.empty cliques
   in
-  Printf.printf "%d\n" (List.length part1)
+  let password = StringSet.to_seq longest |> List.of_seq |> List.sort compare |> String.concat "," in
+  Printf.printf "Part 2: %s\n" password

@@ -197,3 +197,10 @@ let combinations fn init l1 l2 =
     | [] -> acc
   in
   outer init l1
+
+let pairwise_combinations lst =
+  let rec loop acc = function
+    | hd :: tl -> loop (List.fold_left (fun acc elem -> (hd, elem) :: acc) acc tl) tl
+    | [] -> acc
+  in
+  loop [] lst

@@ -45,7 +45,7 @@ func Parse(s *scanner.Scanner, fn CmdFunc) {
 		case "toggle":
 			// Do nothing
 		default:
-			panic(fmt.Sprintf("Unexpected token for commmand: %q", cmd))
+			panic(fmt.Sprintf("Unexpected token for command: %q", cmd))
 		}
 
 		var c1, c2 Coord

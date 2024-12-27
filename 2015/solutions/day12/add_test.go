@@ -1,4 +1,4 @@
-package lib
+package day12
 
 import (
 	"encoding/json"

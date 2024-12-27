@@ -1,4 +1,4 @@
-package lib
+package day10
 
 import (
 	"bytes"

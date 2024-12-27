@@ -1,4 +1,4 @@
-package lib
+package day12
 
 func AddNumbers(json interface{}) float64 {
 	total := 0.0

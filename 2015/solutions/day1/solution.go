@@ -1,4 +1,4 @@
-package lib
+package day1
 
 func toDirection(direction rune) int {
 	switch direction {
@@ -11,7 +11,7 @@ func toDirection(direction rune) int {
 	}
 }
 
-func CountFloors(directions string) int {
+func countFloors(directions string) int {
 	floor := 0
 	for _, c := range directions {
 		floor += toDirection(c)
@@ -19,7 +19,7 @@ func CountFloors(directions string) int {
 	return floor
 }
 
-func FindBasementInstruction(directions string) int {
+func findBasementInstruction(directions string) int {
 	floor := 0
 	for i, c := range directions {
 		floor += toDirection(c)

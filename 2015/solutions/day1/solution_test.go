@@ -1,4 +1,4 @@
-package lib
+package day1
 
 import "testing"
 
@@ -22,8 +22,8 @@ func TestCountFloors(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if answer := CountFloors(test.directions); test.floors != answer {
-			t.Errorf("CountFloors: For %q, expected %v, got %v", test.directions, test.floors, answer)
+		if answer := countFloors(test.directions); test.floors != answer {
+			t.Errorf("countFloors: For %q, expected %v, got %v", test.directions, test.floors, answer)
 		}
 	}
 }
@@ -38,8 +38,8 @@ func TestFindBasementInstruction(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		if answer := FindBasementInstruction(test.directions); test.position != answer {
-			t.Errorf("FindBasementInstruction: For %q, expected %v, got %v", test.directions, test.position, answer)
+		if answer := findBasementInstruction(test.directions); test.position != answer {
+			t.Errorf("findBasementInstruction: For %q, expected %v, got %v", test.directions, test.position, answer)
 		}
 	}
 }

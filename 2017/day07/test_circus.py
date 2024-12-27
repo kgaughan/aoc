@@ -24,22 +24,21 @@ cntj (57)
 
 
 class CircusTest(unittest.TestCase):
-
     def test_parse_fail(self):
-        with self.assertRaises(ValueError, msg='ktlj'):
-            circus.parse_line('ktlj')
+        with self.assertRaises(ValueError, msg="ktlj"):
+            circus.parse_line("ktlj")
 
     def test_parse_no_children(self):
-        result = circus.parse_line('ktlj (57)')
-        self.assertEqual(result.name, 'ktlj')
+        result = circus.parse_line("ktlj (57)")
+        self.assertEqual(result.name, "ktlj")
         self.assertEqual(result.weight, 57)
         self.assertTupleEqual(result.children, ())
 
     def test_parse_with_children(self):
-        result = circus.parse_line('fwft (72) -> ktlj, cntj, xhth')
-        self.assertEqual(result.name, 'fwft')
+        result = circus.parse_line("fwft (72) -> ktlj, cntj, xhth")
+        self.assertEqual(result.name, "fwft")
         self.assertEqual(result.weight, 72)
-        self.assertTupleEqual(result.children, ('ktlj', 'cntj', 'xhth'))
+        self.assertTupleEqual(result.children, ("ktlj", "cntj", "xhth"))
 
     def test_parse_file(self):
         with io.StringIO(FIXTURE) as fh:
@@ -51,7 +50,7 @@ class CircusTest(unittest.TestCase):
             programs = circus.parse_file(fh)
         parentage = circus.build_parentage(programs)
         base = circus.find_base(circus.take_first(programs), parentage)
-        self.assertEqual(base, 'tknk')
+        self.assertEqual(base, "tknk")
 
     def test_find_unbalanced(self):
         with io.StringIO(FIXTURE) as fh:
@@ -60,5 +59,5 @@ class CircusTest(unittest.TestCase):
         base = circus.find_base(circus.take_first(programs), parentage)
         status, name, good_weight = circus.find_unbalanced(base, programs)
         self.assertFalse(status)
-        self.assertEqual(name, 'ugml')
+        self.assertEqual(name, "ugml")
         self.assertEqual(good_weight, 60)

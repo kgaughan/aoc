@@ -15,14 +15,13 @@ c inc -20 if c == 10
 
 
 class RegistersTest(unittest.TestCase):
-
     def test_parse_instruction(self):
-        inst = registers.parse_instruction('b inc 5 if a > 1')
-        self.assertEqual(inst.reg, 'b')
-        self.assertEqual(inst.op, 'inc')
+        inst = registers.parse_instruction("b inc 5 if a > 1")
+        self.assertEqual(inst.reg, "b")
+        self.assertEqual(inst.op, "inc")
         self.assertEqual(inst.amt, 5)
-        self.assertEqual(inst.cond_reg, 'a')
-        self.assertEqual(inst.cond_op, '>')
+        self.assertEqual(inst.cond_reg, "a")
+        self.assertEqual(inst.cond_op, ">")
         self.assertEqual(inst.target, 1)
 
     def test(self):
@@ -31,7 +30,7 @@ class RegistersTest(unittest.TestCase):
         memory, largest = registers.process_instructions(instructions)
         self.assertEqual(largest, 10)
         self.assertEqual(registers.largest_register_value(memory), 1)
-        self.assertListEqual(sorted(memory.keys()), ['a', 'b', 'c'])
-        self.assertEqual(memory['a'], 1)
-        self.assertEqual(memory['b'], 0)
-        self.assertEqual(memory['c'], -10)
+        self.assertListEqual(sorted(memory.keys()), ["a", "b", "c"])
+        self.assertEqual(memory["a"], 1)
+        self.assertEqual(memory["b"], 0)
+        self.assertEqual(memory["c"], -10)

@@ -11,7 +11,7 @@ def slurp(path):
 
 def has_no_dupe(passphrase):
     words = set()
-    for word in passphrase.split(' '):
+    for word in passphrase.split(" "):
         if word in words:
             return False
         words.add(word)
@@ -20,8 +20,8 @@ def has_no_dupe(passphrase):
 
 def has_no_anagram_dupe(passphrase):
     words = set()
-    for word in passphrase.split(' '):
-        word = ''.join(sorted(word))
+    for word in passphrase.split(" "):
+        word = "".join(sorted(word))
         if word in words:
             return False
         words.add(word)
@@ -37,10 +37,10 @@ def runner(lines, fn):
 
 
 def main():
-    lines = slurp('input.txt')
+    lines = slurp("input.txt")
     print(runner(lines, has_no_dupe))
     print(runner(lines, has_no_anagram_dupe))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -13,19 +13,19 @@ def process(stream):
         if mode == SKIP:
             mode = JUNK
         elif mode == STREAM:
-            if ch == '{':
+            if ch == "{":
                 depth += 1
-            elif ch == '}':
+            elif ch == "}":
                 score += depth
                 depth -= 1
-            elif ch == '<':
+            elif ch == "<":
                 mode = JUNK
             # Just ignoring any other characters, which only out to be ','
             # anyway.
         elif mode == JUNK:
-            if ch == '!':
+            if ch == "!":
                 mode = SKIP
-            elif ch == '>':
+            elif ch == ">":
                 mode = STREAM
     return score
 
@@ -37,12 +37,12 @@ def count_garbage(stream):
         if mode == SKIP:
             mode = JUNK
         elif mode == STREAM:
-            if ch == '<':
+            if ch == "<":
                 mode = JUNK
         elif mode == JUNK:
-            if ch == '!':
+            if ch == "!":
                 mode = SKIP
-            elif ch == '>':
+            elif ch == ">":
                 mode = STREAM
             else:
                 score += 1
@@ -50,12 +50,12 @@ def count_garbage(stream):
 
 
 def main():
-    with open('input.txt') as fh:
+    with open("input.txt") as fh:
         stream = fh.read()
 
-    print('Score:', process(stream))
-    print('Garbage score:', count_garbage(stream))
+    print("Score:", process(stream))
+    print("Garbage score:", count_garbage(stream))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

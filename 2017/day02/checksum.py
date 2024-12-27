@@ -4,7 +4,7 @@ import itertools
 
 
 def parse(line):
-    return [int(entry) for entry in line.rstrip().split('\t')]
+    return [int(entry) for entry in line.rstrip().split("\t")]
 
 
 def parse_file(path):
@@ -27,8 +27,7 @@ def checksum_line(line):
 
 
 def checksum1(lines):
-    return sum(checksum_line(line)
-               for line in lines)
+    return sum(checksum_line(line) for line in lines)
 
 
 def sorted_combinations(line):
@@ -45,15 +44,14 @@ def checksum_line_evens(line):
 
 
 def checksum2(lines):
-    return sum(checksum_line_evens(line)
-               for line in lines)
+    return sum(checksum_line_evens(line) for line in lines)
 
 
 def main():
-    lines = parse_file('input.txt')
+    lines = parse_file("input.txt")
     print(checksum1(lines))
     print(checksum2(lines))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

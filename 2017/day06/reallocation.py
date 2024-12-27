@@ -30,13 +30,13 @@ def find_cycle(banks):
 
 def main():
     banks = None
-    with open('input.txt') as fh:
+    with open("input.txt") as fh:
         for line in fh:
-            banks = [int(bank) for bank in line.rstrip().split('\t')]
+            banks = [int(bank) for bank in line.rstrip().split("\t")]
             break
 
     print(find_cycle(banks))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

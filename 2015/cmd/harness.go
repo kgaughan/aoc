@@ -21,7 +21,7 @@ func main() {
 	if !strings.HasPrefix(input, "@") {
 		actualInput = input
 	} else {
-		path := (input)[1 : len(input)-1]
+		path := input[1:]
 		if contents, err := ioutil.ReadFile(path); err != nil {
 			log.Fatalf("could not load input from %q: %v", path, err)
 		} else {

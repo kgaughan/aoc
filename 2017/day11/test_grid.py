@@ -18,5 +18,6 @@ class GridTest(unittest.TestCase):
 
     def test_simplify_reduce(self):
         self.assertListEqual(
-            grid.simplify(["se", "sw", "se", "sw", "sw"]), ["s", "s", "sw"]
+            grid.simplify(["se", "sw", "se", "sw", "sw"]),
+            ["s", "s", "sw"],
         )

@@ -7,13 +7,15 @@ import re
 
 
 Instruction = collections.namedtuple(
-    "Instruction", ["reg", "op", "amt", "cond_reg", "cond_op", "target"]
+    "Instruction",
+    ["reg", "op", "amt", "cond_reg", "cond_op", "target"],
 )
 
 
 def parse_instruction(line):
     match = re.match(
-        "([a-z]+) (inc|dec) (-?[0-9]+) " "if ([a-z]+) ([<>]=?|[!=]=) (-?[0-9]+)", line
+        "([a-z]+) (inc|dec) (-?[0-9]+) " "if ([a-z]+) ([<>]=?|[!=]=) (-?[0-9]+)",
+        line,
     )
     # Not bothering to look for parse errors.
     return Instruction(

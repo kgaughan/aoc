@@ -29,6 +29,4 @@ def simplify(directions):
         elif direction == "se":
             z -= 1
 
-    result = expand(x, "n", "s") + expand(y, "ne", "sw") + expand(z, "nw", "se")
-
-    return result
+    return expand(x, "n", "s") + expand(y, "ne", "sw") + expand(z, "nw", "se")

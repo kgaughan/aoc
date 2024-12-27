@@ -17,3 +17,16 @@ func hasTwins(rs []rune) bool {
 	}
 	return false
 }
+
+// Check if the string contains a sequence of two characters two or more
+// times without overlap.
+func hasDupes(rs []rune) bool {
+	for i := 0; i < len(rs)-2; i++ {
+		for j := i + 2; j < len(rs)-1; j++ {
+			if rs[i] == rs[j] && rs[i+1] == rs[j+1] {
+				return true
+			}
+		}
+	}
+	return false
+}

@@ -4,7 +4,7 @@
 def runner(path, fn):
     with open(path) as fh:
         for i, line in enumerate(fh):
-            print("{}: {}".format(i + 1, fn(line.rstrip())))
+            print(f"{i + 1}: {fn(line.rstrip())}")
 
 
 def captcha1(data):

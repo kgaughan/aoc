@@ -19,12 +19,12 @@ def parse_instruction(line):
     )
     # Not bothering to look for parse errors.
     return Instruction(
-        reg=match.group(1),
-        op=match.group(2),
-        amt=int(match.group(3)),
-        cond_reg=match.group(4),
-        cond_op=match.group(5),
-        target=int(match.group(6)),
+        reg=match[1],
+        op=match[2],
+        amt=int(match[3]),
+        cond_reg=match[4],
+        cond_op=match[5],
+        target=int(match[6]),
     )
 
 

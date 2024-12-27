@@ -18,7 +18,7 @@ DIGITS_RE = re.compile("|".join(DIGITS.keys()))
 
 
 def convert_to_digits(line):
-    return DIGITS_RE.sub(lambda m: DIGITS[m.group(0)], line)
+    return DIGITS_RE.sub(lambda m: DIGITS[m[0]], line)
 
 
 def extract_digits(line):

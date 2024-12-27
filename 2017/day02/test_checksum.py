@@ -5,7 +5,6 @@ import checksum
 
 
 class ChecksumTests(unittest.TestCase):
-
     def test_part1(self):
         fixture = [
             [5, 1, 9, 5],

@@ -6,7 +6,6 @@ import jumps
 
 
 class TestJumps(unittest.TestCase):
-
     def test_part1(self):
         self.assertEqual(jumps.eval_jumps1([0, 3, 0, 1, -3]), 5)
 

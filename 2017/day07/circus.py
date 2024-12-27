@@ -4,19 +4,18 @@ import collections
 import re
 
 
-Program = collections.namedtuple('Program', ['name', 'weight', 'children'])
+Program = collections.namedtuple("Program", ["name", "weight", "children"])
 
 
 def parse_line(line):
-    match = re.match(r'([a-z]+) \(([0-9]+)\)(?: -> (.*))?', line)
+    match = re.match(r"([a-z]+) \(([0-9]+)\)(?: -> (.*))?", line)
     if match is None:
         raise ValueError(line)
-    if match.group(3) is not None:
-        children = tuple(child.strip()
-                         for child in match.group(3).split(','))
+    if match[3] is not None:
+        children = tuple(child.strip() for child in match[3].split(","))
     else:
         children = ()
-    return Program(match.group(1), int(match.group(2)), children)
+    return Program(match[1], int(match[2]), children)
 
 
 def parse_file(fh):
@@ -80,15 +79,15 @@ def take_first(iterable):
 
 
 def main():
-    with open('input.txt') as fh:
+    with open("input.txt") as fh:
         programs = parse_file(fh)
     parentage = build_parentage(programs)
     # Any arbitrary starting point will do.
     base = find_base(take_first(programs), parentage)
-    print('Base:', base)
+    print("Base:", base)
     _, name, weight = find_unbalanced(base, programs)
-    print('Bad program is', name, 'and needs to weigh', weight)
+    print("Bad program is", name, "and needs to weigh", weight)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

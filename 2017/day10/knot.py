@@ -32,22 +32,23 @@ def part2(lengths):
     for _ in range(64):
         blk, pos, skip = tie(blk, lengths, pos, skip)
     # Reduce the sparse hash down to the dense hash.
-    dense = [functools.reduce(operator.xor, blk[i:i+16], 0)
-             for i in range(0, 256, 16)]
+    dense = [
+        functools.reduce(operator.xor, blk[i : i + 16], 0) for i in range(0, 256, 16)
+    ]
     # Convert to hex.
-    return ''.join('{:02x}'.format(n) for n in dense)
+    return "".join("{:02x}".format(n) for n in dense)
 
 
 def main():
-    with open('input.txt') as fh:
-        lengths = [int(length) for length in fh.readline().split(',')]
+    with open("input.txt") as fh:
+        lengths = [int(length) for length in fh.readline().split(",")]
     blk = part1(lengths)
-    print('Product:', blk[0] * blk[1])
+    print("Product:", blk[0] * blk[1])
 
-    with open('input.txt') as fh:
+    with open("input.txt") as fh:
         lengths = [ord(ch) for ch in fh.readline().rstrip()]
     print(part2(lengths))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

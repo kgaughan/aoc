@@ -16,21 +16,17 @@ def simplify(directions):
 
     # Convert to axes:
     for direction in directions:
-        if direction == 'n':
+        if direction == "n":
             x += 1
-        elif direction == 's':
+        elif direction == "s":
             x -= 1
-        elif direction == 'ne':
+        elif direction == "ne":
             y += 1
-        elif direction == 'sw':
+        elif direction == "sw":
             y -= 1
-        elif direction == 'nw':
+        elif direction == "nw":
             z += 1
-        elif direction == 'se':
+        elif direction == "se":
             z -= 1
 
-    result = expand(x, 'n', 's') + \
-        expand(y, 'ne', 'sw') + \
-        expand(z, 'nw', 'se')
-
-    return result
+    return expand(x, "n", "s") + expand(y, "ne", "sw") + expand(z, "nw", "se")

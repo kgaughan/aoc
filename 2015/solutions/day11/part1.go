@@ -8,7 +8,7 @@ func incrementString(runes []rune) []rune {
 		next := runes[offset] + 1
 		if next > 'z' {
 			runes[offset] = 'a'
-			offset -= 1
+			offset--
 			if offset == -1 {
 				break
 			}

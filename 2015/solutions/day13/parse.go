@@ -1,6 +1,7 @@
 package day13
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"strings"
@@ -11,7 +12,7 @@ func parse(source io.Reader) (map[pair]int, error) {
 	for {
 		if pair, happiness, err := parseEntry(source); err == nil {
 			entries[pair] = happiness
-		} else if err == io.EOF {
+		} else if errors.Is(err, io.EOF) {
 			return entries, nil
 		} else {
 			return nil, err

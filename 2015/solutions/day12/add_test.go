@@ -32,7 +32,6 @@ func TestAddNumbers(t *testing.T) {
 		var obj interface{}
 		if err := json.Unmarshal([]byte(test.doc), &obj); err != nil {
 			t.Fatal(err)
-			continue
 		}
 		if result := AddNumbers(obj, true); result != test.expected {
 			t.Fatalf("For %v, expected %v, got %v", test.doc, test.expected, result)

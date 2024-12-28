@@ -1,6 +1,7 @@
 package day9
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"strings"
@@ -27,7 +28,7 @@ func ScanLines(reader io.Reader, receive func(string, string, int)) error {
 	for {
 		if _, err := fmt.Fscanf(reader, "%s to %s = %d\n", &from, &to, &distance); err == nil {
 			receive(from, to, distance)
-		} else if err == io.EOF {
+		} else if errors.Is(err, io.EOF) {
 			return nil
 		} else {
 			return err

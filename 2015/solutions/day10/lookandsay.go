@@ -2,6 +2,7 @@ package day10
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"strings"
@@ -21,7 +22,7 @@ func LookAndSay(s string) string {
 
 	reader := strings.NewReader(s)
 	for {
-		if v, err := readRun(reader); err == io.EOF {
+		if v, err := readRun(reader); errors.Is(err, io.EOF) {
 			break
 		} else if err != nil {
 			panic(err)
@@ -41,7 +42,7 @@ func readRun(s io.RuneScanner) (pair, error) {
 
 	result := pair{digit, 1}
 	for {
-		if digit, _, err := s.ReadRune(); err == io.EOF {
+		if digit, _, err := s.ReadRune(); errors.Is(err, io.EOF) {
 			return result, nil
 		} else if err != nil {
 			return pair{}, err

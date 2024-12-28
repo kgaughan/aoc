@@ -33,7 +33,6 @@ func hasTwoPairs(runes []rune) bool {
 				return true
 			}
 		}
-
 	}
 	return false
 }

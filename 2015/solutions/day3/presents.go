@@ -12,13 +12,13 @@ func deliver(route string, n int) int {
 		j := i % n
 		switch ch {
 		case 'v':
-			coords[j].y -= 1
+			coords[j].y--
 		case '^':
-			coords[j].y += 1
+			coords[j].y++
 		case '<':
-			coords[j].x -= 1
+			coords[j].x--
 		case '>':
-			coords[j].x += 1
+			coords[j].x++
 		}
 		houses[coords[j]]++
 	}

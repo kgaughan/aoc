@@ -34,7 +34,7 @@ func TestAddNumbers(t *testing.T) {
 			t.Fatal(err)
 			continue
 		}
-		if result := AddNumbers(obj); result != test.expected {
+		if result := AddNumbers(obj, true); result != test.expected {
 			t.Fatalf("For %v, expected %v, got %v", test.doc, test.expected, result)
 		}
 	}

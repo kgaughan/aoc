@@ -4,12 +4,10 @@ import (
 	"fmt"
 	"io"
 	"strings"
-
-	"github.com/kgaughan/aoc/2015/helpers/graph"
 )
 
-func parse(input string) (graph.Edges, []string) {
-	edges := graph.Edges{}
+func parse(input string) (Edges, []string) {
+	edges := Edges{}
 	towns := make([]string, 0, 50)
 	ScanLines(strings.NewReader(input), func(from, to string, distance int) {
 		if !Contains(towns, from) {

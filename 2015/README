@@ -3,7 +3,24 @@ Advent of Code
 
 This repo contains my answers for Advent of Code.
 
-Run the exercise with `go run main.go` in the directory for each day.
+Run the solutions using the harness. For instance, for day 9, you'd run:
+
+```sh
+go run cmd/harness.go -day 9 -input @input/day9.txt
+```
+
+The `-input` flag takes either some input to provide the parts or, if it
+starts with `@` as shown above, a path to an input file.
+
+You'll need to run `go generate ./...` to generate some of the files needed
+for this to run. You'll need to make sure that
+[nex](https://github.com/blynn/nex) and
+[goyacc](https://pkg.go.dev/golang.org/x/tools/cmd/goyacc) are installed:
+
+```sh
+go install golang.org/x/tools/cmd/goyacc@v0.28.0
+go install github.com/blynn/nex@latest
+```
 
 Why?
 ====

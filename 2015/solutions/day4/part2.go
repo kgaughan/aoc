@@ -5,7 +5,7 @@ import (
 	"math"
 )
 
-func Part1(input string) {
-	answer := adventCoin(input, 1, 1, math.MaxInt32)
+func Part2(input string) {
+	answer := adventCoin(input, 6, 1, math.MaxInt32)
 	fmt.Printf("%q is %v\n", input, answer)
 }

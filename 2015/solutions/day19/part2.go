@@ -3,6 +3,7 @@ package day19
 import (
 	"container/heap"
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/kgaughan/aoc/2015/helpers"
@@ -31,13 +32,23 @@ func Part2(input string) {
 }
 
 func reduce(molecule string, reverseMappings map[string]string) int {
-	seen := make(map[string]bool, 20)
+	replacements := make([]string, 0, len(reverseMappings))
+	for replacement := range reverseMappings {
+		replacements = append(replacements, replacement)
+	}
+	sort.Slice(replacements, func(i, j int) bool {
+		return len(replacements[i]) > len(replacements[j])
+	})
+
+	seen := make(map[string]bool, 200)
+
 	pq := PriorityQueue{}
 	pq.Push(&Item{molecule: molecule, steps: 0})
 	heap.Init(&pq)
 	for {
 		item := heap.Pop(&pq).(*Item)
-		for replacement, key := range reverseMappings {
+		for _, replacement := range replacements {
+			key := reverseMappings[replacement]
 			offsets := allIndexes(item.molecule, replacement)
 			for _, offset := range offsets {
 				prefix := item.molecule[:offset]

@@ -11,12 +11,13 @@ const eggnog = 150
 
 func readInput(input string) []int {
 	containers := make([]int, 0, 20)
-	helpers.ScanLines(strings.NewReader(input), func(s string) {
-		if value, err := strconv.Atoi(s); err != nil {
-			panic(err)
-		} else {
-			containers = append(containers, value)
+	helpers.ScanLines(strings.NewReader(input), func(s string) error {
+		value, err := strconv.Atoi(s)
+		if err != nil {
+			return err
 		}
+		containers = append(containers, value)
+		return nil
 	})
 	return containers
 }

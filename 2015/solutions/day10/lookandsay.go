@@ -22,13 +22,14 @@ func LookAndSay(s string) string {
 
 	reader := strings.NewReader(s)
 	for {
-		if v, err := readRun(reader); errors.Is(err, io.EOF) {
+		v, err := readRun(reader)
+		if errors.Is(err, io.EOF) {
 			break
-		} else if err != nil {
-			panic(err)
-		} else {
-			buf.WriteString(v.String())
 		}
+		if err != nil {
+			panic(err)
+		}
+		buf.WriteString(v.String())
 	}
 
 	return buf.String()
@@ -47,8 +48,8 @@ func readRun(s io.RuneScanner) (pair, error) {
 		} else if err != nil {
 			return pair{}, err
 		} else if digit != result.digit {
-			s.UnreadRune()
-			return result, nil
+			err = s.UnreadRune()
+			return result, err
 		}
 		result.count++
 	}

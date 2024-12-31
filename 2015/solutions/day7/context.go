@@ -30,6 +30,6 @@ func (ctx Context) String() string {
 	return "<script>"
 }
 
-func (_ Context) Evaluate(_ Context) Value {
+func (Context) Evaluate(_ Context) Value {
 	return 0
 }

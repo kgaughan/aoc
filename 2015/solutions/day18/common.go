@@ -8,7 +8,7 @@ import (
 
 func readInput(input string) [][]bool {
 	rows := make([][]bool, 0, 100)
-	helpers.ScanLines(strings.NewReader(input), func(s string) {
+	helpers.ScanLines(strings.NewReader(input), func(s string) error {
 		row := make([]bool, len(s))
 		for i := 0; i < len(s); i++ {
 			if s[i] == '#' {
@@ -16,6 +16,7 @@ func readInput(input string) [][]bool {
 			}
 		}
 		rows = append(rows, row)
+		return nil
 	})
 	return rows
 }

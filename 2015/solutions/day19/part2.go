@@ -13,18 +13,19 @@ func Part2(input string) {
 	reverseMappings := make(map[string]string, 50)
 	molecule := ""
 	parsingMapping := true
-	helpers.ScanLines(strings.NewReader(input), func(s string) {
+	helpers.ScanLines(strings.NewReader(input), func(s string) error {
 		if s == "" {
 			parsingMapping = false
 		} else if parsingMapping {
 			var key, value string
 			if _, err := fmt.Sscanf(s, "%s => %s\n", &key, &value); err != nil {
-				panic(err)
+				return err
 			}
 			reverseMappings[value] = key
 		} else {
 			molecule = s
 		}
+		return nil
 	})
 
 	result := reduce(molecule, reverseMappings)

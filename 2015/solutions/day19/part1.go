@@ -11,18 +11,19 @@ func Part1(input string) {
 	mappings := make(map[string][]string, 50)
 	molecule := ""
 	parsingMapping := true
-	helpers.ScanLines(strings.NewReader(input), func(s string) {
+	helpers.ScanLines(strings.NewReader(input), func(s string) error {
 		if s == "" {
 			parsingMapping = false
 		} else if parsingMapping {
 			var key, value string
 			if _, err := fmt.Sscanf(s, "%s => %s\n", &key, &value); err != nil {
-				panic(err)
+				return err
 			}
 			mappings[key] = append(mappings[key], value)
 		} else {
 			molecule = s
 		}
+		return nil
 	})
 
 	replacements := make(map[string]bool, 100)

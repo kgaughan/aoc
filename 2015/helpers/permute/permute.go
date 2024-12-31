@@ -27,10 +27,9 @@ func (p *Permute) Get() ([]string, bool) {
 			p.idx[p.i]++
 			p.i = 1
 			return p.source, false
-		} else {
-			p.idx[p.i] = 0
-			p.i++
 		}
+		p.idx[p.i] = 0
+		p.i++
 	}
 	return nil, true
 }

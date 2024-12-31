@@ -22,11 +22,11 @@ func main() {
 		actualInput = input
 	} else {
 		path := input[1:]
-		if contents, err := ioutil.ReadFile(path); err != nil {
+		contents, err := ioutil.ReadFile(path)
+		if err != nil {
 			log.Fatalf("could not load input from %q: %v", path, err)
-		} else {
-			actualInput = string(contents)
 		}
+		actualInput = string(contents)
 	}
 
 	solutions.Execute(day, actualInput)

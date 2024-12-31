@@ -32,7 +32,7 @@ func Parse(s *scanner.Scanner, fn CmdFunc) {
 		cmd := s.TokenText()
 		switch cmd {
 		case "turn":
-			tok = s.Scan()
+			_ = s.Scan()
 			text := s.TokenText()
 			switch text {
 			case "on":
@@ -63,8 +63,9 @@ func Parse(s *scanner.Scanner, fn CmdFunc) {
 
 func parseCoordinate(s *scanner.Scanner) (Coord, rune) {
 	var x, y int
+	var tok rune
 
-	x, tok := parseInt(s)
+	x, _ = parseInt(s)
 
 	_ = s.Scan()
 	text := s.TokenText()
@@ -80,9 +81,9 @@ func parseCoordinate(s *scanner.Scanner) (Coord, rune) {
 func parseInt(s *scanner.Scanner) (int, rune) {
 	tok := s.Scan()
 	text := s.TokenText()
-	if n, err := strconv.Atoi(text); err != nil {
+	n, err := strconv.Atoi(text)
+	if err != nil {
 		panic(err)
-	} else {
-		return n, tok
 	}
+	return n, tok
 }

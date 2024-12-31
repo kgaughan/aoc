@@ -12,8 +12,8 @@ func adventCoin(prefix string, nZeroes, startFrom, endAt int) int {
 
 	for i := startFrom; i <= endAt; i++ {
 		h := md5.New()
-		io.WriteString(h, prefix)
-		io.WriteString(h, fmt.Sprint(i))
+		_, _ = io.WriteString(h, prefix)
+		_, _ = io.WriteString(h, fmt.Sprint(i))
 
 		hex := fmt.Sprintf("%x", h.Sum(nil))
 		if strings.HasPrefix(hex, hexPrefix) {

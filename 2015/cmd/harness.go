@@ -2,9 +2,10 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"io/ioutil"
 	"log"
-	"strings"
+	"os"
 
 	"github.com/kgaughan/aoc/2015/solutions"
 )
@@ -12,22 +13,34 @@ import (
 func main() {
 	var day int
 	var input string
+	var inputPath string
 
 	flag.IntVar(&day, "day", 1, "day to execute")
-	flag.StringVar(&input, "input", "", "input for section; prefix '@' to load a file")
+	flag.StringVar(&input, "input", "", "input for section if no file is given or found")
+	flag.StringVar(&inputPath, "path", "", "use the given file as input; will attempt to infer a file if non specified and no input is given")
 	flag.Parse()
 
-	var actualInput string
-	if !strings.HasPrefix(input, "@") {
-		actualInput = input
-	} else {
-		path := input[1:]
-		contents, err := ioutil.ReadFile(path)
-		if err != nil {
-			log.Fatalf("could not load input from %q: %v", path, err)
+	if input == "" {
+		fallback := fmt.Sprintf("input/day%d.txt", day)
+		if inputPath == "" && isFile(fallback) {
+			inputPath = fallback
 		}
-		actualInput = string(contents)
+		if inputPath == "" {
+			log.Fatalf("no input provided")
+		}
+		contents, err := ioutil.ReadFile(inputPath)
+		if err != nil {
+			log.Fatalf("could not load input from %q: %v", inputPath, err)
+		}
+		input = string(contents)
 	}
+	solutions.Execute(day, input)
+}
 
-	solutions.Execute(day, actualInput)
+func isFile(path string) bool {
+	fi, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	return !fi.IsDir()
 }

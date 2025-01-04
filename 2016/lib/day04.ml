@@ -1,5 +1,3 @@
-#!/usr/bin/env ocaml
-
 let read_entries ic =
   let rec read acc =
     Scanf.kscanf ic (fun _ _ -> List.rev acc) "%[a-z-]-%d[%[a-z]]" (fun name num chk -> read ((name, num, chk) :: acc))
@@ -14,6 +12,7 @@ let string_of_chars lst =
   List.iter (Buffer.add_char buf) lst;
   Buffer.contents buf
 
+(*
 let make_checksum name =
   let as_chars = chars_of_string name in
   let tbl = Hashtbl.create (String.length name) in
@@ -33,5 +32,6 @@ let make_checksum name =
   let sorted = List.sort comparator unsorted in
   let ordered_chars = List.map sorted fst in
   string_of_chars ordered_chars
+*)
 
 let () = ()

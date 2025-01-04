@@ -1,5 +1,3 @@
-#!/usr/bin/env ocaml
-
 exception Unexpected_length
 
 let is_valid_triangle (a, b, c) =

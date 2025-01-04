@@ -1,5 +1,3 @@
-#!/usr/bin/env ocaml
-
 exception Bad_direction
 
 let direction = function

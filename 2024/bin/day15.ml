@@ -104,10 +104,10 @@ let simulate map movements =
 let _ =
   let (map, movements) = read_input "input/day15.txt" in
   simulate map movements;
-  Printf.printf "Part 1: %d\n" (sum_coordinates map)
+  Printf.printf "Part 1: %d\n%!" (sum_coordinates map)
 
 let _ =
   let (map, movements) = read_input "input/day15.txt" in
   let expanded_map = expand_map map in
   simulate expanded_map movements;
-  Printf.printf "Part 2: %d\n" (sum_coordinates expanded_map)
+  Printf.printf "Part 2: %d\n%!" (sum_coordinates expanded_map)

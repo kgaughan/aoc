@@ -33,6 +33,6 @@ let play (a1, a2, b1, b2, c1, c2) =
 let _ =
   let machines = read_input "input/day13.txt" in
   let part1 = List.filter_map play machines |> Utils.sum in
-  Printf.printf "Part 1: %d\n" part1;
+  Printf.printf "Part 1: %d\n%!" part1;
   let part2 = List.map make_monsterous machines |> List.filter_map play |> Utils.sum in
-  Printf.printf "Part 2: %d\n" part2
+  Printf.printf "Part 2: %d\n%!" part2

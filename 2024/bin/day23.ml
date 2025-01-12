@@ -64,5 +64,5 @@ let part2 graph =
 
 let _ =
   let graph = read_edges "input/day23.txt" |> to_adjacency_list in
-  Printf.printf "Part 1: %d\n" (Utils.time "part 1" (fun () -> part1 graph));
-  Printf.printf "Part 2: %s\n" (Utils.time "part 2" (fun () -> part2 graph))
+  Printf.printf "Part 1: %d\n%!" (Utils.time "part 1" (fun () -> part1 graph));
+  Printf.printf "Part 2: %s\n%!" (Utils.time "part 2" (fun () -> part2 graph))

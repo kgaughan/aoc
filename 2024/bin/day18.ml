@@ -112,6 +112,6 @@ let _ =
   let points = read_lines "input/day18.txt" (parse_pair "%d,%d") in
   let (grid, remaining) = populate_grid 71 71 1024 points in
   let path = walk grid |> Option.get in
-  Printf.printf "Part 1: %d\n" (List.length path - 1);
+  Printf.printf "Part 1: %d\n%!" (List.length path - 1);
   let coordinate = try_remaining path grid remaining |> Option.get in
-  Printf.printf "Part 2: %d,%d\n" (fst coordinate) (snd coordinate)
+  Printf.printf "Part 2: %d,%d\n%!" (fst coordinate) (snd coordinate)

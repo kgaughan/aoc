@@ -115,6 +115,6 @@ let _ =
   maze.(snd start_cell).(fst start_cell) <- Empty;
   maze.(snd end_cell).(fst end_cell) <- Empty;
   let score = travel start_cell end_cell maze in
-  Printf.printf "Part 1: %d\n" score;
+  Printf.printf "Part 1: %d\n%!" score;
   let in_best_path = backtrace start_cell end_cell score maze in
-  Printf.printf "Part 2: %d\n" in_best_path
+  Printf.printf "Part 2: %d\n%!" in_best_path

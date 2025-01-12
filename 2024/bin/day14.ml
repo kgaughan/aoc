@@ -89,7 +89,7 @@ let _ =
   let robots = read_input "input/day14.txt" in
   let result = simulate (simulate_once width height) 100 robots in
   let part1 = get_safety_factor width height result in
-  Printf.printf "Part 1: %d\n" part1
+  Printf.printf "Part 1: %d\n%!" part1
 
 let _ =
   let width = 101
@@ -100,7 +100,7 @@ let _ =
     let grid = as_grid width height result in
     let entropy = rle_entropy grid in
     if entropy < 0.05 then (
-      Printf.printf "%d -> %f\n" (attempts + 1) entropy;
+      Printf.printf "Part 2: %d -> %f\n" (attempts + 1) entropy;
       render grid);
     if attempts < 10000 then
       loop result (attempts + 1)

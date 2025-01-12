@@ -100,4 +100,4 @@ let _ =
   let part1 = IntPairSet.cardinal visited in
   Printf.printf "Part 1: %d\n%!" part1;
   let part2 = Utils.time "part 2" (fun () -> count_loops height width guard obstructions visited) in
-  Printf.printf "Part 2: %d\n" part2
+  Printf.printf "Part 2: %d\n%!" part2

@@ -137,8 +137,8 @@ let _ =
   and cache = Hashtbl.create 400 in
   read_input "input/day24.txt" |> List.to_seq |> Hashtbl.add_seq exprs;
   let z = extract_wire_value "z" exprs cache in
-  Printf.printf "Part 1: %d\n" z;
+  Printf.printf "Part 1: %d\n%!" z;
   let wires = get_keys_with_prefix "z" exprs in
   Seq.iter (fun key -> print_endline (wire_to_expression key exprs)) wires;
   Seq.fold_left (fun acc k -> check_adder k exprs |> gather_to acc) [] wires
-  |> List.sort_uniq compare |> String.concat "," |> Printf.printf "Part 2: %s\n"
+  |> List.sort_uniq compare |> String.concat "," |> Printf.printf "Part 2: %s\n%!"

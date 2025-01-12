@@ -17,4 +17,8 @@ let () =
       let input = Day03.read !src in
       Day03.part_one input;
       Day03.part_two input
+  | 4 ->
+      let input = Day04.read !src in
+      Day04.part_one input;
+      Day04.part_two input
   | _ -> print_endline "No such solution"

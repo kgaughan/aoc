@@ -14,7 +14,8 @@
 
 (library
  (name day04)
- (modules day04))
+ (modules day04)
+ (libraries str))
 
 (library
  (name io)

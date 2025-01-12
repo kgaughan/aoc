@@ -1,10 +1,12 @@
 (library
  (name day01)
- (modules day01))
+ (modules day01)
+ (libraries io movement))
 
 (library
  (name day02)
- (modules day02))
+ (modules day02)
+ (libraries io))
 
 (library
  (name day03)
@@ -13,3 +15,11 @@
 (library
  (name day04)
  (modules day04))
+
+(library
+ (name io)
+ (modules io))
+
+(library
+ (name movement)
+ (modules movement))

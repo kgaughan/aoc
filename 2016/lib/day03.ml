@@ -6,7 +6,7 @@ let is_valid_triangle (a, b, c) =
   let (b', c') = (min x c, max x c) in
   a' + b' > c'
 
-let read_file filename =
+let read filename =
   let ic = Scanf.Scanning.open_in filename in
   let rec read acc = Scanf.kscanf ic (fun _ _ -> List.rev acc) " %d %d %d" (fun a b c -> read ((a, b, c) :: acc)) in
   read []
@@ -23,14 +23,5 @@ let rejig_triples lst =
   in
   loop [] lst
 
-let () =
-  let src = ref "" in
-  let part2 = ref false in
-  let speclist = [("-f", Arg.Set_string src, "File to read from"); ("-2", Arg.Set part2, "Run part 2")] in
-  Arg.parse speclist print_endline "Usage:";
-  if !src = "" then
-    exit 1
-  else
-    let lst = read_file !src in
-    let jigged = if !part2 then rejig_triples lst else lst in
-    Printf.printf "Valid triangles: %d\n" (count_triangles jigged)
+let part_one input = count_triangles input |> Printf.printf "Part 1: %d\n%!"
+let part_two input = rejig_triples input |> count_triangles |> Printf.printf "Part 2: %d\n%!"

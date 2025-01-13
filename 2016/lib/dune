@@ -18,6 +18,11 @@
  (libraries str))
 
 (library
+ (name day05)
+ (modules day05)
+ (libraries io))
+
+(library
  (name io)
  (modules io))
 

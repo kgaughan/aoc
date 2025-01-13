@@ -28,6 +28,11 @@
  (libraries io))
 
 (library
+ (name day07)
+ (modules day07)
+ (libraries io))
+
+(library
  (name io)
  (modules io))
 

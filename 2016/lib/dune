@@ -33,6 +33,14 @@
  (libraries io))
 
 (library
+ (name day08)
+ (modules day08 day08_lexer day08_parser day08_aux))
+
+(ocamllex day08_lexer)
+
+(ocamlyacc day08_parser)
+
+(library
  (name io)
  (modules io))
 

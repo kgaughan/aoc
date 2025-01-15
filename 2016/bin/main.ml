@@ -3,34 +3,18 @@ let () =
   and src = ref "" in
   let spec = [("-day", Arg.Set_int day, "Day to run"); ("-file", Arg.Set_string src, "File to read input from")] in
   Arg.parse spec (fun _ -> ()) "AoC 2016 runner\n\nUsage:";
-  if !src = "" then src := Printf.sprintf "input/day%02d.txt" !day;
+  let run reader part_one part_two =
+    let input = reader (if !src = "" then Printf.sprintf "input/day%02d.txt" !day else !src) in
+    part_one input;
+    part_two input
+  in
   match !day with
-  | 1 ->
-      let input = Day01.read !src in
-      Day01.part_one input;
-      Day01.part_two input
-  | 2 ->
-      let input = Day02.read !src in
-      Day02.part_one input;
-      Day02.part_two input
-  | 3 ->
-      let input = Day03.read !src in
-      Day03.part_one input;
-      Day03.part_two input
-  | 4 ->
-      let input = Day04.read !src in
-      Day04.part_one input;
-      Day04.part_two input
-  | 5 ->
-      let input = Day05.read !src in
-      Day05.part_one input;
-      Day05.part_two input
-  | 6 ->
-      let input = Day06.read !src in
-      Day06.part_one input;
-      Day06.part_two input
-  | 7 ->
-      let input = Day07.read !src in
-      Day07.part_one input;
-      Day07.part_two input
+  | 1 -> run Day01.read Day01.part_one Day01.part_two
+  | 2 -> run Day02.read Day02.part_one Day02.part_two
+  | 3 -> run Day03.read Day03.part_one Day03.part_two
+  | 4 -> run Day04.read Day04.part_one Day04.part_two
+  | 5 -> run Day05.read Day05.part_one Day05.part_two
+  | 6 -> run Day06.read Day06.part_one Day06.part_two
+  | 7 -> run Day07.read Day07.part_one Day07.part_two
+  | 8 -> run Day08.read Day08.part_one Day08.part_two
   | _ -> print_endline "No such solution"

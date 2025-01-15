@@ -1,3 +1,10 @@
+let time name fn =
+  let start = Unix.gettimeofday () in
+  let result = fn () in
+  let finish = Unix.gettimeofday () in
+  Printf.printf "Time for %s: %fms\n%!" name ((finish -. start) *. 1000.0);
+  result
+
 let () =
   let day = ref 0
   and src = ref "" in
@@ -5,8 +12,8 @@ let () =
   Arg.parse spec (fun _ -> ()) "AoC 2016 runner\n\nUsage:";
   let run reader part_one part_two =
     let input = reader (if !src = "" then Printf.sprintf "input/day%02d.txt" !day else !src) in
-    part_one input;
-    part_two input
+    time "part one" (fun () -> part_one input);
+    time "part two" (fun () -> part_two input)
   in
   match !day with
   | 1 -> run Day01.read Day01.part_one Day01.part_two

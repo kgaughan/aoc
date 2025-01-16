@@ -41,6 +41,11 @@
 (ocamlyacc day08_parser)
 
 (library
+ (name day09)
+ (modules day09)
+ (libraries io))
+
+(library
  (name io)
  (modules io))
 

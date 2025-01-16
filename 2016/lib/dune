@@ -36,14 +36,18 @@
  (name day08)
  (modules day08 day08_lexer day08_parser day08_aux))
 
-(ocamllex day08_lexer)
-
-(ocamlyacc day08_parser)
-
 (library
  (name day09)
  (modules day09)
  (libraries io))
+
+(library
+ (name day10)
+ (modules day10 day10_lexer day10_parser day10_aux))
+
+(ocamllex day08_lexer day10_lexer)
+
+(ocamlyacc day08_parser day10_parser)
 
 (library
  (name io)

@@ -45,9 +45,13 @@
  (name day10)
  (modules day10 day10_lexer day10_parser day10_aux))
 
-(ocamllex day08_lexer day10_lexer)
+(library
+ (name day11)
+ (modules day11 day11_lexer day11_parser day11_aux))
 
-(ocamlyacc day08_parser day10_parser)
+(ocamllex day08_lexer day10_lexer day11_lexer)
+
+(ocamlyacc day08_parser day10_parser day11_parser)
 
 (library
  (name io)

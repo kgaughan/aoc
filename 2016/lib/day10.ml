@@ -1,6 +1,8 @@
 let read path = Day10_parser.main Day10_lexer.tokens (Lexing.from_channel (open_in path))
 let append tbl k v = Hashtbl.replace tbl k (v :: (Hashtbl.find_opt tbl k |> Option.value ~default:[]))
 
+(* A much better way of handling all this would be to do a topological sort *)
+
 let process input =
   let bots = Hashtbl.create 1000
   and rules = Hashtbl.create 1000

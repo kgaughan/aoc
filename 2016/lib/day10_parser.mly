@@ -16,7 +16,7 @@ exprs:
 ;
 
 expr:
-| VALUE NUM GOES_TO recipient { Day10_aux.Receive ($2, $4) }
+| VALUE NUM GOES_TO BOT NUM { Day10_aux.Receive ($2, $5) }
 | BOT NUM GIVES_LOW recipient GIVES_HIGH recipient { Day10_aux.Give ($2, $4, $6) }
 ;
 

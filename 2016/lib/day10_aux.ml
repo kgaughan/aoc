@@ -3,5 +3,5 @@ type recipient =
   | Bot of int
 
 type action =
-  | Receive of int * recipient
+  | Receive of int * int
   | Give of int * recipient * recipient

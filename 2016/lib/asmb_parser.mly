@@ -21,5 +21,6 @@ instruction:
 | CPY REG REG { Asmb.CpyR ($2, $3) }
 | DEC REG { Asmb.Dec $2 }
 | INC REG { Asmb.Inc $2 }
-| JNZ REG LITERAL { Asmb.Jnz ($2, $3) }
+| JNZ LITERAL LITERAL { Asmb.JnzI ($2, $3) }
+| JNZ REG LITERAL { Asmb.JnzR ($2, $3) }
 ;

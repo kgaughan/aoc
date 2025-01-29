@@ -29,4 +29,5 @@ let () =
   | 11 -> run Day11.read Day11.part_one Day11.part_two
   | 12 -> run Day12.read Day12.part_one Day12.part_two
   | 13 -> run Day13.read Day13.part_one Day13.part_two
+  | 14 -> run Day14.read Day14.part_one Day14.part_two
   | _ -> print_endline "No such solution"

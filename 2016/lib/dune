@@ -59,6 +59,11 @@
  (modules day13)
  (libraries io))
 
+(library
+ (name day14)
+ (modules day14)
+ (libraries io))
+
 (ocamllex asmb_lexer day08_lexer day10_lexer day11_lexer)
 
 (ocamlyacc asmb_parser day08_parser day10_parser day11_parser)

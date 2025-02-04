@@ -64,6 +64,10 @@
  (modules day14)
  (libraries io))
 
+(library
+ (name day15)
+ (modules day15))
+
 (ocamllex asmb_lexer day08_lexer day10_lexer day11_lexer)
 
 (ocamlyacc asmb_parser day08_parser day10_parser day11_parser)
@@ -79,3 +83,7 @@
 (library
  (name movement)
  (modules movement))
+
+(library
+ (name numeric)
+ (modules numeric))

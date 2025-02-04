@@ -21,7 +21,7 @@ type status =
 let generate_cell key (x, y) = if (ord_to_magic (x, y) key |> count_set_bits) land 1 = 1 then Wall else Empty
 
 let follow visit generator =
-  let map = Hashtbl.create 10000 in
+  let map = Hashtbl.create 100 in
   let check (x, y) =
     if x < 0 || y < 0 then
       (Visited, Wall)

@@ -41,8 +41,14 @@ let inverse_mod a = function
       if x < 0 then x + b else x
 
 let chinese_remainder_exn congruences =
-  let mtot = congruences |> List.map (fun (_, x) -> x) |> List.fold_left ( * ) 1 in
-  let sum = List.fold_left (fun acc (r, n) -> acc + (r * inverse_mod (mtot / n) n * (mtot / n))) 0 congruences in
+  let mtot = List.map snd congruences |> List.fold_left ( * ) 1 in
+  let sum =
+    List.fold_left
+      (fun acc (r, n) ->
+        let rest = mtot / n in
+        acc + (r * inverse_mod rest n * rest))
+      0 congruences
+  in
   sum mod mtot
 
 let to_congruence = List.mapi (fun i (size, offset) -> (size - offset - i - 1, size))

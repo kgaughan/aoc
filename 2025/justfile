@@ -1,0 +1,7 @@
+# format the code
+fmt:
+	@find bin lib test -name \*.ml -exec ocamlformat --inplace {} +
+
+# run the code for a particular day; should be two digits
+run day:
+	@dune exec -- bin/day{{day}}.exe

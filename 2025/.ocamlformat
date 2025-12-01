@@ -1,0 +1,9 @@
+break-cases = fit-or-vertical
+type-decl = sparse
+break-fun-decl = fit-or-vertical
+margin = 120
+if-then-else = fit-or-vertical
+let-and = sparse
+space-around-lists = false
+let-binding-spacing = compact
+parens-tuple-patterns = always
